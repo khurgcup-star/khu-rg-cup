@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>일정표 | 경희대학교 총장배 리듬체조 대회</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="soft-page">
+    <header class="topbar light">
+      <a class="logo" href="index.html" aria-label="홈으로 이동">
+        <span class="logo-text">KHU CUP</span>
+        <span class="logo-sub">President's Cup RG</span>
+      </a>
+      <nav class="desktop-nav" aria-label="주요 메뉴">
+        <a href="index.html">대회 안내</a>
+        <a class="active" href="schedule.html">일정표</a>
+        <a href="apply.html">신규 신청</a>
+        <a href="check.html">신청 확인</a>
+      </nav>
+      <button class="menu-button" type="button" data-mobile-menu-button aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <nav class="mobile-nav" data-mobile-menu aria-label="모바일 메뉴">
+      <a href="index.html">대회 안내</a>
+      <a href="schedule.html">일정표</a>
+      <a href="apply.html">신규 신청</a>
+      <a href="check.html">신청 확인</a>
+    </nav>
+
+    <main class="schedule-shell">
+      <section class="schedule-hero">
+        <p class="eyebrow">Schedule</p>
+        <h1>전체 일정표</h1>
+        <p>운영진이 Google Sheet의 Schedule 시트를 업데이트하면 이 페이지에 전체 일정이 표시됩니다. 개인별 상세 일정은 신청 확인 페이지에서 확인할 수 있습니다.</p>
+      </section>
+
+      <section class="schedule-list" aria-label="전체 일정표">
+        <div class="public-schedule" data-public-schedule>
+          <article class="schedule-row">
+            <strong>일정을 불러오는 중입니다.</strong>
+            <span>Google Sheet 연동 후 자동 표시됩니다.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-cta">
+        <h2>대회 관련 문의</h2>
+        <p>대회 참가에 대해 궁금한 점이 있으시면 운영사무국으로 연락해주세요.</p>
+        <a class="btn dark" href="mailto:rg@khu-presidentcup.kr">문의하기</a>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
