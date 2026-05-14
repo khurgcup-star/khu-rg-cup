@@ -1169,68 +1169,94 @@ input:focus, textarea:focus {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background:
-    linear-gradient(90deg, rgba(20, 28, 47, 0.06) 1px, transparent 1px) 0 0 / 44px 44px,
-    linear-gradient(rgba(20, 28, 47, 0.06) 1px, transparent 1px) 0 0 / 44px 44px,
-    linear-gradient(135deg, #f9f5ed, #edf4f1);
+  background: #edf4f1;
 }
-.map-visual::before,
-.map-visual::after {
-  position: absolute;
-  content: "";
+.walking-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
 }
-.map-visual::before {
-  left: 7%;
-  right: 8%;
-  top: 52%;
-  height: 34px;
-  border-radius: 999px;
-  background: rgba(199, 161, 92, 0.34);
-  transform: rotate(-12deg);
+.map-ground {
+  fill: #f7f1e6;
 }
-.map-visual::after {
-  left: 18%;
-  top: 10%;
-  width: 26%;
-  height: 76%;
-  border-radius: 999px;
-  background: rgba(45, 116, 111, 0.12);
-  transform: rotate(32deg);
+.campus-road {
+  fill: none;
+  stroke: #d1c3aa;
+  stroke-width: 34;
+  stroke-linecap: round;
 }
-.map-pin {
-  position: absolute;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  min-width: 118px;
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 14px;
+.campus-road.secondary {
+  stroke: #e4d8c3;
+  stroke-width: 24;
+}
+.green-zone {
+  fill: rgba(45, 116, 111, 0.16);
+}
+.green-zone.small {
+  fill: rgba(45, 116, 111, 0.12);
+}
+.building rect {
+  stroke: rgba(20, 28, 47, 0.16);
+  stroke-width: 2;
+}
+.parking-building rect {
+  fill: #24314f;
+}
+.engineering-building rect {
+  fill: #fffdf8;
+}
+.venue-building rect {
+  fill: #9d2331;
+}
+.building text {
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   font-weight: 900;
-  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.18);
 }
-.venue-pin {
-  right: 15%;
-  top: 20%;
-  background: var(--red);
+.parking-building text,
+.venue-building text {
+  fill: #fff;
 }
-.parking-pin {
-  left: 12%;
-  bottom: 18%;
-  background: var(--navy);
+.engineering-building text {
+  fill: var(--navy);
 }
-.route-line {
-  position: absolute;
-  z-index: 1;
-  left: 27%;
-  top: 45%;
-  width: 46%;
-  height: 4px;
-  border-radius: 999px;
-  background: repeating-linear-gradient(90deg, var(--red) 0 14px, transparent 14px 24px);
-  transform: rotate(-21deg);
+.building text:first-of-type {
+  font-size: 26px;
+}
+.building text:last-of-type {
+  font-size: 22px;
+}
+.walking-route {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 3 24;
+}
+.step-marker circle {
+  fill: #fff;
+  stroke: var(--red);
+  stroke-width: 6;
+}
+.step-marker text {
+  fill: var(--red);
+  font-size: 18px;
+  font-weight: 900;
+}
+.route-label rect {
+  fill: rgba(255, 253, 248, 0.94);
+  stroke: rgba(20, 28, 47, 0.12);
+}
+.route-label text {
+  fill: var(--navy);
+  font-size: 17px;
+  font-weight: 900;
+}
+.map-caption {
+  margin: 14px 4px 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
 }
 .map-actions {
   display: grid;
@@ -1366,9 +1392,11 @@ input:focus, textarea:focus {
   .map-visual {
     min-height: 240px;
   }
-  .map-pin {
-    min-width: 104px;
-    font-size: 13px;
+  .walking-map {
+    min-width: 640px;
+  }
+  .map-visual {
+    overflow-x: auto;
   }
 }
 
