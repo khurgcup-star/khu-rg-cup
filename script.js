@@ -6,6 +6,7 @@ const phraseMap = {
   "신규 신청": "New Application",
   "신청 확인": "Check Application",
   "일정표": "Schedule",
+  "오시는 길": "Directions",
   "메뉴 열기": "Open menu",
   "모바일 메뉴": "Mobile menu",
   "주요 메뉴": "Main menu",
@@ -37,6 +38,34 @@ const phraseMap = {
   "운영진이 Google Sheet의 Schedule 시트를 업데이트하면 이 페이지에 전체 일정이 표시됩니다. 개인별 상세 일정은 신청 확인 페이지에서 확인할 수 있습니다.": "When staff update the Schedule sheet in Google Sheets, the full schedule appears on this page. Personal schedules are available on the check application page.",
   "일정을 불러오는 중입니다.": "Loading schedule.",
   "Google Sheet 연동 후 자동 표시됩니다.": "This appears automatically after Google Sheets is connected.",
+  "지도 바로가기": "Map Links",
+  "이동 안내": "Route Guide",
+  "경희대학교 국제캠퍼스 선승관 방문 및 공과대학 지하주차장 이용 안내": "Directions to Kyung Hee University Global Campus Seonseungwan and Engineering Underground Parking",
+  "선승관 오시는 길": "Directions to Seonseungwan",
+  "대회 장소는 경희대학교 국제캠퍼스 선승관입니다. 차량 이용 시 공과대학 지하주차장을 목적지로 잡고, 주차 후 선승관 방향 보행 동선을 따라 이동하는 안내를 별도 페이지로 분리했습니다.": "The venue is Seonseungwan at Kyung Hee University Global Campus. For drivers, set the Engineering Underground Parking lot as the destination, then follow the pedestrian route toward Seonseungwan.",
+  "주소": "Address",
+  "경기도 용인시 기흥구 덕영대로 1732": "1732 Deogyeong-daero, Giheung-gu, Yongin-si, Gyeonggi-do",
+  "경희대학교 국제캠퍼스 선승관": "Kyung Hee University Global Campus Seonseungwan",
+  "선승관": "Seonseungwan",
+  "공대 지하주차장": "Engineering Underground Parking",
+  "선승관 지도 보기": "Open Seonseungwan Map",
+  "캠퍼스 지도": "Campus Map",
+  "대중교통 이용": "Public Transit",
+  "수원역, 영통역, 망포역 등에서 경희대학교 국제캠퍼스 방면 버스나 택시를 이용합니다.": "Use a bus or taxi toward Kyung Hee University Global Campus from Suwon, Yeongtong, Mangpo, or nearby stations.",
+  "하차 후 선승관 또는 체육관 표지를 따라 이동": "After getting off, follow signs for Seonseungwan or the gymnasium.",
+  "짐이 많은 참가자는 캠퍼스 안쪽 하차 지점 확인 권장": "Participants with large bags should confirm the closest campus drop-off point.",
+  "정문 혼잡 시간에는 도보 이동 시간을 여유 있게 잡기": "Allow extra walking time when the main gate is congested.",
+  "차량 및 주차": "Driving and Parking",
+  "내비게이션 목적지는 공과대학 지하주차장 또는 경희대학교 국제캠퍼스로 설정합니다.": "Set Engineering Underground Parking or Kyung Hee University Global Campus as the navigation destination.",
+  "입차 후 공과대학 지하주차장 안내 표지 확인": "After entering campus, check signs for Engineering Underground Parking.",
+  "주차 공간이 혼잡하면 현장 안내 요원 지시 우선": "If parking is crowded, follow on-site staff guidance first.",
+  "장비 하차가 필요하면 보호자와 선수 동선을 먼저 분리": "For equipment unloading, separate guardian and athlete routes first.",
+  "주차 후 선승관 이동": "From Parking to Seonseungwan",
+  "공대 지하주차장에서 지상으로 올라온 뒤 선승관 방향 보행로를 이용합니다.": "From the underground parking lot, go up to ground level and use the pedestrian route toward Seonseungwan.",
+  "엘리베이터 또는 계단으로 지상 출구 이동": "Use the elevator or stairs to reach the ground-level exit.",
+  "공과대학 건물 외부에서 선승관 방향 표지 확인": "Outside the Engineering buildings, check signs toward Seonseungwan.",
+  "선승관 입구에서 참가자 접수처와 관람 동선 분리": "At the Seonseungwan entrance, separate participant check-in and spectator routes.",
+  "실제 대회 전에는 주차 가능 여부, 주차요금, 하차 가능 구역, 현장 통제 동선을 최종 확인한 뒤 이 페이지 문구와 지도 버튼을 업데이트하면 됩니다.": "Before the event, confirm parking availability, fees, drop-off zones, and on-site traffic control, then update this page and map links.",
 
   "신청 메뉴": "Application Menu",
   "신청 단계": "Application Steps",
@@ -125,7 +154,8 @@ const phraseMap = {
 
   "신규 신청 | 경희대학교 총장배 리듬체조 대회": "New Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
   "신청 확인 | 경희대학교 총장배 리듬체조 대회": "Check Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "일정표 | 경희대학교 총장배 리듬체조 대회": "Schedule | Kyung Hee University President's Cup Rhythmic Gymnastics"
+  "일정표 | 경희대학교 총장배 리듬체조 대회": "Schedule | Kyung Hee University President's Cup Rhythmic Gymnastics",
+  "오시는 길 | 경희대학교 총장배 리듬체조 대회": "Directions | Kyung Hee University President's Cup Rhythmic Gymnastics"
 };
 
 const statusMap = {
