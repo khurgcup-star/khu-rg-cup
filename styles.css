@@ -153,7 +153,7 @@ button, input, select, textarea { font: inherit; }
   position: relative;
   min-height: calc(100vh - 72px);
   display: grid;
-  align-items: end;
+  align-items: center;
   overflow: hidden;
   color: #fff;
   background: var(--navy);
@@ -176,7 +176,7 @@ button, input, select, textarea { font: inherit; }
   z-index: 1;
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 88px 0 52px;
+  padding: 46px 0 52px;
   display: grid;
   justify-items: center;
   text-align: center;
