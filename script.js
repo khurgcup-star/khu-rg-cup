@@ -11,7 +11,7 @@ const phraseMap = {
   "모바일 메뉴": "Mobile menu",
   "주요 메뉴": "Main menu",
   "홈으로 이동": "Go home",
-  "경희대학교 총장배 리듬체조 대회": "Kyung Hee University President's Cup Rhythmic Gymnastics",
+  "경희 라이온스컵 전국 리듬체조 대회": "Kyung Hee Lions Cup National Rhythmic Gymnastics Competition",
   "신청, 종목 선택, 촬영 옵션, 음악 제출, 접수 확인까지 분리된 페이지에서 처리합니다.": "Apply, choose events, request photo or video options, submit music, and check application status through separate pages.",
   "대회일": "Event Date",
   "장소": "Venue",
@@ -167,10 +167,10 @@ const phraseMap = {
   "조회된 신청 내역이 없습니다.": "No application was found.",
   "조회된 신청 내역이 없습니다. 신청할 때 입력한 이메일과 같은지 확인해주세요.": "No application was found. Check that this is the same email used for the application.",
 
-  "신규 신청 | 경희대학교 총장배 리듬체조 대회": "New Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "신청 확인 | 경희대학교 총장배 리듬체조 대회": "Check Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "일정표 | 경희대학교 총장배 리듬체조 대회": "Schedule | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "오시는 길 | 경희대학교 총장배 리듬체조 대회": "Directions | Kyung Hee University President's Cup Rhythmic Gymnastics"
+  "신규 신청 | 경희 라이온스컵 전국 리듬체조 대회": "New Application | Kyung Hee Lions Cup National Rhythmic Gymnastics Competition",
+  "신청 확인 | 경희 라이온스컵 전국 리듬체조 대회": "Check Application | Kyung Hee Lions Cup National Rhythmic Gymnastics Competition",
+  "일정표 | 경희 라이온스컵 전국 리듬체조 대회": "Schedule | Kyung Hee Lions Cup National Rhythmic Gymnastics Competition",
+  "오시는 길 | 경희 라이온스컵 전국 리듬체조 대회": "Directions | Kyung Hee Lions Cup National Rhythmic Gymnastics Competition"
 };
 
 const statusMap = {
@@ -731,29 +731,7 @@ function setupLookup() {
   }
 }
 
-const fallbackPublicSchedule = [
-  {
-    date: "2026-08-22",
-    time: "09:00",
-    label: "접수 및 리허설",
-    location: "경희대학교 체육관",
-    memo: "참가자 등록 및 음악 확인"
-  },
-  {
-    date: "2026-08-22",
-    time: "10:30",
-    label: "개회식",
-    location: "Main floor",
-    memo: "전체 참가자 대기"
-  },
-  {
-    date: "2026-08-22",
-    time: "11:00",
-    label: "경기 시작",
-    location: "Main floor",
-    memo: "세부 순서는 개인 일정표에서 확인"
-  }
-];
+const fallbackPublicSchedule = [];
 
 function renderPublicSchedule(schedule) {
   const target = document.querySelector("[data-public-schedule]");

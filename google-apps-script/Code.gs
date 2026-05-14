@@ -151,11 +151,11 @@ function submitApplication(application, musicFile) {
 function sendConfirmationEmail(application) {
   if (!application.email) return;
 
-  const subject = "[경희대학교 총장배 리듬체조 대회] 신청 접수 안내";
+  const subject = "[경희 라이온스컵 전국 리듬체조 대회] 신청 접수 안내";
   const body = [
     `${application.athleteName || "참가자"} 님,`,
     "",
-    "경희대학교 총장배 리듬체조 대회 신청이 접수되었습니다.",
+    "경희 라이온스컵 전국 리듬체조 대회 신청이 접수되었습니다.",
     "",
     `신청 상태: ${application.status}`,
     `입금 상태: ${application.paymentStatus}`,
@@ -164,7 +164,7 @@ function sendConfirmationEmail(application) {
     "신청 확인 페이지에서 이메일을 입력하면 신청 상태와 개인 일정표를 확인할 수 있습니다.",
     "",
     "감사합니다.",
-    "경희대학교 총장배 리듬체조 대회 운영사무국"
+    "경희 라이온스컵 전국 리듬체조 대회 운영사무국"
   ].join("\n");
 
   try {
