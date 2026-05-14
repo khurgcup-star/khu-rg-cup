@@ -1300,6 +1300,55 @@ input:focus, textarea:focus {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
+.route-step-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.route-step-gallery article {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 34px rgba(17, 24, 39, 0.08);
+}
+.route-step-copy {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 154px;
+  padding: 22px;
+}
+.route-step-copy span {
+  display: inline-grid;
+  place-items: center;
+  width: fit-content;
+  min-width: 42px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--navy);
+  background: #efe3c8;
+  font-size: 13px;
+  font-weight: 900;
+}
+.route-step-copy h3 {
+  margin: 4px 0 0;
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 1.2;
+}
+.route-step-copy p {
+  margin: 0;
+  color: var(--muted);
+}
+.route-step-gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 .route-gallery figure {
   margin: 0;
   overflow: hidden;
@@ -1522,6 +1571,85 @@ input:focus, textarea:focus {
   gap: 14px;
   margin-bottom: 18px;
 }
+.directions-section-head {
+  margin: 34px 0 14px;
+  color: #fff;
+}
+.directions-section-head h2 {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 72px);
+  line-height: 1.04;
+}
+.parking-detail {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: var(--shadow);
+}
+.parking-detail-head span {
+  display: inline-grid;
+  place-items: center;
+  min-height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--navy);
+  background: #efe3c8;
+  font-size: 13px;
+  font-weight: 900;
+}
+.parking-detail-head h3 {
+  margin: 14px 0 8px;
+  color: var(--navy);
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.14;
+}
+.parking-detail-head p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+}
+.parking-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.parking-photo-grid figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+.parking-photo-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.parking-photo-grid figcaption {
+  padding: 13px 15px;
+  color: var(--navy);
+  font-weight: 900;
+}
+.parking-transfer {
+  padding: 18px 20px;
+  border-left: 5px solid var(--gold);
+  border-radius: 8px;
+  background: var(--panel-2);
+}
+.parking-transfer strong {
+  display: block;
+  color: var(--navy);
+  font-size: 18px;
+}
+.parking-transfer p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
 .fee-card {
   display: grid;
   grid-template-columns: 0.78fr 1.22fr;
@@ -1617,10 +1745,12 @@ input:focus, textarea:focus {
     .order-grid,
     .route-steps,
     .route-gallery,
+    .route-step-gallery,
     .directions-hero,
     .map-card,
     .directions-grid,
     .parking-guide,
+    .parking-photo-grid,
     .fee-card {
     grid-template-columns: 1fr;
   }
