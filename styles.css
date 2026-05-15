@@ -590,6 +590,7 @@ button, input, select, textarea { font: inherit; }
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
+    "banner"
     "steps"
     "body"
     "actions"
@@ -605,6 +606,7 @@ button, input, select, textarea { font: inherit; }
   backdrop-filter: blur(16px);
 }
 .wizard-card::before {
+  grid-area: banner;
   display: block;
   padding: 22px 30px;
   color: #fff;
@@ -612,12 +614,12 @@ button, input, select, textarea { font: inherit; }
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 0;
-  content: "KHU President's Cup Registration";
+  content: "KHU President's Cup International RG Registration";
 }
 .stepper {
   grid-area: steps;
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0;
   padding: 18px 28px;
   margin: 0;
@@ -796,10 +798,68 @@ button, input, select, textarea { font: inherit; }
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 }
+.form-grid.three {
+  grid-template-columns: repeat(3, 1fr);
+}
 .form-grid label, .lookup-row input {
   display: grid;
   gap: 8px;
   color: var(--navy);
+  font-weight: 900;
+}
+.member-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.member-section-head h2 {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+.member-section-head .helper {
+  margin: 0 0 14px;
+}
+.add-member-button {
+  flex: 0 0 auto;
+  padding-top: 2px;
+  color: var(--red);
+}
+.member-list {
+  display: grid;
+  gap: 16px;
+}
+.athlete-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.member-index {
+  color: var(--muted);
+  font-size: 15px;
+}
+.custom-event-list {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.custom-event-row {
+  display: grid;
+  gap: 8px;
+  color: var(--navy);
+  font-weight: 900;
+}
+.add-event-button {
+  width: fit-content;
+  min-height: 46px;
+  padding: 0 18px;
+  cursor: pointer;
   font-weight: 900;
 }
 .wide { grid-column: 1 / -1; }
@@ -1741,6 +1801,7 @@ input:focus, textarea:focus {
   .choice-grid.two,
   .choice-grid.four,
     .form-grid,
+    .form-grid.three,
     .apparatus-grid,
     .result-card dl,
     .notice-section,
@@ -1765,7 +1826,7 @@ input:focus, textarea:focus {
     padding: 0;
   }
   .stepper {
-    grid-template-columns: repeat(7, minmax(86px, 1fr));
+    grid-template-columns: repeat(5, minmax(86px, 1fr));
     overflow-x: auto;
     background: var(--panel);
   }

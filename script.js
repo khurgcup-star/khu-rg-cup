@@ -11,8 +11,10 @@ const phraseMap = {
   "모바일 메뉴": "Mobile menu",
   "주요 메뉴": "Main menu",
   "홈으로 이동": "Go home",
-  "경희대학교 총장배 리듬체조 대회": "Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "신청, 종목 선택, 촬영 옵션, 음악 제출, 접수 확인까지 분리된 페이지에서 처리합니다.": "Apply, choose events, request photo or video options, submit music, and check application status through separate pages.",
+  "경희대학교 총장배 국제 리듬체조 대회": "Kyung Hee University President's Cup International Rhythmic Gymnastics",
+  "경희대학교 총장배": "Kyung Hee University President's Cup",
+  "국제 리듬체조 대회": "International Rhythmic Gymnastics Competition",
+  "개인, 단체/그룹, 성인부, 갈라쇼, 심판 제출 신청과 접수 확인을 안내합니다.": "Apply for individual, group/team, adult, gala show, judge submission, and check application status.",
   "대회일": "Event Date",
   "장소": "Venue",
   "경희대학교 체육관": "Kyung Hee University Gymnasium",
@@ -22,7 +24,7 @@ const phraseMap = {
   "일정표 보기": "View Schedule",
   "이메일": "Email",
   "신청은 단계별 화면으로 받습니다": "Applications Are Collected Step by Step",
-  "참가 유형, 대회 부문, 참가 형태, 참가자 정보, 종목, 촬영 및 음악 파일을 순서대로 입력합니다.": "Enter participant type, division, entry type, athlete information, events, media options, and music files in order.",
+  "참가 유형, 신청 부문, 정보, 종목을 순서대로 입력합니다.": "Enter participant type, application type, information, and events in order.",
   "이메일로 신청 내역과 접수 상태를 조회합니다.": "Check application details and status with an email address.",
   "확정 상태는 데이터로 관리합니다": "Confirmation Status Is Managed as Data",
   "실제 운영에서는 신청 폼 데이터를 Google Sheets, Airtable, Supabase 같은 저장소로 받고, 운영자가 상태를 접수대기, 결제확인, 확정, 보완요청으로 바꿉니다.": "For live operation, form submissions should be stored in Google Sheets, Airtable, Supabase, or a similar database. Staff then update the status to pending, payment confirmed, confirmed, or needs revision.",
@@ -38,6 +40,79 @@ const phraseMap = {
   "운영진이 Google Sheet의 Schedule 시트를 업데이트하면 이 페이지에 전체 일정이 표시됩니다. 개인별 상세 일정은 신청 확인 페이지에서 확인할 수 있습니다.": "When staff update the Schedule sheet in Google Sheets, the full schedule appears on this page. Personal schedules are available on the check application page.",
   "일정을 불러오는 중입니다.": "Loading schedule.",
   "Google Sheet 연동 후 자동 표시됩니다.": "This appears automatically after Google Sheets is connected.",
+  "운영진이 연결된 Schedule 시트를 업데이트하면 이 페이지에 전체 일정이 자동 표시됩니다. 일정표를 HTML로 별도 제작하지 않고, 엑셀/시트 원본을 기준으로 보여줍니다.": "When staff update the connected Schedule sheet, the full schedule appears here automatically. The page displays the spreadsheet source instead of maintaining a separate HTML schedule.",
+  "참가자 등록": "Participant Check-in",
+  "안내 데스크 / 접수 확인 및 배번 수령": "Information desk / application check and bib pickup",
+  "안내 데스크": "Information Desk",
+  "접수 확인 및 배번 수령": "application check and bib pickup",
+  "음악 확인": "Music Check",
+  "운영석 / 제출 음악 최종 확인": "Operations desk / final submitted music check",
+  "운영석": "Operations Desk",
+  "제출 음악 최종 확인": "final submitted music check",
+  "개인 경기 세션": "Individual Competition Session",
+  "Main Floor / 개인 경기 진행": "Main Floor / individual competition",
+  "개인 경기 진행": "individual competition",
+  "시상식": "Awards Ceremony",
+  "Main Floor / 부문별 시상 진행": "Main Floor / awards by division",
+  "부문별 시상 진행": "awards by division",
+  "등록된 일정이 없습니다.": "No schedule has been added.",
+  "운영진이 Schedule 시트를 업데이트하면 표시됩니다.": "This will appear when staff update the Schedule sheet.",
+  "운영진 공지 기준": "Based on staff notice",
+  "성인부 / 갈라쇼 / 심판 제출": "Adult / Gala Show / Judge Submission",
+  "대회 요약": "Competition Summary",
+  "2026년 10월 17일(토) - 10월 18일(일)": "October 17 (Sat) - October 18 (Sun), 2026",
+  "신청 마감": "Application Deadline",
+  "필독 공지": "Important Notices",
+  "대회장 이용 전 필독사항": "Important Venue Notices",
+  "관중석 입장과 촬영은 경기 운영과 안전에 직접 영향을 주는 항목입니다.": "Spectator entry and photography directly affect competition operations and safety.",
+  "주차장과 선승관 이동 동선은 오시는 길 페이지에서 확인할 수 있습니다.": "Parking and Seonseungwan routes are available on the directions page.",
+  "2층 관중석 음식물 반입 금지": "No Food in Second-Floor Seating",
+  "물만 반입 가능하며 커피와 음식물은 반입할 수 없습니다. 관중석 입장 시 음식물 검사가 진행됩니다.": "Only water is allowed. Coffee and food are not permitted, and food checks will be conducted at spectator entry.",
+  "1층 관계자 외 출입 제한": "First Floor Access Restricted",
+  "학부모 및 관중은 체육관 입장 후 2층 관객석으로 이동해주세요.": "Parents and spectators should move to the second-floor seating area after entering the gymnasium.",
+  "촬영 장비 제한": "Photography Equipment Restricted",
+  "관중석에서는 스마트폰을 제외한 사진 기기 사용이 불가합니다. 경기 중 플래시가 켜지지 않도록 확인해주세요.": "Only smartphones may be used for photos in the seating area. Please make sure flash is turned off during competition.",
+  "지정 주차장 이용": "Use Designated Parking",
+  "안내된 주차장 외 주차와 불법 주차는 경기 운영에 차질을 줄 수 있어 금지됩니다.": "Parking outside designated areas and illegal parking are prohibited because they may disrupt competition operations.",
+  "신청 전 아래 내용을 준비해주세요": "Prepare the Following Before Applying",
+  "신청 완료 후 신청 확인 페이지에서 입금 확인, 보완요청,": "After submitting, use the check application page to view payment confirmation, revision requests,",
+  "최종 신청완료 여부와 개인 일정표를 확인할 수 있습니다.": "final application status, and personal schedules.",
+  "신규 신청 시작": "Start New Application",
+  "신청 내역 조회": "Application Lookup",
+  "오시는 길 및 주차 안내": "Directions and Parking Guide",
+  "참가 대상": "Entry Categories",
+  "국내 참가자 / International": "Korean Participant / International",
+  "개인 / 단체·그룹": "Individual / Group-Team",
+  "기본 정보": "Basic Information",
+  "선수 이름, 생년월일, 연락처": "Athlete name, date of birth, phone",
+  "이메일, 소속 팀": "Email and team",
+  "단체·그룹은 5-6명 선수 정보": "Group/team entries require 5-6 athletes",
+  "지도자 이름": "Coach name",
+  "지도자 연락처": "Coach phone",
+  "운영진 연락용 이메일": "Email for staff contact",
+  "제출 자료": "Submission Items",
+  "참가 종목 선택": "Select participation events",
+  "성인부와 갈라쇼는 종목명 직접 입력": "Adult and gala show entries enter event names manually",
+  "심판 제출은 이름, 급수, 소속명, 이메일": "Judge submissions require name, grade, organization, and email",
+  "신청 순서": "Application Steps",
+  "신규 신청 클릭": "Click New Application",
+  "상단 또는 이 페이지의 신규 신청 버튼으로 접수를 시작합니다.": "Start registration using the New Application button at the top or on this page.",
+  "참가 기준 선택": "Select Entry Criteria",
+  "참가자 유형과 개인, 단체/그룹, 성인부, 갈라쇼, 심판 제출 중 하나를 선택합니다.": "Choose participant type and one of individual, group/team, adult, gala show, or judge submission.",
+  "정보와 종목 입력": "Enter Information and Events",
+  "선수, 지도자, 종목 또는 심판 제출 정보를 입력합니다.": "Enter athlete, coach, event, or judge submission information.",
+  "동의 후 제출": "Agree and Submit",
+  "신청 완료 후 이메일로 신청 확인에서 상태를 조회합니다.": "After submitting, check status by email on the check application page.",
+  "신청 후에는 확인 페이지를 이용하세요": "Use the Check Page After Applying",
+  "이메일로 신청 내역을 조회할 수 있습니다. 입금, 최종 신청 상태와 개인 일정표는": "You can look up your application by email. Payment, final application status, and personal schedules",
+  "운영진 확인 후 업데이트됩니다.": "are updated after staff review.",
+  "접수 상태 흐름": "Application Status Flow",
+  "입금 확인중": "Payment Checking",
+  "입금": "Payment",
+  "소속": "Team",
+  "송지영": "Song Jiyoung",
+  "확인완료": "Checked",
+  "후프, 볼": "Hoop, Ball",
   "지도 바로가기": "Map Links",
   "이동 안내": "Route Guide",
   "공과대학 지하주차장에서 선승관까지 도보 이동 지도": "Walking map from Engineering Underground Parking to Seonseungwan",
@@ -56,12 +131,92 @@ const phraseMap = {
   "선승관 위치": "Seonseungwan Location",
   "경희대학교 국제캠퍼스 선승관 방문 및 공과대학 지하주차장 이용 안내": "Directions to Kyung Hee University Global Campus Seonseungwan and Engineering Underground Parking",
   "선승관 오시는 길": "Directions to Seonseungwan",
+  "대회 장소는 경희대학교 국제캠퍼스 선승관입니다. 차량 이용 시 안내된 주차장만 이용해주시고, 주차 후 교내 운행 버스를 타고 생명과학대에서 하차하면 선승관으로 이동할 수 있습니다.": "The venue is Seonseungwan at Kyung Hee University Global Campus. Please use only the designated parking areas. After parking, take the campus shuttle and get off at the College of Life Sciences to reach Seonseungwan.",
   "대회 장소는 경희대학교 국제캠퍼스 선승관입니다. 차량 이용 시 공과대학 지하주차장에 주차한 뒤 지상 출구로 나와 선승관 방향 보행로를 따라 이동해주세요.": "The venue is Seonseungwan at Kyung Hee University Global Campus. If arriving by car, park in the Engineering Underground Parking lot, exit to ground level, and follow the pedestrian route toward Seonseungwan.",
   "주소": "Address",
   "경기도 용인시 기흥구 덕영대로 1732": "1732 Deogyeong-daero, Giheung-gu, Yongin-si, Gyeonggi-do",
   "경희대학교 국제캠퍼스 선승관": "Kyung Hee University Global Campus Seonseungwan",
   "선승관": "Seonseungwan",
+  "선승관 이동 순서와 사진": "Seonseungwan Route Steps and Photos",
+  "선승관 오시는 길 제목": "Directions to Seonseungwan Heading",
+  "정문 통과": "Pass the Main Gate",
+  "경희대학교 국제캠퍼스 정문을 통과합니다.": "Pass through the Kyung Hee University Global Campus main gate.",
+  "정문 통과 후 직진": "Go Straight After the Main Gate",
+  "보이는 길을 따라 계속 직진합니다.": "Continue straight along the road ahead.",
+  "차선 따라 직진": "Follow the Lane Straight",
+  "차선을 따라 계속 직진합니다.": "Continue straight along the lane.",
+  "표지판 확인": "Check the Sign",
+  "오른쪽 표지판과 도로 흐름을 확인하며 이동합니다.": "Check the sign on the right and follow the road flow.",
+  "도로 따라 이동": "Follow the Road",
+  "갈림길에서 안내 동선과 차선을 따라 이동합니다.": "At the fork, follow the guided route and lane.",
+  "진입로 확인": "Check the Entrance Road",
+  "선승관 방향 진입로를 확인하고 계속 직진합니다.": "Check the entrance road toward Seonseungwan and continue straight.",
+  "차선 따라 이동": "Follow the Lane",
+  "선승관 방향 우측 차로를 따라 이동합니다.": "Follow the right lane toward Seonseungwan.",
+  "오르막길 이동": "Go Up the Hill",
+  "오르막길을 따라 올라갑니다.": "Go up the hill.",
+  "오르막길 계속 이동": "Continue Up the Hill",
+  "차선을 따라 오르막길을 계속 이동합니다.": "Continue up the hill along the lane.",
+  "선승관 방향": "Toward Seonseungwan",
+  "선승관 건물이 보이는 방향으로 진입합니다.": "Enter toward the visible Seonseungwan building.",
+  "선승관 도착": "Arrive at Seonseungwan",
+  "선승관 체육관에 도착합니다.": "Arrive at Seonseungwan Gymnasium.",
   "공대 지하주차장": "Engineering Underground Parking",
+  "주차 안내 제목": "Parking Guide Heading",
+  "주차 안내": "Parking Guide",
+  "공과대학 지하주차장": "Engineering Underground Parking",
+  "정문 진입 후 차단기를 통과해 직진하고, 왼쪽 농구장을 지나 계속 직진 후 좌회전합니다.": "After entering through the main gate, pass the barrier and go straight. Continue past the basketball court on the left, then turn left.",
+  "내비게이션: 경희대학교 국제캠퍼스 농구장": "Navigation: Kyung Hee University Global Campus Basketball Court",
+  "외국어대학 앞 버스 정류장에서 교내 버스 탑승": "Take the campus shuttle at the bus stop in front of the College of Foreign Languages",
+  "생명과학대 하차": "Get off at the College of Life Sciences",
+  "체육대학 주차장": "College of Physical Education Parking Lot",
+  "정문을 통과해 보이는 길을 따라 직진한 뒤 차단기를 통과하고, 차선을 따라 직진 후 좌회전합니다.": "Pass the main gate, go straight along the visible road, pass the barrier, continue along the lane, then turn left.",
+  "체육대학 주차장 입구로 진입": "Enter the College of Physical Education parking entrance",
+  "사색의 광장 주차장": "Sasaek Plaza Parking Lot",
+  "정문과 차단기를 지나 직진하고, 선승관을 지나 안내 동선에 따라 주차장 입구로 진입합니다.": "Pass the main gate and barrier, continue straight past Seonseungwan, and follow the guided route into the parking entrance.",
+  "내비게이션: 경희대학교 국제캠퍼스 예술디자인대학관": "Navigation: Kyung Hee University Global Campus College of Art and Design",
+  "전자정보대학 앞 사색의 광장 정류장에서 교내 버스 탑승": "Take the campus shuttle at the Sasaek Plaza stop in front of the College of Electronics and Information",
+  "주차 요금 및 주의사항": "Parking Fees and Notices",
+  "주차요금": "Parking Fees",
+  "4시간 2,000원": "4 hours KRW 2,000",
+  "6시간 3,000원": "6 hours KRW 3,000",
+  "24시간 4,000원": "24 hours KRW 4,000",
+  "주의사항": "Notes",
+  "안내된 주차장 외 주차는 금지입니다. 타 단과대 주차나 불법 주차는 민원 및 교통 혼잡으로 경기 운영에 차질을 줄 수 있습니다.": "Parking outside the designated areas is prohibited. Parking at other colleges or illegal parking may cause complaints, traffic congestion, and disruptions to competition operations.",
+  "상세 주차 동선 제목": "Detailed Parking Route Heading",
+  "상세 주차 동선": "Detailed Parking Route",
+  "제1주차장 상세 동선": "Parking Lot 1 Detailed Route",
+  "제2주차장 상세 동선": "Parking Lot 2 Detailed Route",
+  "제3주차장 상세 동선": "Parking Lot 3 Detailed Route",
+  "제1주차장 주차 안내": "Parking Lot 1 Guide",
+  "제2주차장 주차 안내": "Parking Lot 2 Guide",
+  "제3주차장 주차 안내": "Parking Lot 3 Guide",
+  "정문에서 진입해 차단기를 통과한 뒤, 농구장 방향으로 직진하다가 주차장 입구로 진입합니다.": "Enter through the main gate, pass the barrier, go straight toward the basketball court, and enter the parking entrance.",
+  "경희대학교 정문으로 진입합니다.": "Enter through the Kyung Hee University main gate.",
+  "차단기를 통과해 보이는 길을 따라 직진합니다.": "Pass the barrier and continue straight along the road ahead.",
+  "주차장 표지를 확인하고 지하주차장 입구로 진입합니다.": "Check the parking sign and enter the underground parking entrance.",
+  "주차 후 이동": "After Parking",
+  "외국어대학 앞 버스 정류장에서 교내 운행 버스를 탑승한 뒤 생명과학대에서 하차합니다. 교내 버스비는 무료입니다.": "Take the campus shuttle at the bus stop in front of the College of Foreign Languages and get off at the College of Life Sciences. The campus shuttle is free.",
+  "정문 통과 후 직진하고, 차선을 따라 이동하다가 체육대학 주차장 입구로 진입합니다.": "After passing the main gate, go straight and follow the lane into the College of Physical Education parking entrance.",
+  "경희대학교 국제캠퍼스 정문을 통과합니다.": "Pass through the Kyung Hee University Global Campus main gate.",
+  "정문 통과 후 보이는 길을 따라 직진합니다.": "After passing the main gate, continue straight along the road ahead.",
+  "차단기를 지나 계속 직진합니다.": "Pass the barrier and keep going straight.",
+  "차선을 따라 이동하며 좌회전 지점을 확인합니다.": "Follow the lane and check the left-turn point.",
+  "체육대학 주차장 방향으로 진입합니다.": "Enter toward the College of Physical Education parking lot.",
+  "체육대학 건물 앞 갈림길에서 주차장 입구 방향을 확인합니다.": "At the fork in front of the College of Physical Education building, check the direction to the parking entrance.",
+  "체육대학 주차장 인근에 도착합니다.": "Arrive near the College of Physical Education parking lot.",
+  "정문에서 선승관을 지나 사색의 광장 방향으로 이동한 뒤, 안내 동선에 따라 주차장 입구로 진입합니다.": "From the main gate, pass Seonseungwan, move toward Sasaek Plaza, and follow the guided route to the parking entrance.",
+  "차단기를 지나 보이는 길을 따라 직진합니다.": "Pass the barrier and continue straight along the road ahead.",
+  "11시 방향 오르막길을 따라 올라갑니다.": "Go up the hill at the 11 o'clock direction.",
+  "차선을 따라 직진합니다.": "Go straight along the lane.",
+  "오르막길을 지나 계속 직진합니다.": "Pass the hill and continue straight.",
+  "선승관을 오른쪽에 두고 직진합니다.": "Keep Seonseungwan on your right and continue straight.",
+  "좌회전 지점을 확인합니다.": "Check the left-turn point.",
+  "차선을 따라 우회전 후 내리막길로 직진합니다.": "Turn right along the lane, then continue straight downhill.",
+  "주차장 입구 방향으로 이동합니다.": "Move toward the parking entrance.",
+  "안내 동선을 따라 주차장 입구로 진입합니다.": "Follow the guided route into the parking entrance.",
+  "사색의 광장 주차장에 도착합니다. 더 안쪽으로 이동하여 주차하여 주세요.": "Arrive at Sasaek Plaza Parking Lot. Please move farther inside to park.",
+  "전자정보대학 앞 사색의 광장 버스 정류장에서 교내 운행 버스를 탑승한 뒤 생명과학대에서 하차합니다. 교내 버스비는 무료입니다.": "Take the campus shuttle at the Sasaek Plaza bus stop in front of the College of Electronics and Information and get off at the College of Life Sciences. The campus shuttle is free.",
   "선승관 지도 보기": "Open Seonseungwan Map",
   "캠퍼스 지도": "Campus Map",
   "대중교통 이용": "Public Transit",
@@ -85,45 +240,65 @@ const phraseMap = {
   "신청 메뉴": "Application Menu",
   "신청 단계": "Application Steps",
   "참가유형": "Participant Type",
-  "대회부문": "Division",
-  "참가형태": "Entry Type",
-  "참가자정보": "Participant Info",
+  "신청부문": "Application Type",
+  "정보입력": "Information",
   "종목선택": "Events",
   "추가옵션": "Options",
   "동의 & 확인": "Consent & Review",
   "참가자 유형 선택": "Select Participant Type",
+  "참가자의 등록 기준을 선택하세요.": "Select the participant registration type.",
   "국내 참가자": "Korean Participant",
-  "대회 부문 선택": "Select Division",
+  "신청 부문 선택": "Select Application Type",
+  "신청하려는 참가 형태 또는 제출 항목을 선택하세요.": "Choose the application type or submission item.",
   "리듬체조 선수부문": "Rhythmic Gymnastics Athlete Division",
   "비선수 부문": "Non-athlete Division",
   "성인부": "Adult",
-  "성인 참가자 부문": "Adult Participant Division",
-  "갈라 공연 부문": "Gala Performance Division",
+  "종목명을 직접 입력": "Enter event names",
+  "갈라쇼": "Gala Show",
+  "공연 종목 직접 입력": "Enter performance event names",
+  "심판 제출": "Judge Submission",
+  "심판 정보만 제출": "Submit judge information only",
   "참가형태 선택": "Select Entry Type",
   "개인": "Individual",
-  "1인 참가": "Individual entry",
-  "그룹 / 단체": "Group / Team",
+  "개인 선수 참가": "Individual athlete entry",
+  "단체/그룹": "Group / Team",
   "5-6명 팀 참가": "5-6 member team entry",
   "참가자 정보 입력": "Enter Participant Information",
+  "연락 및 소속 정보": "Contact and Team Information",
   "선수 정보": "Athlete Information",
+  "팀 선수 정보": "Team Athlete Information",
+  "최소 5명, 최대 6명까지 입력할 수 있습니다.": "Enter at least 5 and up to 6 athletes.",
+  "+ 선수 추가": "+ Add Athlete",
   "선수 이름 *": "Athlete Name *",
   "선수 이름": "Athlete name",
-  "영문 이름 *": "English Name *",
-  "영문 이름": "English name",
   "국가 / 국적 *": "Country / Nationality *",
   "국가 / 국적": "Country / nationality",
   "생년월일 *": "Date of Birth *",
   "연락처 *": "Phone *",
   "이메일 *": "Email *",
-  "소속 팀/학원 *": "Team / Club *",
-  "소속 팀/학원": "Team / club",
+  "소속 팀 *": "Team *",
+  "소속 팀": "Team",
   "지도자 정보": "Coach Information",
   "지도자명 *": "Coach Name *",
   "지도자명": "Coach name",
   "지도자 연락처 *": "Coach Phone *",
   "종목 선택": "Select Events",
-  "규정 종목": "Required / Program Events",
-  "자유 종목": "Free Events",
+  "개인 종목 선택": "Individual Events",
+  "단체/그룹 종목 선택": "Group Events",
+  "심판란 제출": "Judge Submission",
+  "이름 *": "Name *",
+  "이름": "Name",
+  "급수 *": "Grade *",
+  "급수": "Grade",
+  "소속명 *": "Organization *",
+  "소속명": "Organization",
+  "성인부 종목": "Adult Events",
+  "갈라쇼 종목": "Gala Show Events",
+  "시니어": "Senior",
+  "주니어(2011-2013)": "Junior (2011-2013)",
+  "프리주니어(2014-2017)": "Pre-Junior (2014-2017)",
+  "+ 종목 추가": "+ Add Event",
+  "심판 제출은 종목 선택 없이 다음 단계로 이동할 수 있습니다.": "Judge submissions can continue without selecting events.",
   "후프": "Hoop",
   "볼": "Ball",
   "곤봉": "Clubs",
@@ -145,7 +320,8 @@ const phraseMap = {
   "다음 →": "Next →",
   "신청 완료": "Submit Application",
   "확인 내용": "Review",
-  "규정 종목 또는 자유 종목을 하나 이상 선택해주세요.": "Select at least one required/program event or free event.",
+  "종목을 하나 이상 선택하거나 입력해주세요.": "Select or enter at least one event.",
+  "단체/그룹은 선수 정보를 최소 5명 입력해주세요.": "Group/team entries require at least 5 athletes.",
   "먼저 종목을 선택해주세요.": "Select events first.",
   "대한체조협회 맨손 규정": "KGA freehand program",
   "대한체조협회 수구 규정": "KGA apparatus program",
@@ -167,10 +343,10 @@ const phraseMap = {
   "조회된 신청 내역이 없습니다.": "No application was found.",
   "조회된 신청 내역이 없습니다. 신청할 때 입력한 이메일과 같은지 확인해주세요.": "No application was found. Check that this is the same email used for the application.",
 
-  "신규 신청 | 경희대학교 총장배 리듬체조 대회": "New Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "신청 확인 | 경희대학교 총장배 리듬체조 대회": "Check Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "일정표 | 경희대학교 총장배 리듬체조 대회": "Schedule | Kyung Hee University President's Cup Rhythmic Gymnastics",
-  "오시는 길 | 경희대학교 총장배 리듬체조 대회": "Directions | Kyung Hee University President's Cup Rhythmic Gymnastics"
+  "신규 신청 | 경희대학교 총장배 국제 리듬체조 대회": "New Application | Kyung Hee University President's Cup International Rhythmic Gymnastics",
+  "신청 확인 | 경희대학교 총장배 국제 리듬체조 대회": "Check Application | Kyung Hee University President's Cup International Rhythmic Gymnastics",
+  "일정표 | 경희대학교 총장배 국제 리듬체조 대회": "Schedule | Kyung Hee University President's Cup International Rhythmic Gymnastics",
+  "오시는 길 | 경희대학교 총장배 국제 리듬체조 대회": "Directions | Kyung Hee University President's Cup International Rhythmic Gymnastics"
 };
 
 const statusMap = {
@@ -194,8 +370,8 @@ const sampleApplications = [
     status: "확정",
     participantType: "국내 참가자",
     country: "Korea",
-    division: "Dreamer",
-    entryType: "Individual",
+    division: "국제 리듬체조",
+    entryType: "개인",
     athleteName: "윤시연",
     englishName: "Yun Siyeon",
     birthDate: "",
@@ -204,9 +380,12 @@ const sampleApplications = [
     organization: "KHU RG",
     coachName: "송지영",
     coachPhone: "010-0000-0000",
-    routines: ["Level 1", "Ball"],
+    athletes: [{ name: "윤시연", birthDate: "", phone: "010-0000-0000" }],
+    groupCategory: "",
+    customEvents: [],
+    routines: [],
     apparatus: ["Ball"],
-    photoOptions: ["Level 1"],
+    photoOptions: [],
     videoOptions: ["Ball"],
     musicFileName: "",
     paymentStatus: "결제확인",
@@ -235,9 +414,35 @@ function currentLanguage() {
   return localStorage.getItem(LANGUAGE_KEY) || "ko";
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function translateText(text, lang = currentLanguage()) {
+  const normalized = String(text || "").trim();
   if (lang === "ko") return text;
-  return phraseMap[text] || statusMap[text] || text;
+  const customEventMatch = normalized.match(/^(\d+)\.\s*종목 기입란 \*$/);
+  if (customEventMatch) return `${customEventMatch[1]}. Event *`;
+
+  const customEventPlaceholderMatch = normalized.match(/^종목\s*(\d+)$/);
+  if (customEventPlaceholderMatch) return `Event ${customEventPlaceholderMatch[1]}`;
+
+  const athleteCountMatch = normalized.match(/^(\d+)명$/);
+  if (athleteCountMatch) return `${athleteCountMatch[1]} athlete${athleteCountMatch[1] === "1" ? "" : "s"}`;
+
+  const exact = phraseMap[normalized] || statusMap[normalized];
+  if (exact) return exact;
+
+  let translated = normalized;
+  const dictionary = { ...phraseMap, ...statusMap };
+  Object.keys(dictionary)
+    .filter((key) => /[가-힣]/.test(key) && key.replace(/\s/g, "").length >= 6 && normalized.includes(key))
+    .sort((left, right) => right.length - left.length)
+    .forEach((key) => {
+      translated = translated.replace(new RegExp(escapeRegExp(key), "g"), dictionary[key]);
+    });
+
+  return translated === normalized ? text : translated;
 }
 
 function translateDynamic(text) {
@@ -316,6 +521,10 @@ function applyTranslations() {
   document.title = translateText(sourceTitle, lang);
 }
 
+function refreshTranslations() {
+  if (document.body) applyTranslations();
+}
+
 const mobileButton = document.querySelector("[data-mobile-menu-button]");
 const mobileMenu = document.querySelector("[data-mobile-menu]");
 mobileButton?.addEventListener("click", () => mobileMenu?.classList.toggle("open"));
@@ -389,83 +598,172 @@ function getAllApplications() {
 }
 
 function getCheckedValues(form, name) {
-  return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
+  return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`))
+    .filter((input) => !input.disabled)
+    .map((input) => input.value);
 }
 
 function getRadioValue(form, name) {
-  return form.querySelector(`input[name="${name}"]:checked`)?.value || "";
+  return form.querySelector(`input[name="${name}"]:checked:not(:disabled)`)?.value || "";
+}
+
+function getCustomEventValues(form) {
+  return Array.from(form.querySelectorAll('input[name="customEvent"]:not(:disabled)'))
+    .map((input) => input.value.trim())
+    .filter(Boolean);
 }
 
 function getSelectedEventValues(form) {
-  return [...getCheckedValues(form, "routine"), ...getCheckedValues(form, "apparatus")];
+  return [
+    ...getCheckedValues(form, "routine"),
+    ...getCheckedValues(form, "apparatus"),
+    getRadioValue(form, "groupCategory"),
+    ...getCustomEventValues(form)
+  ].filter(Boolean);
 }
 
-function describeEvent(eventName) {
-  const freeEvents = {
-    Hoop: "자유 종목 · 후프",
-    Ball: "자유 종목 · 볼",
-    Clubs: "자유 종목 · 곤봉",
-    Ribbon: "자유 종목 · 리본",
-    Rope: "자유 종목 · 줄",
-    FH: "자유 종목 · 맨손자유"
-  };
-
-  if (/^Level/.test(eventName)) {
-    return "대한체조협회 맨손 규정";
-  }
-
-  if (["Hoop", "Ball", "Clubs", "Ribbon", "Rope"].includes(eventName)) {
-    return "대한체조협회 수구 규정";
-  }
-
-  return freeEvents[eventName] || "선택 종목";
+function formatEventList(events) {
+  return events.map((eventName) => translateDynamic(eventName)).join(", ");
 }
 
-function syncMediaOptions(form) {
-  const selectedEvents = getSelectedEventValues(form);
-  const containers = Array.from(form.querySelectorAll("[data-dynamic-options]"));
-  const summary = form.querySelector("[data-selected-event-summary]");
+function collectAthletes(form) {
+  return Array.from(form.querySelectorAll("[data-athlete-card]"))
+    .map((card) => ({
+      name: card.querySelector('input[name="athleteName"]')?.value.trim() || "",
+      birthDate: card.querySelector('input[name="birthDate"]')?.value || "",
+      phone: card.querySelector('input[name="athletePhone"]')?.value.trim() || ""
+    }))
+    .filter((athlete) => athlete.name || athlete.birthDate || athlete.phone);
+}
 
-  if (summary) {
-    summary.innerHTML = selectedEvents.length
-      ? selectedEvents
-          .map(
-            (eventName) => `
-              <article class="selected-event-card">
-                <strong>${eventName}</strong>
-                <span>${translateText(describeEvent(eventName))}</span>
-              </article>
-            `
-          )
-          .join("")
-      : `<span class="empty-options">${translateText("먼저 종목을 선택해주세요.")}</span>`;
-  }
-
-  containers.forEach((container) => {
-    const optionName = container.dataset.dynamicOptions;
-    const previousValues = getCheckedValues(form, optionName);
-
-    if (!selectedEvents.length) {
-      container.innerHTML = `<span class="empty-options">${translateText("먼저 종목을 선택해주세요.")}</span>`;
-      return;
-    }
-
-    container.innerHTML = selectedEvents
-      .map((eventName) => {
-        const checked = previousValues.includes(eventName) ? "checked" : "";
-        return `
-          <label class="media-option">
-            <input type="checkbox" name="${optionName}" value="${eventName}" ${checked} />
-            <span class="media-option-check"></span>
-            <span class="media-option-copy">
-              <strong>${eventName}</strong>
-              <small>${translateText(describeEvent(eventName))}</small>
-            </span>
-          </label>
-        `;
-      })
-      .join("");
+function setPanelEnabled(panel, enabled) {
+  if (!panel) return;
+  panel.hidden = !enabled;
+  panel.querySelectorAll("input, select, textarea, button").forEach((control) => {
+    control.disabled = !enabled;
   });
+}
+
+function entryType(form) {
+  return getRadioValue(form, "entryType");
+}
+
+function isJudgeEntry(form) {
+  return entryType(form) === "심판 제출";
+}
+
+function isGroupEntry(form) {
+  return entryType(form) === "단체/그룹";
+}
+
+function usesCustomEvents(form) {
+  return ["성인부", "갈라쇼"].includes(entryType(form));
+}
+
+function createAthleteCard(index) {
+  const article = document.createElement("article");
+  article.className = "athlete-card";
+  article.dataset.athleteCard = "";
+  article.innerHTML = `
+    <strong class="member-index">${index + 1}</strong>
+    <div class="form-grid three">
+      <label>선수 이름 *<input name="athleteName" type="text" placeholder="선수 이름" required /></label>
+      <label>생년월일 *<input name="birthDate" type="date" required /></label>
+      <label>연락처 *<input name="athletePhone" type="tel" placeholder="010-0000-0000" required /></label>
+    </div>
+  `;
+  return article;
+}
+
+function syncAthleteCards(form) {
+  const list = form.querySelector("[data-athlete-list]");
+  if (!list) return;
+
+  const targetCount = isGroupEntry(form) ? Math.max(5, list.children.length || 5) : 1;
+  while (list.children.length < targetCount) {
+    list.appendChild(createAthleteCard(list.children.length));
+  }
+  while (list.children.length > targetCount) {
+    list.lastElementChild?.remove();
+  }
+
+  Array.from(list.children).forEach((card, index) => {
+    card.querySelector(".member-index").textContent = String(index + 1);
+  });
+}
+
+function addAthleteCard(form) {
+  const list = form.querySelector("[data-athlete-list]");
+  if (!list || list.children.length >= 6) return;
+  list.appendChild(createAthleteCard(list.children.length));
+  refreshTranslations();
+}
+
+function createCustomEventRow(index) {
+  const label = document.createElement("label");
+  label.className = "custom-event-row";
+  label.innerHTML = `${index + 1}. 종목 기입란 *<input name="customEvent" type="text" placeholder="종목 ${index + 1}" required />`;
+  return label;
+}
+
+function syncCustomEventRows(form) {
+  const list = form.querySelector("[data-custom-event-list]");
+  if (!list) return;
+  if (!list.children.length) {
+    list.appendChild(createCustomEventRow(0));
+  }
+  Array.from(list.children).forEach((row, index) => {
+    row.firstChild.textContent = `${index + 1}. 종목 기입란 *`;
+    row.querySelector("input").placeholder = `종목 ${index + 1}`;
+  });
+  refreshTranslations();
+}
+
+function addCustomEventRow(form) {
+  const list = form.querySelector("[data-custom-event-list]");
+  if (!list) return;
+  list.appendChild(createCustomEventRow(list.children.length));
+  refreshTranslations();
+}
+
+function syncFormForEntryType(form) {
+  const type = entryType(form);
+  const competitorFields = form.querySelector("[data-competitor-fields]");
+  const judgeFields = form.querySelector("[data-judge-fields]");
+  const individualEvents = form.querySelector("[data-individual-events]");
+  const groupEvents = form.querySelector("[data-group-events]");
+  const customEvents = form.querySelector("[data-custom-events]");
+  const judgeEventNote = form.querySelector("[data-judge-event-note]");
+  const groupHelper = form.querySelector("[data-group-helper]");
+  const addAthleteButton = form.querySelector("[data-add-athlete]");
+  const memberTitle = form.querySelector("[data-member-title]");
+  const customTitle = form.querySelector("[data-custom-event-title]");
+
+  setPanelEnabled(competitorFields, type !== "심판 제출");
+  setPanelEnabled(judgeFields, type === "심판 제출");
+  setPanelEnabled(individualEvents, type === "개인");
+  setPanelEnabled(groupEvents, type === "단체/그룹");
+  setPanelEnabled(customEvents, usesCustomEvents(form));
+  setPanelEnabled(judgeEventNote, type === "심판 제출");
+
+  if (memberTitle) memberTitle.textContent = isGroupEntry(form) ? "팀 선수 정보" : "선수 정보";
+  if (groupHelper) groupHelper.hidden = !isGroupEntry(form);
+  if (addAthleteButton) {
+    addAthleteButton.hidden = !isGroupEntry(form);
+    addAthleteButton.disabled = !isGroupEntry(form);
+  }
+  if (customTitle) customTitle.textContent = type === "갈라쇼" ? "갈라쇼 종목" : "성인부 종목";
+
+  syncAthleteCards(form);
+  syncCustomEventRows(form);
+
+  setPanelEnabled(competitorFields, type !== "심판 제출");
+  setPanelEnabled(judgeFields, type === "심판 제출");
+  setPanelEnabled(individualEvents, type === "개인");
+  setPanelEnabled(groupEvents, type === "단체/그룹");
+  setPanelEnabled(customEvents, usesCustomEvents(form));
+  setPanelEnabled(judgeEventNote, type === "심판 제출");
+  refreshTranslations();
 }
 
 function createApplicationFromForm(form) {
@@ -473,23 +771,34 @@ function createApplicationFromForm(form) {
   const now = new Date();
   const id = `KHU-2026-${String(Date.now()).slice(-6)}`;
   const musicFile = form.querySelector('input[name="musicFile"]')?.files?.[0];
+  const athletes = collectAthletes(form);
+  const firstAthlete = athletes[0] || {};
+  const judgeEmail = String(formData.get("judgeEmail") || "");
+  const applicationEmail = isJudgeEntry(form) ? judgeEmail : String(formData.get("email") || "");
 
   return {
     id,
     createdAt: now.toISOString().slice(0, 10),
     status: "접수대기",
     participantType: getRadioValue(form, "participantType"),
-    country: String(formData.get("country") || ""),
-    division: getRadioValue(form, "division"),
+    country: String(formData.get("country") || getRadioValue(form, "participantType") || ""),
+    division: String(formData.get("division") || "국제 리듬체조"),
     entryType: getRadioValue(form, "entryType"),
-    athleteName: String(formData.get("athleteName") || ""),
+    athleteName: firstAthlete.name || String(formData.get("judgeName") || ""),
     englishName: String(formData.get("englishName") || ""),
-    birthDate: String(formData.get("birthDate") || ""),
-    email: String(formData.get("email") || ""),
-    phone: String(formData.get("phone") || ""),
-    organization: String(formData.get("organization") || ""),
+    birthDate: firstAthlete.birthDate || "",
+    email: applicationEmail,
+    phone: isJudgeEntry(form) ? "" : String(formData.get("phone") || ""),
+    organization: isJudgeEntry(form) ? String(formData.get("judgeOrganization") || "") : String(formData.get("organization") || ""),
     coachName: String(formData.get("coachName") || ""),
     coachPhone: String(formData.get("coachPhone") || ""),
+    athletes,
+    groupCategory: getRadioValue(form, "groupCategory"),
+    customEvents: getCustomEventValues(form),
+    judgeName: String(formData.get("judgeName") || ""),
+    judgeGrade: String(formData.get("judgeGrade") || ""),
+    judgeOrganization: String(formData.get("judgeOrganization") || ""),
+    judgeEmail,
     routines: getCheckedValues(form, "routine"),
     apparatus: getCheckedValues(form, "apparatus"),
     photoOptions: getCheckedValues(form, "photoOptions"),
@@ -512,7 +821,7 @@ async function buildSubmissionPayload(form) {
 
 function validateCurrentStep(form, stepIndex) {
   const step = form.querySelector(`[data-step="${stepIndex}"]`);
-  const controls = Array.from(step.querySelectorAll("input, select, textarea"));
+  const controls = Array.from(step.querySelectorAll("input, select, textarea")).filter((control) => !control.disabled);
   for (const control of controls) {
     if (!control.checkValidity()) {
       control.reportValidity();
@@ -520,9 +829,17 @@ function validateCurrentStep(form, stepIndex) {
     }
   }
 
-  if (stepIndex === 4) {
+  if (stepIndex === 2 && isGroupEntry(form)) {
+    const completedAthletes = collectAthletes(form).filter((athlete) => athlete.name && athlete.birthDate && athlete.phone);
+    if (completedAthletes.length < 5) {
+      form.querySelector("[data-form-message]").textContent = translateText("단체/그룹은 선수 정보를 최소 5명 입력해주세요.");
+      return false;
+    }
+  }
+
+  if (stepIndex === 3 && !isJudgeEntry(form)) {
     if (!getSelectedEventValues(form).length) {
-      form.querySelector("[data-form-message]").textContent = translateText("규정 종목 또는 자유 종목을 하나 이상 선택해주세요.");
+      form.querySelector("[data-form-message]").textContent = translateText("종목을 하나 이상 선택하거나 입력해주세요.");
       return false;
     }
   }
@@ -555,11 +872,12 @@ function setupWizard() {
 
     if (currentStep === steps.length - 1) {
       const preview = createApplicationFromForm(form);
+      const events = formatEventList(getSelectedEventValues(form)) || "-";
+      const displayName = preview.judgeName || preview.athleteName || "-";
       receiptPreview.innerHTML = `
         <strong>${translateDynamic("확인 내용")}</strong><br />
-        ${preview.athleteName || "-"} / ${preview.division || "-"} / ${preview.entryType || "-"}<br />
-        ${translateDynamic("국가 / 국적")}: ${preview.country || "-"}<br />
-        ${translateDynamic("종목")}: ${[...preview.routines, ...preview.apparatus].join(", ") || "-"}<br />
+        ${displayName} / ${translateDynamic(preview.entryType || "-")}<br />
+        ${translateDynamic("종목")}: ${events}<br />
         ${translateDynamic("이메일 *").replace(" *", "")}: ${preview.email || "-"}
       `;
     }
@@ -573,13 +891,16 @@ function setupWizard() {
   nextButton.addEventListener("click", () => {
     if (!validateCurrentStep(form, currentStep)) return;
     currentStep = Math.min(steps.length - 1, currentStep + 1);
-    if (currentStep === 5) syncMediaOptions(form);
+    syncFormForEntryType(form);
     render();
   });
 
-  form.querySelectorAll('input[name="routine"], input[name="apparatus"]').forEach((input) => {
-    input.addEventListener("change", () => syncMediaOptions(form));
+  form.querySelectorAll('input[name="entryType"]').forEach((input) => {
+    input.addEventListener("change", () => syncFormForEntryType(form));
   });
+
+  form.querySelector("[data-add-athlete]")?.addEventListener("click", () => addAthleteCard(form));
+  form.querySelector("[data-add-event]")?.addEventListener("click", () => addCustomEventRow(form));
 
   form.querySelector('input[name="musicFile"]')?.addEventListener("change", (event) => {
     const label = form.querySelector("[data-file-name]");
@@ -623,7 +944,7 @@ function setupWizard() {
 
   document.addEventListener("languagechange", render);
 
-  syncMediaOptions(form);
+  syncFormForEntryType(form);
   render();
 }
 
@@ -634,9 +955,19 @@ function statusClass(status) {
 }
 
 function renderApplication(application) {
-  const events = [...(application.routines || []), ...(application.apparatus || [])].join(", ") || "-";
-  const displayName = currentLanguage() === "en" && application.englishName ? application.englishName : application.athleteName;
+  const events = [
+    ...(application.routines || []),
+    ...(application.apparatus || []),
+    application.groupCategory,
+    ...(application.customEvents || [])
+  ]
+    .filter(Boolean);
+  const eventsText = formatEventList(events) || "-";
+  const displayName =
+    application.judgeName ||
+    (currentLanguage() === "en" && application.englishName ? application.englishName : application.athleteName);
   const schedule = Array.isArray(application.schedule) ? application.schedule : [];
+  const athleteCount = Array.isArray(application.athletes) ? application.athletes.length : 0;
   return `
     <article class="result-card">
       <div class="result-head">
@@ -647,11 +978,12 @@ function renderApplication(application) {
         <span class="status ${statusClass(application.status)}">${translateDynamic(application.status)}</span>
       </div>
       <dl>
-        <div><dt>${translateDynamic("부문")}</dt><dd>${application.division || "-"} - ${application.entryType || "-"}</dd></div>
+        <div><dt>${translateDynamic("부문")}</dt><dd>${translateDynamic(application.entryType || application.division || "-")}</dd></div>
         <div><dt>${translateDynamic("참가유형")}</dt><dd>${translateDynamic(application.participantType || "-")}</dd></div>
-        <div><dt>${translateDynamic("국가 / 국적")}</dt><dd>${application.country || "-"}</dd></div>
-        <div><dt>${translateDynamic("종목")}</dt><dd>${events}</dd></div>
-        <div><dt>${translateDynamic("지도자")}</dt><dd>${application.coachName || "-"}</dd></div>
+        <div><dt>${translateDynamic("소속명 *").replace(" *", "")}</dt><dd>${application.organization || application.judgeOrganization || "-"}</dd></div>
+        <div><dt>${translateDynamic("종목")}</dt><dd>${eventsText}</dd></div>
+        <div><dt>${translateDynamic("지도자")}</dt><dd>${application.coachName || application.judgeGrade || "-"}</dd></div>
+        <div><dt>${translateDynamic("선수 정보")}</dt><dd>${athleteCount ? translateDynamic(`${athleteCount}명`) : "-"}</dd></div>
         <div><dt>${translateDynamic("결제")}</dt><dd>${translateDynamic(application.paymentStatus || "-")}</dd></div>
         <div><dt>${currentLanguage() === "en" ? "Music" : "음악"}</dt><dd>${translateDynamic(application.musicStatus || "-")}</dd></div>
         <div><dt>${translateDynamic("운영 메모")}</dt><dd>${translateDynamic(application.adminMemo || "-")}</dd></div>
@@ -743,13 +1075,13 @@ function renderPublicSchedule(schedule) {
           (item) => `
             <article class="public-schedule-row">
               <time>${item.date || "-"} · ${item.time || "-"}</time>
-              <strong>${item.label || "-"}</strong>
-              <span>${item.location || "-"}${item.memo ? ` / ${item.memo}` : ""}</span>
+              <strong>${translateDynamic(item.label || "-")}</strong>
+              <span>${translateDynamic(item.location || "-")}${item.memo ? ` / ${translateDynamic(item.memo)}` : ""}</span>
             </article>
           `
         )
         .join("")
-    : `<article class="schedule-row"><strong>등록된 일정이 없습니다.</strong><span>운영진이 Schedule 시트를 업데이트하면 표시됩니다.</span></article>`;
+    : `<article class="schedule-row"><strong>${translateDynamic("등록된 일정이 없습니다.")}</strong><span>${translateDynamic("운영진이 Schedule 시트를 업데이트하면 표시됩니다.")}</span></article>`;
 }
 
 async function setupPublicSchedule() {
@@ -775,4 +1107,3 @@ setupWizard();
 setupLookup();
 setupPublicSchedule();
 applyTranslations();
-

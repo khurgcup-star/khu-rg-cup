@@ -23,6 +23,13 @@ const APPLICATION_HEADERS = [
   "organization",
   "coachName",
   "coachPhone",
+  "athletes",
+  "groupCategory",
+  "customEvents",
+  "judgeName",
+  "judgeGrade",
+  "judgeOrganization",
+  "judgeEmail",
   "routines",
   "apparatus",
   "photoOptions",
@@ -122,6 +129,13 @@ function submitApplication(application, musicFile) {
     organization: application.organization || "",
     coachName: application.coachName || "",
     coachPhone: application.coachPhone || "",
+    athletes: JSON.stringify(application.athletes || []),
+    groupCategory: application.groupCategory || "",
+    customEvents: stringifyList(application.customEvents),
+    judgeName: application.judgeName || "",
+    judgeGrade: application.judgeGrade || "",
+    judgeOrganization: application.judgeOrganization || "",
+    judgeEmail: application.judgeEmail || "",
     routines: stringifyList(application.routines),
     apparatus: stringifyList(application.apparatus),
     photoOptions: stringifyList(application.photoOptions),
@@ -151,11 +165,11 @@ function submitApplication(application, musicFile) {
 function sendConfirmationEmail(application) {
   if (!application.email) return;
 
-  const subject = "[경희대학교 총장배 리듬체조 대회] 신청 접수 안내";
+  const subject = "[경희대학교 총장배 국제 리듬체조 대회] 신청 접수 안내";
   const body = [
     `${application.athleteName || "참가자"} 님,`,
     "",
-    "경희대학교 총장배 리듬체조 대회 신청이 접수되었습니다.",
+    "경희대학교 총장배 국제 리듬체조 대회 신청이 접수되었습니다.",
     "",
     `신청 상태: ${application.status}`,
     `입금 상태: ${application.paymentStatus}`,
@@ -164,7 +178,7 @@ function sendConfirmationEmail(application) {
     "신청 확인 페이지에서 이메일을 입력하면 신청 상태와 개인 일정표를 확인할 수 있습니다.",
     "",
     "감사합니다.",
-    "경희대학교 총장배 리듬체조 대회 운영사무국"
+    "경희대학교 총장배 국제 리듬체조 대회 운영사무국"
   ].join("\n");
 
   try {
@@ -186,17 +200,8 @@ function validateApplication(application) {
 
   const requiredFields = [
     ["participantType", "참가자 유형"],
-    ["division", "대회 부문"],
-    ["entryType", "참가 형태"],
-    ["athleteName", "선수 이름"],
-    ["englishName", "영문 이름"],
-    ["country", "국가/국적"],
-    ["birthDate", "생년월일"],
+    ["entryType", "신청 부문"],
     ["email", "이메일"],
-    ["phone", "연락처"],
-    ["organization", "소속"],
-    ["coachName", "지도자명"],
-    ["coachPhone", "지도자 연락처"]
   ];
 
   for (const [field, label] of requiredFields) {
@@ -209,9 +214,48 @@ function validateApplication(application) {
     return { ok: false, error: "이메일 형식이 올바르지 않습니다." };
   }
 
+  if (application.entryType === "심판 제출") {
+    const judgeFields = [
+      ["judgeName", "이름"],
+      ["judgeGrade", "급수"],
+      ["judgeOrganization", "소속명"],
+      ["judgeEmail", "이메일"]
+    ];
+
+    for (const [field, label] of judgeFields) {
+      if (!String(application[field] || "").trim()) {
+        return { ok: false, error: `${label} 항목이 누락되었습니다.` };
+      }
+    }
+
+    return { ok: true };
+  }
+
+  const competitorFields = [
+    ["athleteName", "선수 이름"],
+    ["birthDate", "생년월일"],
+    ["phone", "연락처"],
+    ["organization", "소속"],
+    ["coachName", "지도자명"],
+    ["coachPhone", "지도자 연락처"]
+  ];
+
+  for (const [field, label] of competitorFields) {
+    if (!String(application[field] || "").trim()) {
+      return { ok: false, error: `${label} 항목이 누락되었습니다.` };
+    }
+  }
+
+  const athletes = Array.isArray(application.athletes) ? application.athletes : [];
+  if (application.entryType === "단체/그룹" && athletes.length < 5) {
+    return { ok: false, error: "단체/그룹은 선수 정보를 최소 5명 입력해야 합니다." };
+  }
+
   const selectedEvents = []
     .concat(Array.isArray(application.routines) ? application.routines : [])
     .concat(Array.isArray(application.apparatus) ? application.apparatus : [])
+    .concat(application.groupCategory ? [application.groupCategory] : [])
+    .concat(Array.isArray(application.customEvents) ? application.customEvents : [])
     .filter((item) => String(item || "").trim());
 
   if (!selectedEvents.length) {
@@ -239,6 +283,8 @@ function lookupApplication(email) {
 
     return {
       ...application,
+      athletes: parseJsonList(application.athletes),
+      customEvents: parseList(application.customEvents),
       routines: parseList(application.routines),
       apparatus: parseList(application.apparatus),
       photoOptions: parseList(application.photoOptions),
@@ -360,6 +406,15 @@ function parseList(value) {
     .filter(Boolean);
 }
 
+function parseJsonList(value) {
+  try {
+    const parsed = JSON.parse(String(value || "[]"));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
 function normalize(value) {
   return String(value || "").trim().toLowerCase();
 }
@@ -379,4 +434,3 @@ function maskEmail(value) {
 function jsonResponse(payload) {
   return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);
 }
-

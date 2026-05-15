@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>신규 신청 | 경희대학교 총장배 리듬체조 대회</title>
-    <meta name="description" content="경희대학교 총장배 리듬체조 대회 신규 신청" />
+    <title>신규 신청 | 경희대학교 총장배 국제 리듬체조 대회</title>
+    <meta name="description" content="경희대학교 총장배 국제 리듬체조 대회 신규 신청" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="신규 신청 | 경희대학교 총장배 리듬체조 대회" />
-    <meta property="og:description" content="경희대학교 총장배 리듬체조 대회 참가 신청 페이지입니다." />
+    <meta property="og:title" content="신규 신청 | 경희대학교 총장배 국제 리듬체조 대회" />
+    <meta property="og:description" content="경희대학교 총장배 국제 리듬체조 대회 참가 신청 페이지입니다." />
     <meta property="og:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/og-home.jpg?v=2" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -19,7 +19,7 @@
     <header class="topbar light">
       <a class="logo" href="index.html" aria-label="홈으로 이동">
         <span class="logo-text">KHU CUP</span>
-        <span class="logo-sub">President's Cup RG</span>
+        <span class="logo-sub">International RG</span>
       </a>
       <nav class="desktop-nav" aria-label="주요 메뉴">
         <a href="index.html">대회 안내</a>
@@ -51,12 +51,10 @@
       <form class="wizard-card" data-application-wizard>
         <ol class="stepper" aria-label="신청 단계">
           <li class="active" data-step-dot="0"><span>1</span><small>참가유형</small></li>
-          <li data-step-dot="1"><span>2</span><small>대회부문</small></li>
-          <li data-step-dot="2"><span>3</span><small>참가형태</small></li>
-          <li data-step-dot="3"><span>4</span><small>참가자정보</small></li>
-          <li data-step-dot="4"><span>5</span><small>종목선택</small></li>
-          <li data-step-dot="5"><span>6</span><small>추가옵션</small></li>
-          <li data-step-dot="6"><span>7</span><small>동의 & 확인</small></li>
+          <li data-step-dot="1"><span>2</span><small>신청부문</small></li>
+          <li data-step-dot="2"><span>3</span><small>정보입력</small></li>
+          <li data-step-dot="3"><span>4</span><small>종목선택</small></li>
+          <li data-step-dot="4"><span>5</span><small>동의 & 확인</small></li>
         </ol>
 
         <section class="wizard-step active" data-step="0">
@@ -79,130 +77,112 @@
         </section>
 
         <section class="wizard-step" data-step="1">
-          <h1>대회 부문 선택</h1>
-          <p class="step-intro">참가 기준에 맞는 부문을 선택하세요.</p>
+          <h1>신청 부문 선택</h1>
+          <p class="step-intro">신청하려는 참가 형태 또는 제출 항목을 선택하세요.</p>
+          <input type="hidden" name="division" value="국제 리듬체조" />
           <div class="choice-grid four compact-choice">
             <label class="choice-card text-left">
-              <input type="radio" name="division" value="RG" required />
-              <span class="choice-icon">RG</span>
-              <strong>RG</strong><span>리듬체조 선수부문</span>
+              <input type="radio" name="entryType" value="개인" required />
+              <span class="choice-icon">1</span>
+              <strong>개인</strong><span>개인 선수 참가</span>
             </label>
             <label class="choice-card text-left">
-              <input type="radio" name="division" value="Dreamer" required />
-              <span class="choice-icon">DR</span>
-              <strong>Dreamer</strong><span>비선수 부문</span>
+              <input type="radio" name="entryType" value="단체/그룹" required />
+              <span class="choice-icon">5+</span>
+              <strong>단체/그룹</strong><span>5-6명 팀 참가</span>
             </label>
             <label class="choice-card text-left">
-              <input type="radio" name="division" value="성인부" required />
+              <input type="radio" name="entryType" value="성인부" required />
               <span class="choice-icon">AD</span>
-              <strong>성인부</strong><span>성인 참가자 부문</span>
+              <strong>성인부</strong><span>종목명을 직접 입력</span>
             </label>
             <label class="choice-card text-left">
-              <input type="radio" name="division" value="GALA" required />
+              <input type="radio" name="entryType" value="갈라쇼" required />
               <span class="choice-icon">GA</span>
-              <strong>GALA</strong><span>갈라 공연 부문</span>
+              <strong>갈라쇼</strong><span>공연 종목 직접 입력</span>
+            </label>
+            <label class="choice-card text-left">
+              <input type="radio" name="entryType" value="심판 제출" required />
+              <span class="choice-icon">J</span>
+              <strong>심판 제출</strong><span>심판 정보만 제출</span>
             </label>
           </div>
         </section>
 
         <section class="wizard-step" data-step="2">
-          <h1>참가형태 선택</h1>
-          <p class="step-intro">개인 또는 단체 참가 방식을 선택하세요.</p>
-          <div class="choice-grid two compact-choice">
-            <label class="choice-card">
-              <input type="radio" name="entryType" value="Individual" required />
-              <span class="choice-icon">1</span>
-              <strong>개인</strong><span>1인 참가</span>
-            </label>
-            <label class="choice-card">
-              <input type="radio" name="entryType" value="Group" required />
-              <span class="choice-icon">5+</span>
-              <strong>그룹 / 단체</strong><span>5-6명 팀 참가</span>
-            </label>
+          <h1>참가자 정보 입력</h1>
+
+          <div data-competitor-fields>
+            <div class="member-section-head">
+              <div>
+                <h2 data-member-title>선수 정보</h2>
+                <p class="helper" data-group-helper>최소 5명, 최대 6명까지 입력할 수 있습니다.</p>
+              </div>
+              <button class="link-button add-member-button" type="button" data-add-athlete>+ 선수 추가</button>
+            </div>
+            <div class="member-list" data-athlete-list></div>
+
+            <h2>연락 및 소속 정보</h2>
+            <div class="form-grid">
+              <label>연락처 *<input name="phone" type="tel" placeholder="010-0000-0000" required /></label>
+              <label>이메일 *<input name="email" type="email" placeholder="example@email.com" required /></label>
+              <label class="wide">소속 팀 *<input name="organization" type="text" placeholder="소속 팀" required /></label>
+            </div>
+
+            <h2>지도자 정보</h2>
+            <div class="form-grid">
+              <label>지도자명 *<input name="coachName" type="text" placeholder="지도자명" required /></label>
+              <label>지도자 연락처 *<input name="coachPhone" type="tel" placeholder="010-0000-0000" required /></label>
+            </div>
+          </div>
+
+          <div data-judge-fields hidden>
+            <h2>심판란 제출</h2>
+            <div class="form-grid">
+              <label>이름 *<input name="judgeName" type="text" placeholder="이름" required /></label>
+              <label>급수 *<input name="judgeGrade" type="text" placeholder="급수" required /></label>
+              <label>소속명 *<input name="judgeOrganization" type="text" placeholder="소속명" required /></label>
+              <label>이메일 *<input name="judgeEmail" type="email" placeholder="example@email.com" required /></label>
+            </div>
           </div>
         </section>
 
         <section class="wizard-step" data-step="3">
-          <h1>참가자 정보 입력</h1>
-          <h2>선수 정보</h2>
-          <div class="form-grid">
-            <label>선수 이름 *<input name="athleteName" type="text" placeholder="선수 이름" required /></label>
-            <label>영문 이름 *<input name="englishName" type="text" placeholder="영문 이름" required /></label>
-            <label>국가 / 국적 *<input name="country" type="text" placeholder="국가 / 국적" required /></label>
-            <label>생년월일 *<input name="birthDate" type="date" required /></label>
-            <label>연락처 *<input name="phone" type="tel" placeholder="010-0000-0000" required /></label>
-            <label>이메일 *<input name="email" type="email" placeholder="example@email.com" required /></label>
-            <label class="wide">소속 팀/학원 *<input name="organization" type="text" placeholder="소속 팀/학원" required /></label>
-          </div>
-          <h2>지도자 정보</h2>
-          <div class="form-grid">
-            <label>지도자명 *<input name="coachName" type="text" placeholder="지도자명" required /></label>
-            <label>지도자 연락처 *<input name="coachPhone" type="tel" placeholder="010-0000-0000" required /></label>
-          </div>
-        </section>
-
-        <section class="wizard-step" data-step="4">
           <h1>종목 선택</h1>
-          <div class="event-block">
-            <h2>규정 종목</h2>
-            <h3 class="event-subtitle">대한체조협회 맨손 규정</h3>
-            <div class="pill-group">
-              <label><input type="checkbox" name="routine" value="Level 1" />Level 1</label>
-              <label><input type="checkbox" name="routine" value="Level 2" />Level 2</label>
-              <label><input type="checkbox" name="routine" value="Level 3" />Level 3</label>
-            </div>
 
-            <h3 class="event-subtitle">대한체조협회 수구 규정</h3>
-            <div class="pill-group">
-              <label><input type="checkbox" name="routine" value="Hoop" />후프 Hoop</label>
-              <label><input type="checkbox" name="routine" value="Ball" />볼 Ball</label>
-              <label><input type="checkbox" name="routine" value="Clubs" />곤봉 Clubs</label>
-              <label><input type="checkbox" name="routine" value="Ribbon" />리본 Ribbon</label>
-              <label><input type="checkbox" name="routine" value="Rope" />줄 Rope</label>
-            </div>
-          </div>
-
-          <div class="event-block">
-            <h2>자유 종목</h2>
+          <div class="event-block" data-individual-events>
+            <h2>개인 종목 선택</h2>
             <div class="apparatus-grid">
               <label><input type="checkbox" name="apparatus" value="Hoop" /><strong>Hoop</strong><span>후프</span></label>
               <label><input type="checkbox" name="apparatus" value="Ball" /><strong>Ball</strong><span>볼</span></label>
               <label><input type="checkbox" name="apparatus" value="Clubs" /><strong>Clubs</strong><span>곤봉</span></label>
               <label><input type="checkbox" name="apparatus" value="Ribbon" /><strong>Ribbon</strong><span>리본</span></label>
-              <label><input type="checkbox" name="apparatus" value="Rope" /><strong>Rope</strong><span>줄</span></label>
               <label><input type="checkbox" name="apparatus" value="FH" /><strong>FH</strong><span>맨손자유</span></label>
             </div>
           </div>
-        </section>
 
-        <section class="wizard-step" data-step="5">
-          <h1>추가 옵션</h1>
-          <div class="selected-events-summary">
-            <h2>선택한 종목</h2>
-            <div class="selected-event-list" data-selected-event-summary></div>
+          <div class="event-block" data-group-events hidden>
+            <h2>단체/그룹 종목 선택</h2>
+            <div class="apparatus-grid group-category-grid">
+              <label><input type="radio" name="groupCategory" value="시니어" /><strong>Senior</strong><span>시니어</span></label>
+              <label><input type="radio" name="groupCategory" value="주니어(2011-2013)" /><strong>Junior</strong><span>2011-2013</span></label>
+              <label><input type="radio" name="groupCategory" value="프리주니어(2014-2017)" /><strong>Pre-Junior</strong><span>2014-2017</span></label>
+            </div>
           </div>
-          <div class="event-block">
-            <h2>사진 촬영 신청</h2>
-            <p class="helper">선택한 종목 중 사진 촬영을 원하는 항목만 켜주세요.</p>
-            <div class="pill-group dynamic-options" data-dynamic-options="photoOptions"></div>
+
+          <div class="event-block" data-custom-events hidden>
+            <h2 data-custom-event-title>종목 선택</h2>
+            <div class="custom-event-list" data-custom-event-list></div>
+            <button class="empty-options add-event-button" type="button" data-add-event>+ 종목 추가</button>
           </div>
-          <div class="event-block">
-            <h2>영상 촬영 신청</h2>
-            <p class="helper">선택한 종목 중 영상 촬영을 원하는 항목만 켜주세요.</p>
-            <div class="pill-group dynamic-options" data-dynamic-options="videoOptions"></div>
-          </div>
-          <div class="event-block">
-            <h2>음악 파일 제출</h2>
-            <p class="helper">MP3, WAV, M4A 파일을 업로드하세요. 실제 운영 시 파일은 Jotform 또는 서버 저장소로 전송됩니다.</p>
-            <label class="file-drop">
-              <input name="musicFile" type="file" accept=".mp3,.wav,.m4a" />
-              <span>클릭하여 파일 선택</span>
-              <small data-file-name>선택된 파일 없음</small>
-            </label>
+
+          <div class="event-block" data-judge-event-note hidden>
+            <h2>심판 제출</h2>
+            <p class="helper">심판 제출은 종목 선택 없이 다음 단계로 이동할 수 있습니다.</p>
           </div>
         </section>
 
-        <section class="wizard-step" data-step="6">
+        <section class="wizard-step" data-step="4">
           <h1>동의 및 확인</h1>
           <div class="agreement-panel">
             <label><input type="checkbox" name="privacyConsent" required />개인정보 수집 및 이용에 동의합니다.</label>
@@ -225,4 +205,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-
