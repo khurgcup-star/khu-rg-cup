@@ -60,7 +60,7 @@
         <section class="wizard-step active" data-step="0">
           <h1>참가자 유형 선택</h1>
           <p class="step-intro">참가자의 등록 기준을 선택하세요.</p>
-          <div class="choice-grid two compact-choice">
+          <div class="choice-grid three compact-choice">
             <label class="choice-card">
               <input type="radio" name="participantType" value="International" required />
               <span class="choice-icon">INT</span>
@@ -72,6 +72,12 @@
               <span class="choice-icon">KOR</span>
               <strong>국내 참가자</strong>
               <span>Korean athlete or club</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="participantType" value="심판 제출" required />
+              <span class="choice-icon">J</span>
+              <strong>심판 제출</strong>
+              <span>심판 정보만 제출</span>
             </label>
           </div>
         </section>
@@ -100,11 +106,6 @@
               <input type="radio" name="entryType" value="갈라쇼" required />
               <span class="choice-icon">GA</span>
               <strong>갈라쇼</strong><span>공연 종목 직접 입력</span>
-            </label>
-            <label class="choice-card text-left">
-              <input type="radio" name="entryType" value="심판 제출" required />
-              <span class="choice-icon">J</span>
-              <strong>심판 제출</strong><span>심판 정보만 제출</span>
             </label>
           </div>
         </section>

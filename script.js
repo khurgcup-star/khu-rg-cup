@@ -58,7 +58,7 @@ const phraseMap = {
   "등록된 일정이 없습니다.": "No schedule has been added.",
   "운영진이 Schedule 시트를 업데이트하면 표시됩니다.": "This will appear when staff update the Schedule sheet.",
   "운영진 공지 기준": "Based on staff notice",
-  "성인부 / 갈라쇼 / 심판 제출": "Adult / Gala Show / Judge Submission",
+  "성인부 / 갈라쇼": "Adult / Gala Show",
   "대회 요약": "Competition Summary",
   "2026년 10월 17일(토) - 10월 18일(일)": "October 17 (Sat) - October 18 (Sun), 2026",
   "신청 마감": "Application Deadline",
@@ -81,7 +81,7 @@ const phraseMap = {
   "신청 내역 조회": "Application Lookup",
   "오시는 길 및 주차 안내": "Directions and Parking Guide",
   "참가 대상": "Entry Categories",
-  "국내 참가자 / International": "Korean Participant / International",
+  "국내 참가자 / International / 심판 제출": "Korean Participant / International / Judge Submission",
   "개인 / 단체·그룹": "Individual / Group-Team",
   "기본 정보": "Basic Information",
   "선수 이름, 생년월일, 연락처": "Athlete name, date of birth, phone",
@@ -98,9 +98,9 @@ const phraseMap = {
   "신규 신청 클릭": "Click New Application",
   "상단 또는 이 페이지의 신규 신청 버튼으로 접수를 시작합니다.": "Start registration using the New Application button at the top or on this page.",
   "참가 기준 선택": "Select Entry Criteria",
-  "참가자 유형과 개인, 단체/그룹, 성인부, 갈라쇼, 심판 제출 중 하나를 선택합니다.": "Choose participant type and one of individual, group/team, adult, gala show, or judge submission.",
+  "참가자 유형에서 국내, International, 심판 제출 중 하나를 선택한 뒤 선수는 신청 부문을 선택합니다.": "Choose Korean, International, or Judge Submission first. Athletes then choose an application type.",
   "정보와 종목 입력": "Enter Information and Events",
-  "선수, 지도자, 종목 또는 심판 제출 정보를 입력합니다.": "Enter athlete, coach, event, or judge submission information.",
+  "선수는 선수, 지도자, 종목 정보를 입력하고 심판은 기본 정보만 입력합니다.": "Athletes enter athlete, coach, and event information. Judges enter basic information only.",
   "동의 후 제출": "Agree and Submit",
   "신청 완료 후 이메일로 신청 확인에서 상태를 조회합니다.": "After submitting, check status by email on the check application page.",
   "신청 후에는 확인 페이지를 이용하세요": "Use the Check Page After Applying",
@@ -645,11 +645,20 @@ function setPanelEnabled(panel, enabled) {
 }
 
 function entryType(form) {
+  if (isJudgeParticipant(form)) return "심판 제출";
   return getRadioValue(form, "entryType");
 }
 
+function participantType(form) {
+  return getRadioValue(form, "participantType");
+}
+
+function isJudgeParticipant(form) {
+  return participantType(form) === "심판 제출";
+}
+
 function isJudgeEntry(form) {
-  return entryType(form) === "심판 제출";
+  return isJudgeParticipant(form) || getRadioValue(form, "entryType") === "심판 제출";
 }
 
 function isGroupEntry(form) {
@@ -728,6 +737,7 @@ function addCustomEventRow(form) {
 
 function syncFormForEntryType(form) {
   const type = entryType(form);
+  const judgeSelected = isJudgeEntry(form);
   const competitorFields = form.querySelector("[data-competitor-fields]");
   const judgeFields = form.querySelector("[data-judge-fields]");
   const individualEvents = form.querySelector("[data-individual-events]");
@@ -739,12 +749,16 @@ function syncFormForEntryType(form) {
   const memberTitle = form.querySelector("[data-member-title]");
   const customTitle = form.querySelector("[data-custom-event-title]");
 
-  setPanelEnabled(competitorFields, type !== "심판 제출");
-  setPanelEnabled(judgeFields, type === "심판 제출");
+  form.querySelectorAll('input[name="entryType"]').forEach((input) => {
+    input.disabled = judgeSelected;
+  });
+
+  setPanelEnabled(competitorFields, !judgeSelected);
+  setPanelEnabled(judgeFields, judgeSelected);
   setPanelEnabled(individualEvents, type === "개인");
   setPanelEnabled(groupEvents, type === "단체/그룹");
   setPanelEnabled(customEvents, usesCustomEvents(form));
-  setPanelEnabled(judgeEventNote, type === "심판 제출");
+  setPanelEnabled(judgeEventNote, judgeSelected);
 
   if (memberTitle) memberTitle.textContent = isGroupEntry(form) ? "팀 선수 정보" : "선수 정보";
   if (groupHelper) groupHelper.hidden = !isGroupEntry(form);
@@ -757,12 +771,12 @@ function syncFormForEntryType(form) {
   syncAthleteCards(form);
   syncCustomEventRows(form);
 
-  setPanelEnabled(competitorFields, type !== "심판 제출");
-  setPanelEnabled(judgeFields, type === "심판 제출");
+  setPanelEnabled(competitorFields, !judgeSelected);
+  setPanelEnabled(judgeFields, judgeSelected);
   setPanelEnabled(individualEvents, type === "개인");
   setPanelEnabled(groupEvents, type === "단체/그룹");
   setPanelEnabled(customEvents, usesCustomEvents(form));
-  setPanelEnabled(judgeEventNote, type === "심판 제출");
+  setPanelEnabled(judgeEventNote, judgeSelected);
   refreshTranslations();
 }
 
@@ -781,9 +795,9 @@ function createApplicationFromForm(form) {
     createdAt: now.toISOString().slice(0, 10),
     status: "접수대기",
     participantType: getRadioValue(form, "participantType"),
-    country: String(formData.get("country") || getRadioValue(form, "participantType") || ""),
+    country: isJudgeEntry(form) ? "" : String(formData.get("country") || getRadioValue(form, "participantType") || ""),
     division: String(formData.get("division") || "국제 리듬체조"),
-    entryType: getRadioValue(form, "entryType"),
+    entryType: entryType(form),
     athleteName: firstAthlete.name || String(formData.get("judgeName") || ""),
     englishName: String(formData.get("englishName") || ""),
     birthDate: firstAthlete.birthDate || "",
@@ -860,11 +874,32 @@ function setupWizard() {
   const receiptPreview = form.querySelector("[data-receipt-preview]");
   let currentStep = 0;
 
+  function isStepSkipped(stepIndex) {
+    return isJudgeEntry(form) && (stepIndex === 1 || stepIndex === 3);
+  }
+
+  function nextStepIndex(fromIndex) {
+    let target = Math.min(steps.length - 1, fromIndex + 1);
+    while (target < steps.length - 1 && isStepSkipped(target)) {
+      target += 1;
+    }
+    return target;
+  }
+
+  function prevStepIndex(fromIndex) {
+    let target = Math.max(0, fromIndex - 1);
+    while (target > 0 && isStepSkipped(target)) {
+      target -= 1;
+    }
+    return target;
+  }
+
   function render() {
     steps.forEach((step, index) => step.classList.toggle("active", index === currentStep));
     dots.forEach((dot, index) => {
       dot.classList.toggle("active", index === currentStep);
       dot.classList.toggle("done", index < currentStep);
+      dot.classList.toggle("skipped", isStepSkipped(index));
     });
     prevButton.style.visibility = currentStep === 0 ? "hidden" : "visible";
     nextButton.classList.toggle("hidden", currentStep === steps.length - 1);
@@ -884,15 +919,23 @@ function setupWizard() {
   }
 
   prevButton.addEventListener("click", () => {
-    currentStep = Math.max(0, currentStep - 1);
+    currentStep = prevStepIndex(currentStep);
     render();
   });
 
   nextButton.addEventListener("click", () => {
-    if (!validateCurrentStep(form, currentStep)) return;
-    currentStep = Math.min(steps.length - 1, currentStep + 1);
     syncFormForEntryType(form);
+    if (!validateCurrentStep(form, currentStep)) return;
+    currentStep = nextStepIndex(currentStep);
     render();
+  });
+
+  form.querySelectorAll('input[name="participantType"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      syncFormForEntryType(form);
+      if (isStepSkipped(currentStep)) currentStep = nextStepIndex(0);
+      render();
+    });
   });
 
   form.querySelectorAll('input[name="entryType"]').forEach((input) => {
