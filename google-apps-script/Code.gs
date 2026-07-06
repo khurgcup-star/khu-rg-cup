@@ -4,7 +4,7 @@ const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-06-pledge-upload";
+const API_VERSION = "2026-07-07-readable-file-names";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -352,8 +352,7 @@ function savePledgeFile(id, application, pledgeFile) {
   const parentFolder = getParentFolder(musicFolder);
   const folder = getOrCreateSubfolder(parentFolder, PLEDGE_FOLDER_NAME);
   const bytes = Utilities.base64Decode(pledgeFile.base64);
-  const safeAthlete = sanitizeFileName(application.englishName || application.athleteName || application.judgeName || "applicant");
-  const safeFileName = `${id}_${safeAthlete}_${sanitizeFileName(pledgeFile.name || "pledge")}`;
+  const safeFileName = buildSubmissionFileName(id, application, "서약서", pledgeFile.name || "pledge");
   const blob = Utilities.newBlob(bytes, pledgeFile.mimeType || "application/octet-stream", safeFileName);
   const file = folder.createFile(blob);
   return { name: file.getName(), url: file.getUrl() };
@@ -366,11 +365,22 @@ function saveMusicFile(id, application, musicFile) {
 
   const folder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
   const bytes = Utilities.base64Decode(musicFile.base64);
-  const safeAthlete = sanitizeFileName(application.englishName || application.athleteName || "athlete");
-  const safeFileName = `${id}_${safeAthlete}_${sanitizeFileName(musicFile.name || "music")}`;
+  const safeFileName = buildSubmissionFileName(id, application, "음악", musicFile.name || "music");
   const blob = Utilities.newBlob(bytes, musicFile.mimeType || "application/octet-stream", safeFileName);
   const file = folder.createFile(blob);
   return { name: file.getName(), url: file.getUrl() };
+}
+
+function buildSubmissionFileName(id, application, fileKind, originalName) {
+  const team = application.organization || application.judgeOrganization || "소속없음";
+  const athlete = application.athleteName || application.judgeName || application.englishName || "참가자";
+  const entryType = application.entryType || application.division || "신청";
+  const parts = [team, athlete, entryType, fileKind, id, originalName];
+  return parts.map((part) => sanitizeFileNamePart(part)).filter(Boolean).join("_");
+}
+
+function sanitizeFileNamePart(value) {
+  return sanitizeFileName(value).replace(/\s+/g, " ").trim() || "미입력";
 }
 
 function getOrCreateSubfolder(parentFolder, name) {
