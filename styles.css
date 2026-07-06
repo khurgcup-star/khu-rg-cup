@@ -1057,6 +1057,10 @@ input:focus, textarea:focus {
   background: #fff;
   cursor: pointer;
 }
+.file-drop.dragging {
+  border-color: var(--red);
+  background: rgba(157, 35, 49, 0.06);
+}
 .file-drop input { display: none; }
 .file-drop span { color: var(--navy); font-weight: 900; }
 .agreement-panel {

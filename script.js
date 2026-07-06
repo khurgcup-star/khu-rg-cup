@@ -311,8 +311,9 @@ const phraseMap = {
   "영상 촬영 신청": "Video Request",
   "음악 파일 제출": "Music File Submission",
   "MP3, WAV, M4A 파일을 업로드하세요. 실제 운영 시 파일은 Jotform 또는 서버 저장소로 전송됩니다.": "Upload an MP3, WAV, or M4A file. In live operation, files should be sent to Jotform or a server storage.",
-  "클릭하여 파일 선택": "Click to choose a file",
+  "파일을 드래그하거나 클릭하여 선택": "Drag a file here or click to choose",
   "선택된 파일 없음": "No file selected",
+  "MP3, WAV, M4A 파일만 업로드할 수 있습니다.": "Only MP3, WAV, and M4A files can be uploaded.",
   "동의 및 확인": "Consent and Review",
   "개인정보 수집 및 이용에 동의합니다.": "I agree to the collection and use of personal information.",
   "대회 사진 및 영상 촬영/활용 안내를 확인했습니다.": "I have reviewed the photo and video recording/use notice.",
@@ -580,6 +581,13 @@ function readFileAsPayload(file) {
   });
 }
 
+function isAcceptedMusicFile(file) {
+  if (!file) return false;
+  const name = String(file.name || "").toLowerCase();
+  const type = String(file.type || "").toLowerCase();
+  return /\.(mp3|wav|m4a)$/.test(name) || ["audio/mpeg", "audio/wav", "audio/x-wav", "audio/x-m4a", "audio/mp4"].includes(type);
+}
+
 function getStoredApplications() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -789,33 +797,42 @@ function createApplicationFromForm(form) {
   const athletes = collectAthletes(form);
   const firstAthlete = athletes[0] || {};
   const judgeEmail = String(formData.get("judgeEmail") || "");
-  const applicationEmail = isJudgeEntry(form) ? judgeEmail : String(formData.get("email") || "");
+  const judgeName = String(formData.get("judgeName") || "");
+  const judgeSelected = isJudgeEntry(form);
+  const selectedEntryType = entryType(form);
+  const groupCategory = getRadioValue(form, "groupCategory");
+  const applicationEmail = judgeSelected ? judgeEmail : String(formData.get("email") || "");
   const customEvents = getCustomEventValues(form);
+  const routineEvents = usesCustomEvents(form)
+    ? customEvents
+    : selectedEntryType === "단체/그룹" && groupCategory
+      ? [groupCategory]
+      : getCheckedValues(form, "routine");
 
   return {
     id,
     createdAt: now.toISOString().slice(0, 10),
     status: "접수대기",
     participantType: getRadioValue(form, "participantType"),
-    country: isJudgeEntry(form) ? "" : String(formData.get("country") || getRadioValue(form, "participantType") || ""),
+    country: judgeSelected ? "심판 제출" : String(formData.get("country") || getRadioValue(form, "participantType") || ""),
     division: String(formData.get("division") || "국제 리듬체조"),
-    entryType: entryType(form),
-    athleteName: firstAthlete.name || String(formData.get("judgeName") || ""),
-    englishName: String(formData.get("englishName") || ""),
-    birthDate: firstAthlete.birthDate || "",
+    entryType: selectedEntryType,
+    athleteName: firstAthlete.name || judgeName,
+    englishName: judgeSelected ? judgeName : String(formData.get("englishName") || ""),
+    birthDate: judgeSelected ? "1900-01-01" : firstAthlete.birthDate || "",
     email: applicationEmail,
-    phone: isJudgeEntry(form) ? "" : String(formData.get("phone") || ""),
-    organization: isJudgeEntry(form) ? String(formData.get("judgeOrganization") || "") : String(formData.get("organization") || ""),
-    coachName: String(formData.get("coachName") || ""),
-    coachPhone: String(formData.get("coachPhone") || ""),
+    phone: judgeSelected ? "심판 제출" : String(formData.get("phone") || ""),
+    organization: judgeSelected ? String(formData.get("judgeOrganization") || "") : String(formData.get("organization") || ""),
+    coachName: judgeSelected ? judgeName : String(formData.get("coachName") || ""),
+    coachPhone: judgeSelected ? "심판 제출" : String(formData.get("coachPhone") || ""),
     athletes,
-    groupCategory: getRadioValue(form, "groupCategory"),
+    groupCategory,
     customEvents,
-    judgeName: String(formData.get("judgeName") || ""),
+    judgeName,
     judgeGrade: String(formData.get("judgeGrade") || ""),
     judgeOrganization: String(formData.get("judgeOrganization") || ""),
     judgeEmail,
-    routines: usesCustomEvents(form) ? customEvents : getCheckedValues(form, "routine"),
+    routines: judgeSelected ? ["심판 제출"] : routineEvents,
     apparatus: getCheckedValues(form, "apparatus"),
     photoOptions: getCheckedValues(form, "photoOptions"),
     videoOptions: getCheckedValues(form, "videoOptions"),
@@ -947,9 +964,55 @@ function setupWizard() {
   form.querySelector("[data-add-athlete]")?.addEventListener("click", () => addAthleteCard(form));
   form.querySelector("[data-add-event]")?.addEventListener("click", () => addCustomEventRow(form));
 
-  form.querySelector('input[name="musicFile"]')?.addEventListener("change", (event) => {
+  const musicInput = form.querySelector('input[name="musicFile"]');
+  const fileDrop = form.querySelector(".file-drop");
+  const fileLabel = form.querySelector("[data-file-name]");
+
+  function setMusicFile(file) {
+    if (!musicInput || !file) return;
+    const message = form.querySelector("[data-form-message]");
+    if (!isAcceptedMusicFile(file)) {
+      musicInput.value = "";
+      if (fileLabel) fileLabel.textContent = translateText("선택된 파일 없음");
+      if (message) message.textContent = translateText("MP3, WAV, M4A 파일만 업로드할 수 있습니다.");
+      return;
+    }
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    musicInput.files = transfer.files;
+    if (fileLabel) fileLabel.textContent = file.name;
+    if (message) message.textContent = "";
+  }
+
+  musicInput?.addEventListener("change", (event) => {
     const label = form.querySelector("[data-file-name]");
-    label.textContent = event.target.files?.[0]?.name || translateText("선택된 파일 없음");
+    const file = event.target.files?.[0];
+    if (file && !isAcceptedMusicFile(file)) {
+      event.target.value = "";
+      label.textContent = translateText("선택된 파일 없음");
+      form.querySelector("[data-form-message]").textContent = translateText("MP3, WAV, M4A 파일만 업로드할 수 있습니다.");
+      return;
+    }
+    label.textContent = file?.name || translateText("선택된 파일 없음");
+  });
+
+  ["dragenter", "dragover"].forEach((type) => {
+    fileDrop?.addEventListener(type, (event) => {
+      event.preventDefault();
+      fileDrop.classList.add("dragging");
+    });
+  });
+
+  ["dragleave", "drop"].forEach((type) => {
+    fileDrop?.addEventListener(type, () => {
+      fileDrop.classList.remove("dragging");
+    });
+  });
+
+  fileDrop?.addEventListener("drop", (event) => {
+    event.preventDefault();
+    setMusicFile(event.dataTransfer?.files?.[0]);
   });
 
   form.addEventListener("submit", async (event) => {
