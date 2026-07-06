@@ -185,17 +185,28 @@
 
           <div class="event-block" data-music-upload>
             <h2>음악 파일 제출</h2>
-            <p class="helper">MP3, WAV, M4A 파일을 업로드하세요.</p>
+            <p class="helper">음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.</p>
             <label class="file-drop">
               <input name="musicFile" type="file" accept=".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-m4a,audio/mp4" />
               <span>파일을 드래그하거나 클릭하여 선택</span>
-              <small data-file-name>선택된 파일 없음</small>
+              <small data-music-file-name>선택된 파일 없음</small>
             </label>
           </div>
         </section>
 
         <section class="wizard-step" data-step="4">
           <h1>동의 및 확인</h1>
+          <div class="event-block" data-pledge-upload>
+            <h2>서약서 제출</h2>
+            <p class="helper">
+              <a href="정보/서약서.hwp" download>서약서 양식 다운로드</a> 후 서명한 파일을 업로드하세요. PDF, HWP, HWPX, JPG, PNG 파일을 받을 수 있습니다.
+            </p>
+            <label class="file-drop">
+              <input name="pledgeFile" type="file" accept=".pdf,.hwp,.hwpx,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required />
+              <span>서약서 파일을 드래그하거나 클릭하여 선택</span>
+              <small data-pledge-file-name>선택된 파일 없음</small>
+            </label>
+          </div>
           <div class="agreement-panel">
             <label><input type="checkbox" name="privacyConsent" required />개인정보 수집 및 이용에 동의합니다.</label>
             <label><input type="checkbox" name="mediaConsent" required />대회 사진 및 영상 촬영/활용 안내를 확인했습니다.</label>

@@ -309,7 +309,14 @@ const phraseMap = {
   "추가 옵션": "Additional Options",
   "사진 촬영 신청": "Photo Request",
   "영상 촬영 신청": "Video Request",
+  "서약서 제출": "Pledge Submission",
+  "서약서 양식 다운로드": "Download pledge form",
+  "서약서 파일을 드래그하거나 클릭하여 선택": "Drag the signed pledge here or click to choose",
+  "PDF, HWP, HWPX, JPG, PNG 파일만 업로드할 수 있습니다.": "Only PDF, HWP, HWPX, JPG, and PNG files can be uploaded.",
+  "서약서 파일을 업로드해주세요.": "Please upload the signed pledge file.",
+  "서약서가 서버에 저장되지 않았습니다. Apps Script 배포를 확인해주세요.": "The pledge was not saved on the server. Check the Apps Script deployment.",
   "음악 파일 제출": "Music File Submission",
+  "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.": "Music is optional. Upload an MP3, WAV, or M4A file.",
   "MP3, WAV, M4A 파일을 업로드하세요. 실제 운영 시 파일은 Jotform 또는 서버 저장소로 전송됩니다.": "Upload an MP3, WAV, or M4A file. In live operation, files should be sent to Jotform or a server storage.",
   "파일을 드래그하거나 클릭하여 선택": "Drag a file here or click to choose",
   "선택된 파일 없음": "No file selected",
@@ -588,6 +595,13 @@ function isAcceptedMusicFile(file) {
   return /\.(mp3|wav|m4a)$/.test(name) || ["audio/mpeg", "audio/wav", "audio/x-wav", "audio/x-m4a", "audio/mp4"].includes(type);
 }
 
+function isAcceptedPledgeFile(file) {
+  if (!file) return false;
+  const name = String(file.name || "").toLowerCase();
+  const type = String(file.type || "").toLowerCase();
+  return /\.(pdf|hwp|hwpx|jpe?g|png)$/.test(name) || ["application/pdf", "image/jpeg", "image/png"].includes(type);
+}
+
 function getStoredApplications() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -794,6 +808,7 @@ function createApplicationFromForm(form) {
   const now = new Date();
   const id = `KHU-2026-${String(Date.now()).slice(-6)}`;
   const musicFile = form.querySelector('input[name="musicFile"]')?.files?.[0];
+  const pledgeFile = form.querySelector('input[name="pledgeFile"]')?.files?.[0];
   const athletes = collectAthletes(form);
   const firstAthlete = athletes[0] || {};
   const judgeEmail = String(formData.get("judgeEmail") || "");
@@ -836,6 +851,8 @@ function createApplicationFromForm(form) {
     apparatus: getCheckedValues(form, "apparatus"),
     photoOptions: getCheckedValues(form, "photoOptions"),
     videoOptions: getCheckedValues(form, "videoOptions"),
+    pledgeFileName: pledgeFile?.name || "",
+    pledgeFileSize: pledgeFile?.size || 0,
     musicFileName: musicFile?.name || "",
     musicFileSize: musicFile?.size || 0,
     paymentStatus: "미확인",
@@ -848,8 +865,10 @@ function createApplicationFromForm(form) {
 async function buildSubmissionPayload(form) {
   const application = createApplicationFromForm(form);
   const musicFile = form.querySelector('input[name="musicFile"]')?.files?.[0];
+  const pledgeFile = form.querySelector('input[name="pledgeFile"]')?.files?.[0];
   const musicFilePayload = await readFileAsPayload(musicFile);
-  return { application, musicFile: musicFilePayload };
+  const pledgeFilePayload = await readFileAsPayload(pledgeFile);
+  return { application, musicFile: musicFilePayload, pledgeFile: pledgeFilePayload };
 }
 
 function validateCurrentStep(form, stepIndex) {
@@ -964,56 +983,71 @@ function setupWizard() {
   form.querySelector("[data-add-athlete]")?.addEventListener("click", () => addAthleteCard(form));
   form.querySelector("[data-add-event]")?.addEventListener("click", () => addCustomEventRow(form));
 
-  const musicInput = form.querySelector('input[name="musicFile"]');
-  const fileDrop = form.querySelector(".file-drop");
-  const fileLabel = form.querySelector("[data-file-name]");
+  function setupFileDrop(inputSelector, labelSelector, validateFile, invalidMessage) {
+    const input = form.querySelector(inputSelector);
+    const drop = input?.closest(".file-drop");
+    const label = form.querySelector(labelSelector);
+    if (!input || !drop || !label) return;
 
-  function setMusicFile(file) {
-    if (!musicInput || !file) return;
-    const message = form.querySelector("[data-form-message]");
-    if (!isAcceptedMusicFile(file)) {
-      musicInput.value = "";
-      if (fileLabel) fileLabel.textContent = translateText("선택된 파일 없음");
-      if (message) message.textContent = translateText("MP3, WAV, M4A 파일만 업로드할 수 있습니다.");
-      return;
+    function setFile(file) {
+      if (!file) return;
+      const message = form.querySelector("[data-form-message]");
+      if (!validateFile(file)) {
+        input.value = "";
+        label.textContent = translateText("선택된 파일 없음");
+        if (message) message.textContent = translateText(invalidMessage);
+        return;
+      }
+
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      input.files = transfer.files;
+      label.textContent = file.name;
+      if (message) message.textContent = "";
     }
 
-    const transfer = new DataTransfer();
-    transfer.items.add(file);
-    musicInput.files = transfer.files;
-    if (fileLabel) fileLabel.textContent = file.name;
-    if (message) message.textContent = "";
+    input.addEventListener("change", (event) => {
+      const file = event.target.files?.[0];
+      if (file && !validateFile(file)) {
+        event.target.value = "";
+        label.textContent = translateText("선택된 파일 없음");
+        form.querySelector("[data-form-message]").textContent = translateText(invalidMessage);
+        return;
+      }
+      label.textContent = file?.name || translateText("선택된 파일 없음");
+    });
+
+    ["dragenter", "dragover"].forEach((type) => {
+      drop.addEventListener(type, (event) => {
+        event.preventDefault();
+        drop.classList.add("dragging");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((type) => {
+      drop.addEventListener(type, () => {
+        drop.classList.remove("dragging");
+      });
+    });
+
+    drop.addEventListener("drop", (event) => {
+      event.preventDefault();
+      setFile(event.dataTransfer?.files?.[0]);
+    });
   }
 
-  musicInput?.addEventListener("change", (event) => {
-    const label = form.querySelector("[data-file-name]");
-    const file = event.target.files?.[0];
-    if (file && !isAcceptedMusicFile(file)) {
-      event.target.value = "";
-      label.textContent = translateText("선택된 파일 없음");
-      form.querySelector("[data-form-message]").textContent = translateText("MP3, WAV, M4A 파일만 업로드할 수 있습니다.");
-      return;
-    }
-    label.textContent = file?.name || translateText("선택된 파일 없음");
-  });
-
-  ["dragenter", "dragover"].forEach((type) => {
-    fileDrop?.addEventListener(type, (event) => {
-      event.preventDefault();
-      fileDrop.classList.add("dragging");
-    });
-  });
-
-  ["dragleave", "drop"].forEach((type) => {
-    fileDrop?.addEventListener(type, () => {
-      fileDrop.classList.remove("dragging");
-    });
-  });
-
-  fileDrop?.addEventListener("drop", (event) => {
-    event.preventDefault();
-    setMusicFile(event.dataTransfer?.files?.[0]);
-  });
+  setupFileDrop(
+    'input[name="pledgeFile"]',
+    "[data-pledge-file-name]",
+    isAcceptedPledgeFile,
+    "PDF, HWP, HWPX, JPG, PNG 파일만 업로드할 수 있습니다."
+  );
+  setupFileDrop(
+    'input[name="musicFile"]',
+    "[data-music-file-name]",
+    isAcceptedMusicFile,
+    "MP3, WAV, M4A 파일만 업로드할 수 있습니다."
+  );
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -1027,8 +1061,12 @@ function setupWizard() {
 
       if (hasRemoteApi()) {
         const result = await callRemote("submitApplication", payload);
+        if (!result.application?.pledgeFileUrl) {
+          throw new Error(translateText("서약서가 서버에 저장되지 않았습니다. Apps Script 배포를 확인해주세요."));
+        }
         payload.application.id = result.application?.id || payload.application.id;
         payload.application.status = result.application?.status || payload.application.status;
+        payload.application.pledgeFileUrl = result.application?.pledgeFileUrl || "";
         payload.application.musicFileUrl = result.application?.musicFileUrl || "";
       } else {
         saveApplication(payload.application);
@@ -1094,6 +1132,7 @@ function renderApplication(application) {
         <div><dt>${translateDynamic("지도자")}</dt><dd>${application.coachName || application.judgeGrade || "-"}</dd></div>
         <div><dt>${translateDynamic("선수 정보")}</dt><dd>${athleteCount ? translateDynamic(`${athleteCount}명`) : "-"}</dd></div>
         <div><dt>${translateDynamic("결제")}</dt><dd>${translateDynamic(application.paymentStatus || "-")}</dd></div>
+        <div><dt>${currentLanguage() === "en" ? "Pledge" : "서약서"}</dt><dd>${translateDynamic(application.pledgeStatus || (application.pledgeFileUrl ? "제출완료" : "-"))}</dd></div>
         <div><dt>${currentLanguage() === "en" ? "Music" : "음악"}</dt><dd>${translateDynamic(application.musicStatus || "-")}</dd></div>
         <div><dt>${translateDynamic("운영 메모")}</dt><dd>${translateDynamic(application.adminMemo || "-")}</dd></div>
       </dl>

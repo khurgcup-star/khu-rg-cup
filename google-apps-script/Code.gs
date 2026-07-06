@@ -1,9 +1,10 @@
 ﻿const SPREADSHEET_ID = "1w4MbvvDKK9FnlnYiqMWqNTLrCa1J5yj-n9c3FOd99nU";
 const DRIVE_FOLDER_ID = "1EkacVrXtSINEmaaaXRoiCuRb4qQ6g_sA";
+const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-05-11-email-lookup";
+const API_VERSION = "2026-07-06-pledge-upload";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -37,7 +38,10 @@ const APPLICATION_HEADERS = [
   "musicFileName",
   "musicFileUrl",
   "adminMemo",
-  "updatedAt"
+  "updatedAt",
+  "pledgeStatus",
+  "pledgeFileName",
+  "pledgeFileUrl"
 ];
 
 const SCHEDULE_HEADERS = [
@@ -73,7 +77,7 @@ function handleRequest(e, method) {
       });
     }
     if (payload.action === "submitApplication") {
-      return jsonResponse(submitApplication(payload.application, payload.musicFile));
+      return jsonResponse(submitApplication(payload.application, payload.musicFile, payload.pledgeFile));
     }
     if (payload.action === "lookupApplication") {
       return jsonResponse(lookupApplication(payload.email));
@@ -99,8 +103,8 @@ function queryPayload(e) {
   };
 }
 
-function submitApplication(application, musicFile) {
-  const validation = validateApplication(application);
+function submitApplication(application, musicFile, pledgeFile) {
+  const validation = validateApplication(application, pledgeFile);
   if (!validation.ok) {
     return { ok: false, error: validation.error };
   }
@@ -109,6 +113,7 @@ function submitApplication(application, musicFile) {
   const sheet = ensureSheet(ss, APPLICATION_SHEET, APPLICATION_HEADERS);
   const now = new Date().toISOString();
   const id = application.id || `KHU-2026-${Date.now().toString().slice(-6)}`;
+  const pledge = savePledgeFile(id, application, pledgeFile);
   const music = saveMusicFile(id, application, musicFile);
 
   const rowObject = {
@@ -140,6 +145,9 @@ function submitApplication(application, musicFile) {
     apparatus: stringifyList(application.apparatus),
     photoOptions: stringifyList(application.photoOptions),
     videoOptions: stringifyList(application.videoOptions),
+    pledgeStatus: pledge.url ? "제출완료" : "미제출",
+    pledgeFileName: pledge.name || application.pledgeFileName || "",
+    pledgeFileUrl: pledge.url || "",
     musicFileName: music.name || application.musicFileName || "",
     musicFileUrl: music.url || "",
     adminMemo: application.adminMemo || "운영진 확인 전",
@@ -157,6 +165,7 @@ function submitApplication(application, musicFile) {
       status: rowObject.status,
       paymentStatus: rowObject.paymentStatus,
       musicStatus: rowObject.musicStatus,
+      pledgeFileUrl: rowObject.pledgeFileUrl,
       musicFileUrl: rowObject.musicFileUrl
     }
   };
@@ -173,6 +182,7 @@ function sendConfirmationEmail(application) {
     "",
     `신청 상태: ${application.status}`,
     `입금 상태: ${application.paymentStatus}`,
+    `서약서 상태: ${application.pledgeStatus}`,
     `음악 상태: ${application.musicStatus}`,
     "",
     "신청 확인 페이지에서 이메일을 입력하면 신청 상태와 개인 일정표를 확인할 수 있습니다.",
@@ -193,9 +203,13 @@ function sendConfirmationEmail(application) {
   }
 }
 
-function validateApplication(application) {
+function validateApplication(application, pledgeFile) {
   if (!application) {
     return { ok: false, error: "신청 데이터가 없습니다." };
+  }
+
+  if (!pledgeFile || !pledgeFile.base64) {
+    return { ok: false, error: "서약서 파일을 업로드해야 합니다." };
   }
 
   const requiredFields = [
@@ -329,6 +343,21 @@ function getPublicSchedule() {
   return { ok: true, version: API_VERSION, schedule };
 }
 
+function savePledgeFile(id, application, pledgeFile) {
+  if (!pledgeFile || !pledgeFile.base64) {
+    return { name: "", url: "" };
+  }
+
+  const root = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+  const folder = getOrCreateSubfolder(root, PLEDGE_FOLDER_NAME);
+  const bytes = Utilities.base64Decode(pledgeFile.base64);
+  const safeAthlete = sanitizeFileName(application.englishName || application.athleteName || application.judgeName || "applicant");
+  const safeFileName = `${id}_${safeAthlete}_${sanitizeFileName(pledgeFile.name || "pledge")}`;
+  const blob = Utilities.newBlob(bytes, pledgeFile.mimeType || "application/octet-stream", safeFileName);
+  const file = folder.createFile(blob);
+  return { name: file.getName(), url: file.getUrl() };
+}
+
 function saveMusicFile(id, application, musicFile) {
   if (!musicFile || !musicFile.base64) {
     return { name: "", url: "" };
@@ -341,6 +370,11 @@ function saveMusicFile(id, application, musicFile) {
   const blob = Utilities.newBlob(bytes, musicFile.mimeType || "application/octet-stream", safeFileName);
   const file = folder.createFile(blob);
   return { name: file.getName(), url: file.getUrl() };
+}
+
+function getOrCreateSubfolder(parentFolder, name) {
+  const folders = parentFolder.getFoldersByName(name);
+  return folders.hasNext() ? folders.next() : parentFolder.createFolder(name);
 }
 
 function ensureSheet(ss, name, headers) {
