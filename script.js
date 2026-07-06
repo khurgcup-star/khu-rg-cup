@@ -271,6 +271,7 @@ const phraseMap = {
   "+ 선수 추가": "+ Add Athlete",
   "선수 이름 *": "Athlete Name *",
   "선수 이름": "Athlete name",
+  "영문 이름 *": "English Name *",
   "국가 / 국적 *": "Country / Nationality *",
   "국가 / 국적": "Country / nationality",
   "생년월일 *": "Date of Birth *",
@@ -789,6 +790,7 @@ function createApplicationFromForm(form) {
   const firstAthlete = athletes[0] || {};
   const judgeEmail = String(formData.get("judgeEmail") || "");
   const applicationEmail = isJudgeEntry(form) ? judgeEmail : String(formData.get("email") || "");
+  const customEvents = getCustomEventValues(form);
 
   return {
     id,
@@ -808,12 +810,12 @@ function createApplicationFromForm(form) {
     coachPhone: String(formData.get("coachPhone") || ""),
     athletes,
     groupCategory: getRadioValue(form, "groupCategory"),
-    customEvents: getCustomEventValues(form),
+    customEvents,
     judgeName: String(formData.get("judgeName") || ""),
     judgeGrade: String(formData.get("judgeGrade") || ""),
     judgeOrganization: String(formData.get("judgeOrganization") || ""),
     judgeEmail,
-    routines: getCheckedValues(form, "routine"),
+    routines: usesCustomEvents(form) ? customEvents : getCheckedValues(form, "routine"),
     apparatus: getCheckedValues(form, "apparatus"),
     photoOptions: getCheckedValues(form, "photoOptions"),
     videoOptions: getCheckedValues(form, "videoOptions"),
@@ -978,10 +980,11 @@ function setupWizard() {
       }, 800);
     } catch (error) {
       console.error(error);
+      const detail = error?.message ? ` ${error.message}` : "";
       message.textContent =
         currentLanguage() === "en"
-          ? "Submission failed. Please try again or contact the event office."
-          : "전송에 실패했습니다. 다시 시도하거나 운영사무국으로 문의해주세요.";
+          ? `Submission failed.${detail} Please try again or contact the event office.`
+          : `전송에 실패했습니다.${detail} 다시 시도하거나 운영사무국으로 문의해주세요.`;
     }
   });
 
