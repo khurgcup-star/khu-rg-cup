@@ -348,8 +348,9 @@ function savePledgeFile(id, application, pledgeFile) {
     return { name: "", url: "" };
   }
 
-  const root = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const folder = getOrCreateSubfolder(root, PLEDGE_FOLDER_NAME);
+  const musicFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+  const parentFolder = getParentFolder(musicFolder);
+  const folder = getOrCreateSubfolder(parentFolder, PLEDGE_FOLDER_NAME);
   const bytes = Utilities.base64Decode(pledgeFile.base64);
   const safeAthlete = sanitizeFileName(application.englishName || application.athleteName || application.judgeName || "applicant");
   const safeFileName = `${id}_${safeAthlete}_${sanitizeFileName(pledgeFile.name || "pledge")}`;
@@ -375,6 +376,11 @@ function saveMusicFile(id, application, musicFile) {
 function getOrCreateSubfolder(parentFolder, name) {
   const folders = parentFolder.getFoldersByName(name);
   return folders.hasNext() ? folders.next() : parentFolder.createFolder(name);
+}
+
+function getParentFolder(folder) {
+  const parents = folder.getParents();
+  return parents.hasNext() ? parents.next() : folder;
 }
 
 function ensureSheet(ss, name, headers) {

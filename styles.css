@@ -1047,6 +1047,25 @@ input:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(157, 35, 49, 0.1);
 }
 .helper { color: var(--muted); }
+.pledge-download {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  margin: 12px 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+.pledge-download strong {
+  display: block;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.pledge-download .helper {
+  margin: 0;
+}
 .file-drop {
   display: grid;
   place-items: center;
@@ -1833,6 +1852,13 @@ input:focus, textarea:focus {
   .summary-band article { border-right: 0; border-bottom: 1px solid var(--line); }
   .wizard-card {
     padding: 0;
+  }
+  .pledge-download {
+    display: grid;
+  }
+  .pledge-download .btn {
+    width: 100%;
+    justify-content: center;
   }
   .stepper {
     grid-template-columns: repeat(5, minmax(86px, 1fr));
