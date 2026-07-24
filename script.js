@@ -6,14 +6,15 @@ const phraseMap = {
   "신규 신청": "New Application",
   "신청 확인": "Check Application",
   "일정표": "Schedule",
+  "대회 사진": "Gallery",
   "오시는 길": "Directions",
   "메뉴 열기": "Open menu",
   "모바일 메뉴": "Mobile menu",
   "주요 메뉴": "Main menu",
   "홈으로 이동": "Go home",
-  "경희대학교 총장배 국제 리듬체조 대회": "Kyung Hee University President's Cup International Rhythmic Gymnastics",
+  "경희대학교 총장배 리듬체조 대회": "Kyung Hee University President's Cup Rhythmic Gymnastics",
   "경희대학교 총장배": "Kyung Hee University President's Cup",
-  "국제 리듬체조 대회": "International Rhythmic Gymnastics Competition",
+  "리듬체조 대회": "Rhythmic Gymnastics Competition",
   "개인, 단체/그룹, 성인부, 갈라쇼, 심판 제출 신청과 접수 확인을 안내합니다.": "Apply for individual, group/team, adult, gala show, judge submission, and check application status.",
   "대회일": "Event Date",
   "장소": "Venue",
@@ -60,7 +61,13 @@ const phraseMap = {
   "운영진 공지 기준": "Based on staff notice",
   "성인부 / 갈라쇼": "Adult / Gala Show",
   "대회 요약": "Competition Summary",
-  "2026년 10월 17일(토) - 10월 18일(일)": "October 17 (Sat) - October 18 (Sun), 2026",
+  "2026년 9월 19일(토) - 9월 20일(일)": "September 19 (Sat) - September 20 (Sun), 2026",
+  "리듬체조 대회의 생생한 순간을 전합니다. 2026년 대회 사진은 9월 19일과 20일 행사 종료 후 순차적으로 공개됩니다.": "Relive the competition highlights. Photos from September 19 and 20, 2026 will be published after each event day.",
+  "지난 대회 현장": "Previous Competition",
+  "대회 현장 스케치": "Competition Highlights",
+  "첫째 날 경기와 시상식 사진을 대회 종료 후 공개합니다.": "Day 1 competition and awards photos will be published after the event.",
+  "경기 및 시상식": "Competition and Awards",
+  "둘째 날 경기와 참가자들의 순간을 순차적으로 공개합니다.": "Day 2 competition and participant moments will be published in sequence.",
   "신청 마감": "Application Deadline",
   "필독 공지": "Important Notices",
   "대회장 이용 전 필독사항": "Important Venue Notices",
@@ -81,26 +88,30 @@ const phraseMap = {
   "신청 내역 조회": "Application Lookup",
   "오시는 길 및 주차 안내": "Directions and Parking Guide",
   "참가 대상": "Entry Categories",
-  "국내 참가자 / International / 심판 제출": "Korean Participant / International / Judge Submission",
-  "개인 / 단체·그룹": "Individual / Group-Team",
+  "국내 참가자 / 심판 제출": "Korean Participant / Judge Submission",
+  "꿈나무부 / 선수부": "Dreamer Division / Athlete Division",
+  "개인 / 단체·그룹 / 성인부 / 갈라쇼": "Individual / Group-Team / Adult / Gala Show",
+  "개인 / 단체 · 성인부 / 갈라쇼": "Individual / Group-Team · Adult / Gala Show",
   "기본 정보": "Basic Information",
-  "선수 이름, 생년월일, 연락처": "Athlete name, date of birth, phone",
-  "이메일, 소속 팀": "Email and team",
+  "선수 이름, 생년월일": "Athlete name and date of birth",
+  "대표 연락처, 이메일, 소속 팀": "Primary phone, email, and team",
   "단체·그룹은 5-6명 선수 정보": "Group/team entries require 5-6 athletes",
   "지도자 이름": "Coach name",
   "지도자 연락처": "Coach phone",
   "운영진 연락용 이메일": "Email for staff contact",
   "제출 자료": "Submission Items",
   "참가 종목 선택": "Select participation events",
+  "사진·영상은 종목별 별도 신청": "Request photo and video coverage separately by event",
+  "음악 파일 선택 제출": "Optional music file submission",
   "성인부와 갈라쇼는 종목명 직접 입력": "Adult and gala show entries enter event names manually",
   "심판 제출은 이름, 급수, 소속명, 이메일": "Judge submissions require name, grade, organization, and email",
   "신청 순서": "Application Steps",
   "신규 신청 클릭": "Click New Application",
   "상단 또는 이 페이지의 신규 신청 버튼으로 접수를 시작합니다.": "Start registration using the New Application button at the top or on this page.",
   "참가 기준 선택": "Select Entry Criteria",
-  "참가자 유형에서 국내, International, 심판 제출 중 하나를 선택한 뒤 선수는 신청 부문을 선택합니다.": "Choose Korean, International, or Judge Submission first. Athletes then choose an application type.",
+  "국내 참가자 또는 심판 제출을 선택한 뒤, 참가자는 꿈나무부와 선수부 등 대회 부문을 선택합니다.": "Choose Korean Participant or Judge Submission. Participants then select a division such as Dreamer or Athlete.",
   "정보와 종목 입력": "Enter Information and Events",
-  "선수는 선수, 지도자, 종목 정보를 입력하고 심판은 기본 정보만 입력합니다.": "Athletes enter athlete, coach, and event information. Judges enter basic information only.",
+  "선수·지도자·종목 정보를 입력하고 사진·영상 신청 및 음악 파일을 확인합니다.": "Enter athlete, coach, and event information, then review photo, video, and music options.",
   "동의 후 제출": "Agree and Submit",
   "신청 완료 후 이메일로 신청 확인에서 상태를 조회합니다.": "After submitting, check status by email on the check application page.",
   "신청 후에는 확인 페이지를 이용하세요": "Use the Check Page After Applying",
@@ -240,7 +251,7 @@ const phraseMap = {
   "신청 메뉴": "Application Menu",
   "신청 단계": "Application Steps",
   "참가유형": "Participant Type",
-  "신청부문": "Application Type",
+  "대회부문": "Division",
   "정보입력": "Information",
   "종목선택": "Events",
   "추가옵션": "Options",
@@ -248,17 +259,21 @@ const phraseMap = {
   "참가자 유형 선택": "Select Participant Type",
   "참가자의 등록 기준을 선택하세요.": "Select the participant registration type.",
   "국내 참가자": "Korean Participant",
-  "신청 부문 선택": "Select Application Type",
-  "신청하려는 참가 형태 또는 제출 항목을 선택하세요.": "Choose the application type or submission item.",
-  "리듬체조 선수부문": "Rhythmic Gymnastics Athlete Division",
-  "비선수 부문": "Non-athlete Division",
+  "대회 부문 선택": "Select Competition Division",
+  "참가 기준에 맞는 대회 부문을 선택하세요.": "Select the competition division that matches the participant.",
+  "꿈나무부": "Dreamer Division",
+  "비선수 참가 부문": "Non-registered athlete division",
+  "선수부": "Athlete Division",
+  "리듬체조 선수 참가 부문": "Registered rhythmic gymnastics athlete division",
   "성인부": "Adult",
+  "성인 참가자 부문": "Adult participant division",
   "종목명을 직접 입력": "Enter event names",
   "갈라쇼": "Gala Show",
   "공연 종목 직접 입력": "Enter performance event names",
   "심판 제출": "Judge Submission",
   "심판 정보만 제출": "Submit judge information only",
-  "참가형태 선택": "Select Entry Type",
+  "참가 형태 선택": "Select Entry Type",
+  "개인 또는 단체·그룹 참가를 선택하세요.": "Choose an individual or group-team entry.",
   "개인": "Individual",
   "개인 선수 참가": "Individual athlete entry",
   "단체/그룹": "Group / Team",
@@ -307,8 +322,17 @@ const phraseMap = {
   "줄": "Rope",
   "맨손자유": "Freehand",
   "추가 옵션": "Additional Options",
-  "사진 촬영 신청": "Photo Request",
-  "영상 촬영 신청": "Video Request",
+  "촬영 신청 대상 종목": "Events for Media Requests",
+  "사진·영상 촬영은 참가비와 별도 비용입니다.": "Photo and video coverage is charged separately from the entry fee.",
+  "원하는 종목을 사진과 영상으로 각각 선택하세요. 금액과 결제 방법은 운영진이 별도로 안내합니다.": "Select the events you want photographed and filmed. Staff will provide pricing and payment instructions separately.",
+  "대회 사진 신청": "Competition Photo Request",
+  "사진 촬영을 신청할 종목을 선택하세요.": "Select the events for photo coverage.",
+  "대회 영상 신청": "Competition Video Request",
+  "영상 촬영을 신청할 종목을 선택하세요.": "Select the events for video coverage.",
+  "별도 비용": "Separate Fee",
+  "사진 별도 신청": "Separate photo request",
+  "영상 별도 신청": "Separate video request",
+  "신청 안 함": "Not requested",
   "서약서 제출": "Pledge Submission",
   "서약서 양식 다운로드": "Download pledge form",
   "서약서 파일을 드래그하거나 클릭하여 선택": "Drag the signed pledge here or click to choose",
@@ -347,15 +371,16 @@ const phraseMap = {
   "신청할 때 입력한 이메일로 조회할 수 있습니다.": "Use the email address submitted with the application.",
   "대회 참가에 대해 궁금한 점이 있으시면 운영사무국으로 연락해주세요.": "Contact the event office if you have any questions about participation.",
   "참가유형": "Participant Type",
+  "참가형태": "Entry Type",
   "결제": "Payment",
   "운영 메모": "Admin Memo",
   "조회된 신청 내역이 없습니다.": "No application was found.",
   "조회된 신청 내역이 없습니다. 신청할 때 입력한 이메일과 같은지 확인해주세요.": "No application was found. Check that this is the same email used for the application.",
 
-  "신규 신청 | 경희대학교 총장배 국제 리듬체조 대회": "New Application | Kyung Hee University President's Cup International Rhythmic Gymnastics",
-  "신청 확인 | 경희대학교 총장배 국제 리듬체조 대회": "Check Application | Kyung Hee University President's Cup International Rhythmic Gymnastics",
-  "일정표 | 경희대학교 총장배 국제 리듬체조 대회": "Schedule | Kyung Hee University President's Cup International Rhythmic Gymnastics",
-  "오시는 길 | 경희대학교 총장배 국제 리듬체조 대회": "Directions | Kyung Hee University President's Cup International Rhythmic Gymnastics"
+  "신규 신청 | 경희대학교 총장배 리듬체조 대회": "New Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
+  "신청 확인 | 경희대학교 총장배 리듬체조 대회": "Check Application | Kyung Hee University President's Cup Rhythmic Gymnastics",
+  "일정표 | 경희대학교 총장배 리듬체조 대회": "Schedule | Kyung Hee University President's Cup Rhythmic Gymnastics",
+  "오시는 길 | 경희대학교 총장배 리듬체조 대회": "Directions | Kyung Hee University President's Cup Rhythmic Gymnastics"
 };
 
 const statusMap = {
@@ -379,7 +404,7 @@ const sampleApplications = [
     status: "확정",
     participantType: "국내 참가자",
     country: "Korea",
-    division: "국제 리듬체조",
+    division: "선수부",
     entryType: "개인",
     athleteName: "윤시연",
     englishName: "Yun Siyeon",
@@ -389,7 +414,7 @@ const sampleApplications = [
     organization: "KHU RG",
     coachName: "송지영",
     coachPhone: "010-0000-0000",
-    athletes: [{ name: "윤시연", birthDate: "", phone: "010-0000-0000" }],
+    athletes: [{ name: "윤시연", birthDate: "" }],
     groupCategory: "",
     customEvents: [],
     routines: [],
@@ -401,14 +426,14 @@ const sampleApplications = [
     musicStatus: "확인완료",
     schedule: [
       {
-        date: "2026-08-22",
+        date: "2026-09-19",
         time: "10:30",
         label: "Warm-up",
         location: "Sub floor",
         memo: "Arrive 30 minutes early"
       },
       {
-        date: "2026-08-22",
+        date: "2026-09-19",
         time: "11:20",
         label: "Competition",
         location: "Main floor",
@@ -653,10 +678,9 @@ function collectAthletes(form) {
   return Array.from(form.querySelectorAll("[data-athlete-card]"))
     .map((card) => ({
       name: card.querySelector('input[name="athleteName"]')?.value.trim() || "",
-      birthDate: card.querySelector('input[name="birthDate"]')?.value || "",
-      phone: card.querySelector('input[name="athletePhone"]')?.value.trim() || ""
+      birthDate: card.querySelector('input[name="birthDate"]')?.value || ""
     }))
-    .filter((athlete) => athlete.name || athlete.birthDate || athlete.phone);
+    .filter((athlete) => athlete.name || athlete.birthDate);
 }
 
 function setPanelEnabled(panel, enabled) {
@@ -667,13 +691,19 @@ function setPanelEnabled(panel, enabled) {
   });
 }
 
-function entryType(form) {
-  if (isJudgeParticipant(form)) return "심판 제출";
-  return getRadioValue(form, "entryType");
-}
-
 function participantType(form) {
   return getRadioValue(form, "participantType");
+}
+
+function division(form) {
+  return getRadioValue(form, "division");
+}
+
+function entryType(form) {
+  if (isJudgeParticipant(form)) return "심판 제출";
+  const selectedDivision = division(form);
+  if (["성인부", "갈라쇼"].includes(selectedDivision)) return selectedDivision;
+  return getRadioValue(form, "entryType");
 }
 
 function isJudgeParticipant(form) {
@@ -698,10 +728,9 @@ function createAthleteCard(index) {
   article.dataset.athleteCard = "";
   article.innerHTML = `
     <strong class="member-index">${index + 1}</strong>
-    <div class="form-grid three">
+    <div class="form-grid">
       <label>선수 이름 *<input name="athleteName" type="text" placeholder="선수 이름" required /></label>
       <label>생년월일 *<input name="birthDate" type="date" required /></label>
-      <label>연락처 *<input name="athletePhone" type="tel" placeholder="010-0000-0000" required /></label>
     </div>
   `;
   return article;
@@ -758,30 +787,104 @@ function addCustomEventRow(form) {
   refreshTranslations();
 }
 
+function createEmptyOptions(message) {
+  const empty = document.createElement("span");
+  empty.className = "empty-options";
+  empty.textContent = translateText(message);
+  return empty;
+}
+
+function syncMediaOptions(form) {
+  const selectedEvents = getSelectedEventValues(form);
+  const summary = form.querySelector("[data-selected-event-summary]");
+
+  if (summary) {
+    summary.replaceChildren();
+    if (!selectedEvents.length) {
+      summary.appendChild(createEmptyOptions("먼저 종목을 선택해주세요."));
+    } else {
+      selectedEvents.forEach((eventName) => {
+        const card = document.createElement("article");
+        const title = document.createElement("strong");
+        const description = document.createElement("span");
+        card.className = "selected-event-card";
+        title.textContent = translateDynamic(eventName);
+        description.textContent = translateText("선택 종목");
+        card.append(title, description);
+        summary.appendChild(card);
+      });
+    }
+  }
+
+  form.querySelectorAll("[data-dynamic-options]").forEach((container) => {
+    const optionName = container.dataset.dynamicOptions;
+    const previousValues = new Set(getCheckedValues(form, optionName));
+    const optionDescription = optionName === "photoOptions" ? "사진 별도 신청" : "영상 별도 신청";
+    container.replaceChildren();
+
+    if (!selectedEvents.length) {
+      container.appendChild(createEmptyOptions("먼저 종목을 선택해주세요."));
+      return;
+    }
+
+    selectedEvents.forEach((eventName) => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      const check = document.createElement("span");
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      const description = document.createElement("small");
+
+      label.className = "media-option";
+      input.type = "checkbox";
+      input.name = optionName;
+      input.value = eventName;
+      input.checked = previousValues.has(eventName);
+      check.className = "media-option-check";
+      copy.className = "media-option-copy";
+      title.textContent = translateDynamic(eventName);
+      description.textContent = translateText(optionDescription);
+      copy.append(title, description);
+      label.append(input, check, copy);
+      container.appendChild(label);
+    });
+  });
+}
+
 function syncFormForEntryType(form) {
   const type = entryType(form);
   const judgeSelected = isJudgeEntry(form);
+  const standardDivision = ["꿈나무부", "선수부"].includes(division(form));
+  const entryTypeChoice = form.querySelector("[data-entry-type-choice]");
   const competitorFields = form.querySelector("[data-competitor-fields]");
   const judgeFields = form.querySelector("[data-judge-fields]");
   const individualEvents = form.querySelector("[data-individual-events]");
   const groupEvents = form.querySelector("[data-group-events]");
   const customEvents = form.querySelector("[data-custom-events]");
   const judgeEventNote = form.querySelector("[data-judge-event-note]");
+  const mediaOptions = form.querySelector("[data-media-options]");
+  const musicUpload = form.querySelector("[data-music-upload]");
   const groupHelper = form.querySelector("[data-group-helper]");
   const addAthleteButton = form.querySelector("[data-add-athlete]");
   const memberTitle = form.querySelector("[data-member-title]");
   const customTitle = form.querySelector("[data-custom-event-title]");
 
-  form.querySelectorAll('input[name="entryType"]').forEach((input) => {
+  form.querySelectorAll('input[name="division"]').forEach((input) => {
     input.disabled = judgeSelected;
   });
 
+  syncAthleteCards(form);
+  syncCustomEventRows(form);
+
+  setPanelEnabled(entryTypeChoice, !judgeSelected && standardDivision);
   setPanelEnabled(competitorFields, !judgeSelected);
   setPanelEnabled(judgeFields, judgeSelected);
   setPanelEnabled(individualEvents, type === "개인");
   setPanelEnabled(groupEvents, type === "단체/그룹");
   setPanelEnabled(customEvents, usesCustomEvents(form));
   setPanelEnabled(judgeEventNote, judgeSelected);
+  setPanelEnabled(mediaOptions, !judgeSelected);
+  setPanelEnabled(musicUpload, !judgeSelected);
 
   if (memberTitle) memberTitle.textContent = isGroupEntry(form) ? "팀 선수 정보" : "선수 정보";
   if (groupHelper) groupHelper.hidden = !isGroupEntry(form);
@@ -791,15 +894,7 @@ function syncFormForEntryType(form) {
   }
   if (customTitle) customTitle.textContent = type === "갈라쇼" ? "갈라쇼 종목" : "성인부 종목";
 
-  syncAthleteCards(form);
-  syncCustomEventRows(form);
-
-  setPanelEnabled(competitorFields, !judgeSelected);
-  setPanelEnabled(judgeFields, judgeSelected);
-  setPanelEnabled(individualEvents, type === "개인");
-  setPanelEnabled(groupEvents, type === "단체/그룹");
-  setPanelEnabled(customEvents, usesCustomEvents(form));
-  setPanelEnabled(judgeEventNote, judgeSelected);
+  syncMediaOptions(form);
   refreshTranslations();
 }
 
@@ -818,11 +913,7 @@ function createApplicationFromForm(form) {
   const groupCategory = getRadioValue(form, "groupCategory");
   const applicationEmail = judgeSelected ? judgeEmail : String(formData.get("email") || "");
   const customEvents = getCustomEventValues(form);
-  const routineEvents = usesCustomEvents(form)
-    ? customEvents
-    : selectedEntryType === "단체/그룹" && groupCategory
-      ? [groupCategory]
-      : getCheckedValues(form, "routine");
+  const routineEvents = getCheckedValues(form, "routine");
 
   return {
     id,
@@ -830,7 +921,7 @@ function createApplicationFromForm(form) {
     status: "접수대기",
     participantType: getRadioValue(form, "participantType"),
     country: judgeSelected ? "심판 제출" : String(formData.get("country") || getRadioValue(form, "participantType") || ""),
-    division: String(formData.get("division") || "국제 리듬체조"),
+    division: judgeSelected ? "심판 제출" : getRadioValue(form, "division"),
     entryType: selectedEntryType,
     athleteName: firstAthlete.name || judgeName,
     englishName: judgeSelected ? judgeName : String(formData.get("englishName") || ""),
@@ -882,7 +973,7 @@ function validateCurrentStep(form, stepIndex) {
   }
 
   if (stepIndex === 2 && isGroupEntry(form)) {
-    const completedAthletes = collectAthletes(form).filter((athlete) => athlete.name && athlete.birthDate && athlete.phone);
+    const completedAthletes = collectAthletes(form).filter((athlete) => athlete.name && athlete.birthDate);
     if (completedAthletes.length < 5) {
       form.querySelector("[data-form-message]").textContent = translateText("단체/그룹은 선수 정보를 최소 5명 입력해주세요.");
       return false;
@@ -943,14 +1034,22 @@ function setupWizard() {
     nextButton.classList.toggle("hidden", currentStep === steps.length - 1);
     submitButton.classList.toggle("hidden", currentStep !== steps.length - 1);
 
+    if (currentStep === 3) {
+      syncMediaOptions(form);
+    }
+
     if (currentStep === steps.length - 1) {
       const preview = createApplicationFromForm(form);
       const events = formatEventList(getSelectedEventValues(form)) || "-";
+      const photos = formatEventList(preview.photoOptions) || translateDynamic("신청 안 함");
+      const videos = formatEventList(preview.videoOptions) || translateDynamic("신청 안 함");
       const displayName = preview.judgeName || preview.athleteName || "-";
       receiptPreview.innerHTML = `
         <strong>${translateDynamic("확인 내용")}</strong><br />
-        ${displayName} / ${translateDynamic(preview.entryType || "-")}<br />
+        ${displayName} / ${translateDynamic(preview.division || "-")} / ${translateDynamic(preview.entryType || "-")}<br />
         ${translateDynamic("종목")}: ${events}<br />
+        ${translateDynamic("대회 사진 신청")}: ${photos}<br />
+        ${translateDynamic("대회 영상 신청")}: ${videos}<br />
         ${translateDynamic("이메일 *").replace(" *", "")}: ${preview.email || "-"}
       `;
     }
@@ -980,8 +1079,30 @@ function setupWizard() {
     input.addEventListener("change", () => syncFormForEntryType(form));
   });
 
+  form.querySelectorAll('input[name="division"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      syncFormForEntryType(form);
+      render();
+    });
+  });
+
+  form.addEventListener("change", (event) => {
+    if (event.target.matches('input[name="routine"], input[name="apparatus"], input[name="groupCategory"]')) {
+      syncMediaOptions(form);
+    }
+  });
+
+  form.addEventListener("input", (event) => {
+    if (event.target.matches('input[name="customEvent"]')) {
+      syncMediaOptions(form);
+    }
+  });
+
   form.querySelector("[data-add-athlete]")?.addEventListener("click", () => addAthleteCard(form));
-  form.querySelector("[data-add-event]")?.addEventListener("click", () => addCustomEventRow(form));
+  form.querySelector("[data-add-event]")?.addEventListener("click", () => {
+    addCustomEventRow(form);
+    syncMediaOptions(form);
+  });
 
   function setupFileDrop(inputSelector, labelSelector, validateFile, invalidMessage) {
     const input = form.querySelector(inputSelector);
@@ -1089,7 +1210,10 @@ function setupWizard() {
     }
   });
 
-  document.addEventListener("languagechange", render);
+  document.addEventListener("languagechange", () => {
+    syncMediaOptions(form);
+    render();
+  });
 
   syncFormForEntryType(form);
   render();
@@ -1110,6 +1234,10 @@ function renderApplication(application) {
   ]
     .filter(Boolean);
   const eventsText = formatEventList(events) || "-";
+  const photoOptions = Array.isArray(application.photoOptions) ? application.photoOptions : [];
+  const videoOptions = Array.isArray(application.videoOptions) ? application.videoOptions : [];
+  const photosText = formatEventList(photoOptions) || translateDynamic("신청 안 함");
+  const videosText = formatEventList(videoOptions) || translateDynamic("신청 안 함");
   const displayName =
     application.judgeName ||
     (currentLanguage() === "en" && application.englishName ? application.englishName : application.athleteName);
@@ -1125,12 +1253,15 @@ function renderApplication(application) {
         <span class="status ${statusClass(application.status)}">${translateDynamic(application.status)}</span>
       </div>
       <dl>
-        <div><dt>${translateDynamic("부문")}</dt><dd>${translateDynamic(application.entryType || application.division || "-")}</dd></div>
+        <div><dt>${translateDynamic("대회부문")}</dt><dd>${translateDynamic(application.division || "-")}</dd></div>
+        <div><dt>${translateDynamic("참가형태")}</dt><dd>${translateDynamic(application.entryType || "-")}</dd></div>
         <div><dt>${translateDynamic("참가유형")}</dt><dd>${translateDynamic(application.participantType || "-")}</dd></div>
         <div><dt>${translateDynamic("소속명 *").replace(" *", "")}</dt><dd>${application.organization || application.judgeOrganization || "-"}</dd></div>
         <div><dt>${translateDynamic("종목")}</dt><dd>${eventsText}</dd></div>
         <div><dt>${translateDynamic("지도자")}</dt><dd>${application.coachName || application.judgeGrade || "-"}</dd></div>
         <div><dt>${translateDynamic("선수 정보")}</dt><dd>${athleteCount ? translateDynamic(`${athleteCount}명`) : "-"}</dd></div>
+        <div><dt>${translateDynamic("대회 사진 신청")}</dt><dd>${photosText}</dd></div>
+        <div><dt>${translateDynamic("대회 영상 신청")}</dt><dd>${videosText}</dd></div>
         <div><dt>${translateDynamic("결제")}</dt><dd>${translateDynamic(application.paymentStatus || "-")}</dd></div>
         <div><dt>${currentLanguage() === "en" ? "Pledge" : "서약서"}</dt><dd>${translateDynamic(application.pledgeStatus || (application.pledgeFileUrl ? "제출완료" : "-"))}</dd></div>
         <div><dt>${currentLanguage() === "en" ? "Music" : "음악"}</dt><dd>${translateDynamic(application.musicStatus || "-")}</dd></div>

@@ -4,7 +4,7 @@ const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-07-readable-file-names";
+const API_VERSION = "2026-07-24-president-cup";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -174,21 +174,25 @@ function submitApplication(application, musicFile, pledgeFile) {
 function sendConfirmationEmail(application) {
   if (!application.email) return;
 
-  const subject = "[경희대학교 총장배 국제 리듬체조 대회] 신청 접수 안내";
+  const subject = "[경희대학교 총장배 리듬체조 대회] 신청 접수 안내";
   const body = [
     `${application.athleteName || "참가자"} 님,`,
     "",
-    "경희대학교 총장배 국제 리듬체조 대회 신청이 접수되었습니다.",
+    "경희대학교 총장배 리듬체조 대회 신청이 접수되었습니다.",
     "",
     `신청 상태: ${application.status}`,
     `입금 상태: ${application.paymentStatus}`,
+    `대회 부문: ${application.division || "-"}`,
+    `참가 형태: ${application.entryType || "-"}`,
+    `사진 신청 종목: ${application.photoOptions || "신청 안 함"}`,
+    `영상 신청 종목: ${application.videoOptions || "신청 안 함"}`,
     `서약서 상태: ${application.pledgeStatus}`,
     `음악 상태: ${application.musicStatus}`,
     "",
     "신청 확인 페이지에서 이메일을 입력하면 신청 상태와 개인 일정표를 확인할 수 있습니다.",
     "",
     "감사합니다.",
-    "경희대학교 총장배 국제 리듬체조 대회 운영사무국"
+    "경희대학교 총장배 리듬체조 대회 운영사무국"
   ].join("\n");
 
   try {
@@ -214,6 +218,7 @@ function validateApplication(application, pledgeFile) {
 
   const requiredFields = [
     ["participantType", "참가자 유형"],
+    ["division", "대회 부문"],
     ["entryType", "신청 부문"],
     ["email", "이메일"],
   ];
