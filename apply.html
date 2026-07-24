@@ -8,12 +8,12 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="신규 신청 | 경희대학교 총장배 리듬체조 대회" />
     <meta property="og:description" content="경희대학교 총장배 리듬체조 대회 참가 신청 페이지입니다." />
-    <meta property="og:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/hero-president-cup-2026.png?v=1" />
-    <meta property="og:image:width" content="1717" />
-    <meta property="og:image:height" content="916" />
+    <meta property="og:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/hero-rg-competition.png?v=2" />
+    <meta property="og:image:width" content="6000" />
+    <meta property="og:image:height" content="2595" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/hero-president-cup-2026.png?v=1" />
-    <link rel="stylesheet" href="styles.css?v=20260724-president-cup" />
+    <meta name="twitter:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/hero-rg-competition.png?v=2" />
+    <link rel="stylesheet" href="styles.css?v=20260725-event-sections" />
   </head>
   <body class="soft-page">
     <header class="topbar light">
@@ -164,14 +164,35 @@
         <section class="wizard-step" data-step="3">
           <h1>종목 선택</h1>
 
-          <div class="event-block" data-individual-events>
-            <h2>개인 종목 선택</h2>
-            <div class="apparatus-grid">
-              <label><input type="checkbox" name="apparatus" value="Hoop" /><strong>Hoop</strong><span>후프</span></label>
-              <label><input type="checkbox" name="apparatus" value="Ball" /><strong>Ball</strong><span>볼</span></label>
-              <label><input type="checkbox" name="apparatus" value="Clubs" /><strong>Clubs</strong><span>곤봉</span></label>
-              <label><input type="checkbox" name="apparatus" value="Ribbon" /><strong>Ribbon</strong><span>리본</span></label>
-              <label><input type="checkbox" name="apparatus" value="FH" /><strong>FH</strong><span>맨손자유</span></label>
+          <div data-individual-events>
+            <div class="event-block">
+              <h2>규정 부문</h2>
+              <h3 class="event-subtitle">맨손</h3>
+              <div class="pill-group">
+                <label><input type="checkbox" name="routine" value="Level 1" data-event-section="규정 부문 · 맨손" />Level 1</label>
+                <label><input type="checkbox" name="routine" value="Level 2" data-event-section="규정 부문 · 맨손" />Level 2</label>
+                <label><input type="checkbox" name="routine" value="Level 3" data-event-section="규정 부문 · 맨손" />Level 3</label>
+              </div>
+
+              <h3 class="event-subtitle">수구</h3>
+              <div class="pill-group">
+                <label><input type="checkbox" name="routine" value="Rope" data-event-section="규정 부문 · 수구" />줄 Rope</label>
+                <label><input type="checkbox" name="routine" value="Hoop" data-event-section="규정 부문 · 수구" />후프 Hoop</label>
+                <label><input type="checkbox" name="routine" value="Ball" data-event-section="규정 부문 · 수구" />볼 Ball</label>
+                <label><input type="checkbox" name="routine" value="Clubs" data-event-section="규정 부문 · 수구" />곤봉 Clubs</label>
+                <label><input type="checkbox" name="routine" value="Ribbon" data-event-section="규정 부문 · 수구" />리본 Ribbon</label>
+              </div>
+            </div>
+
+            <div class="event-block">
+              <h2>자유 부문</h2>
+              <div class="apparatus-grid">
+                <label><input type="checkbox" name="apparatus" value="FH" data-event-section="자유 부문" /><strong>FH</strong><span>맨손자유</span></label>
+                <label><input type="checkbox" name="apparatus" value="Hoop" data-event-section="자유 부문" /><strong>Hoop</strong><span>후프</span></label>
+                <label><input type="checkbox" name="apparatus" value="Ball" data-event-section="자유 부문" /><strong>Ball</strong><span>볼</span></label>
+                <label><input type="checkbox" name="apparatus" value="Clubs" data-event-section="자유 부문" /><strong>Clubs</strong><span>곤봉</span></label>
+                <label><input type="checkbox" name="apparatus" value="Ribbon" data-event-section="자유 부문" /><strong>Ribbon</strong><span>리본</span></label>
+              </div>
             </div>
           </div>
 
@@ -260,6 +281,6 @@
     </main>
 
     <script src="config.js"></script>
-    <script src="script.js?v=20260724-president-cup"></script>
+    <script src="script.js?v=20260725-event-sections"></script>
   </body>
 </html>

@@ -632,7 +632,7 @@ button, input, select, textarea { font: inherit; }
   min-height: 100vh;
   background:
     linear-gradient(115deg, rgba(10, 14, 24, 0.9), rgba(20, 28, 47, 0.72)),
-    url("assets/hero-president-cup-2026.png") center / cover fixed;
+    url("assets/hero-rg-competition.png") center / cover fixed;
 }
 .soft-page::before {
   position: fixed;

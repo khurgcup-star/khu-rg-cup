@@ -300,6 +300,10 @@ const phraseMap = {
   "지도자 연락처 *": "Coach Phone *",
   "종목 선택": "Select Events",
   "개인 종목 선택": "Individual Events",
+  "규정 부문": "Regulation Division",
+  "맨손": "Freehand",
+  "수구": "Apparatus",
+  "자유 부문": "Free Division",
   "단체/그룹 종목 선택": "Group Events",
   "심판란 제출": "Judge Submission",
   "이름 *": "Name *",
@@ -661,17 +665,53 @@ function getCustomEventValues(form) {
     .filter(Boolean);
 }
 
+function getSelectedEventChoices(form) {
+  const choices = Array.from(
+    form.querySelectorAll('input[name="routine"]:checked, input[name="apparatus"]:checked')
+  )
+    .filter((input) => !input.disabled)
+    .map((input) => {
+      const section = input.dataset.eventSection || "";
+      return {
+        title: input.value,
+        section,
+        value: section ? `${section} · ${input.value}` : input.value
+      };
+    });
+
+  const groupCategory = getRadioValue(form, "groupCategory");
+  if (groupCategory) {
+    choices.push({
+      title: groupCategory,
+      section: "단체/그룹",
+      value: groupCategory
+    });
+  }
+
+  getCustomEventValues(form).forEach((eventName) => {
+    choices.push({
+      title: eventName,
+      section: entryType(form),
+      value: eventName
+    });
+  });
+
+  return choices;
+}
+
 function getSelectedEventValues(form) {
-  return [
-    ...getCheckedValues(form, "routine"),
-    ...getCheckedValues(form, "apparatus"),
-    getRadioValue(form, "groupCategory"),
-    ...getCustomEventValues(form)
-  ].filter(Boolean);
+  return getSelectedEventChoices(form).map((eventChoice) => eventChoice.value);
+}
+
+function translateEventText(text) {
+  return String(text || "")
+    .split(" · ")
+    .map((part) => translateDynamic(part))
+    .join(" · ");
 }
 
 function formatEventList(events) {
-  return events.map((eventName) => translateDynamic(eventName)).join(", ");
+  return events.map((eventName) => translateEventText(eventName)).join(", ");
 }
 
 function collectAthletes(form) {
@@ -795,7 +835,7 @@ function createEmptyOptions(message) {
 }
 
 function syncMediaOptions(form) {
-  const selectedEvents = getSelectedEventValues(form);
+  const selectedEvents = getSelectedEventChoices(form);
   const summary = form.querySelector("[data-selected-event-summary]");
 
   if (summary) {
@@ -803,13 +843,13 @@ function syncMediaOptions(form) {
     if (!selectedEvents.length) {
       summary.appendChild(createEmptyOptions("먼저 종목을 선택해주세요."));
     } else {
-      selectedEvents.forEach((eventName) => {
+      selectedEvents.forEach((eventChoice) => {
         const card = document.createElement("article");
         const title = document.createElement("strong");
         const description = document.createElement("span");
         card.className = "selected-event-card";
-        title.textContent = translateDynamic(eventName);
-        description.textContent = translateText("선택 종목");
+        title.textContent = translateEventText(eventChoice.title);
+        description.textContent = translateEventText(eventChoice.section || "선택 종목");
         card.append(title, description);
         summary.appendChild(card);
       });
@@ -827,7 +867,7 @@ function syncMediaOptions(form) {
       return;
     }
 
-    selectedEvents.forEach((eventName) => {
+    selectedEvents.forEach((eventChoice) => {
       const label = document.createElement("label");
       const input = document.createElement("input");
       const check = document.createElement("span");
@@ -838,12 +878,15 @@ function syncMediaOptions(form) {
       label.className = "media-option";
       input.type = "checkbox";
       input.name = optionName;
-      input.value = eventName;
-      input.checked = previousValues.has(eventName);
+      input.value = eventChoice.value;
+      input.checked = previousValues.has(eventChoice.value);
       check.className = "media-option-check";
       copy.className = "media-option-copy";
-      title.textContent = translateDynamic(eventName);
-      description.textContent = translateText(optionDescription);
+      title.textContent = translateEventText(eventChoice.title);
+      description.textContent = [eventChoice.section, optionDescription]
+        .filter(Boolean)
+        .map((part) => translateEventText(part))
+        .join(" · ");
       copy.append(title, description);
       label.append(input, check, copy);
       container.appendChild(label);
@@ -1225,14 +1268,38 @@ function statusClass(status) {
   return "pending";
 }
 
-function renderApplication(application) {
-  const events = [
-    ...(application.routines || []),
-    ...(application.apparatus || []),
+function formatStoredRoutineEvent(eventName, application) {
+  const normalized = String(eventName || "");
+  if (!normalized || normalized.includes(" · ")) return normalized;
+
+  const nonRoutineEvents = new Set([
     application.groupCategory,
-    ...(application.customEvents || [])
-  ]
-    .filter(Boolean);
+    ...(Array.isArray(application.customEvents) ? application.customEvents : []),
+    "심판 제출"
+  ]);
+  if (nonRoutineEvents.has(normalized)) return normalized;
+
+  const section = /^Level\s+[123]$/i.test(normalized) ? "규정 부문 · 맨손" : "규정 부문 · 수구";
+  return `${section} · ${normalized}`;
+}
+
+function formatStoredFreeEvent(eventName) {
+  const normalized = String(eventName || "");
+  if (!normalized || normalized.includes(" · ")) return normalized;
+  return `자유 부문 · ${normalized}`;
+}
+
+function renderApplication(application) {
+  const events = Array.from(
+    new Set(
+      [
+        ...(application.routines || []).map((eventName) => formatStoredRoutineEvent(eventName, application)),
+        ...(application.apparatus || []).map((eventName) => formatStoredFreeEvent(eventName)),
+        application.groupCategory,
+        ...(application.customEvents || [])
+      ].filter(Boolean)
+    )
+  );
   const eventsText = formatEventList(events) || "-";
   const photoOptions = Array.isArray(application.photoOptions) ? application.photoOptions : [];
   const videoOptions = Array.isArray(application.videoOptions) ? application.videoOptions : [];
