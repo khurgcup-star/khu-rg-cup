@@ -1061,7 +1061,10 @@ function syncFormForEntryType(form) {
   setPanelEnabled(mediaOptions, !judgeSelected);
   setPanelEnabled(musicUpload, !judgeSelected);
   setPanelEnabled(pledgeUpload, !judgeSelected);
-  individualContactFields.forEach((field) => setPanelEnabled(field, !judgeSelected && !isGroupEntry(form)));
+  // 꿈나무부·선수부는 선수 개인 연락처 대신 지도자 연락처로 일원화합니다.
+  // 성인부·갈라쇼는 기존 개인 영문 이름·연락처 입력을 유지합니다.
+  const needsParticipantContact = !judgeSelected && ["성인부", "갈라쇼"].includes(division(form));
+  individualContactFields.forEach((field) => setPanelEnabled(field, needsParticipantContact));
 
   syncAthleteGroupDetail(form);
   syncMusicUploadRules(form);
@@ -1101,6 +1104,7 @@ function createApplicationFromForm(form) {
   const selectedGroupDetail = groupEventDetail(form);
   if (isAthleteGroup(form) && selectedGroupDetail) customEvents.push(selectedGroupDetail);
   const routineEvents = getCheckedValues(form, "routine");
+  const needsParticipantContact = !judgeSelected && ["성인부", "갈라쇼"].includes(division(form));
 
   return {
     id,
@@ -1111,10 +1115,18 @@ function createApplicationFromForm(form) {
     division: judgeSelected ? "심판 제출" : getRadioValue(form, "division"),
     entryType: selectedEntryType,
     athleteName: firstAthlete.name || judgeName,
-    englishName: judgeSelected ? judgeName : String(formData.get("englishName") || ""),
+    englishName: judgeSelected
+      ? judgeName
+      : needsParticipantContact
+        ? String(formData.get("englishName") || "")
+        : "",
     birthDate: judgeSelected ? "1900-01-01" : firstAthlete.birthDate || "",
     email: applicationEmail,
-    phone: judgeSelected ? "심판 제출" : String(formData.get("phone") || ""),
+    phone: judgeSelected
+      ? "심판 제출"
+      : needsParticipantContact
+        ? String(formData.get("phone") || "")
+        : "",
     organization: judgeSelected ? String(formData.get("judgeOrganization") || "") : String(formData.get("organization") || ""),
     coachName: judgeSelected ? judgeName : String(formData.get("coachName") || ""),
     coachPhone: judgeSelected ? "심판 제출" : String(formData.get("coachPhone") || ""),

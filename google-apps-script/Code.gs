@@ -4,7 +4,7 @@ const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-31-entry-form-update";
+const API_VERSION = "2026-07-31-youth-coach-contact";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -104,6 +104,12 @@ function queryPayload(e) {
 }
 
 function submitApplication(application, musicFile, pledgeFile) {
+  // 꿈나무부·선수부는 선수 개인 연락처를 저장하지 않고 지도자 연락처를 사용합니다.
+  if (application && ["꿈나무부", "선수부"].includes(String(application.division || ""))) {
+    application.englishName = "";
+    application.phone = "";
+  }
+
   const validation = validateApplication(application, musicFile, pledgeFile);
   if (!validation.ok) {
     return { ok: false, error: validation.error };
@@ -263,7 +269,7 @@ function validateApplication(application, musicFile, pledgeFile) {
     ["coachName", "지도자명"],
     ["coachPhone", "지도자 연락처"]
   ];
-  if (application.entryType !== "단체/그룹") {
+  if (["성인부", "갈라쇼"].includes(String(application.division || ""))) {
     competitorFields.push(["phone", "연락처"]);
   }
 
