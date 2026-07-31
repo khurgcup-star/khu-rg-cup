@@ -1,4 +1,4 @@
-﻿const STORAGE_KEY = "khu-president-cup-applications";
+const STORAGE_KEY = "khu-president-cup-applications";
 const LANGUAGE_KEY = "khu-president-cup-language";
 
 const EVENT_DISPLAY_META = Object.freeze({
@@ -1121,6 +1121,16 @@ function createApplicationFromForm(form) {
   if (isAthleteGroup(form) && selectedGroupDetail) customEvents.push(selectedGroupDetail);
   const routineEvents = getCheckedValues(form, "routine");
   const needsParticipantContact = !judgeSelected && ["성인부", "갈라쇼"].includes(division(form));
+  const coachPhone = judgeSelected ? "심판 제출" : String(formData.get("coachPhone") || "");
+
+  // 구형 Apps Script 배포본은 개인 신청의 phone 값을 필수로 검사합니다.
+  // 꿈나무부·선수부에서는 선수 개인번호를 받지 않으므로 지도자 연락처를
+  // 호환용 phone 값으로 전송합니다. 최신 Code.gs는 저장 전에 이 값을 비웁니다.
+  const participantPhone = judgeSelected
+    ? "심판 제출"
+    : needsParticipantContact
+      ? String(formData.get("phone") || "")
+      : coachPhone;
 
   return {
     id,
@@ -1138,14 +1148,10 @@ function createApplicationFromForm(form) {
         : "",
     birthDate: judgeSelected ? "1900-01-01" : firstAthlete.birthDate || "",
     email: applicationEmail,
-    phone: judgeSelected
-      ? "심판 제출"
-      : needsParticipantContact
-        ? String(formData.get("phone") || "")
-        : "",
+    phone: participantPhone,
     organization: judgeSelected ? String(formData.get("judgeOrganization") || "") : String(formData.get("organization") || ""),
     coachName: judgeSelected ? judgeName : String(formData.get("coachName") || ""),
-    coachPhone: judgeSelected ? "심판 제출" : String(formData.get("coachPhone") || ""),
+    coachPhone,
     athletes,
     groupCategory,
     customEvents,

@@ -1,10 +1,10 @@
-﻿const SPREADSHEET_ID = "1w4MbvvDKK9FnlnYiqMWqNTLrCa1J5yj-n9c3FOd99nU";
+const SPREADSHEET_ID = "1w4MbvvDKK9FnlnYiqMWqNTLrCa1J5yj-n9c3FOd99nU";
 const DRIVE_FOLDER_ID = "1EkacVrXtSINEmaaaXRoiCuRb4qQ6g_sA";
 const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-31-youth-coach-contact";
+const API_VERSION = "2026-07-31-youth-coach-contact-v2";
 
 const APPLICATION_HEADERS = [
   "id",
