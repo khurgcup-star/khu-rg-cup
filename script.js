@@ -62,6 +62,7 @@ const phraseMap = {
   "성인부 / 갈라쇼": "Adult / Gala Show",
   "대회 요약": "Competition Summary",
   "2026년 9월 19일(토) - 9월 20일(일)": "September 19 (Sat) - September 20 (Sun), 2026",
+  "2026년 8월 25일(화)": "August 25 (Tue), 2026",
   "리듬체조 대회의 생생한 순간을 전합니다. 2026년 대회 사진은 9월 19일과 20일 행사 종료 후 순차적으로 공개됩니다.": "Relive the competition highlights. Photos from September 19 and 20, 2026 will be published after each event day.",
   "지난 대회 현장": "Previous Competition",
   "대회 현장 스케치": "Competition Highlights",
@@ -290,6 +291,8 @@ const phraseMap = {
   "국가 / 국적 *": "Country / Nationality *",
   "국가 / 국적": "Country / nationality",
   "생년월일 *": "Date of Birth *",
+  "선수 이름 (선택)": "Athlete Name (Optional)",
+  "생년월일 (선택)": "Date of Birth (Optional)",
   "연락처 *": "Phone *",
   "이메일 *": "Email *",
   "소속 팀 *": "Team *",
@@ -325,8 +328,24 @@ const phraseMap = {
   "리본": "Ribbon",
   "줄": "Rope",
   "맨손자유": "Freehand",
+  "1분10초 이하": "Up to 1 min 10 sec",
+  "1분30초 이하": "Up to 1 min 30 sec",
+  "FH_Short(1분10초 이하)": "FH_Short (up to 1 min 10 sec)",
+  "FH_Long(1분30초 이하)": "FH_Long (up to 1 min 30 sec)",
+  "규정": "Regulation",
+  "단체 규정": "Group Regulation",
+  "단체 규정 맨손": "Group Regulation Freehand",
+  "단체 규정 후프": "Group Regulation Hoop",
+  "단체 규정 볼": "Group Regulation Ball",
+  "자유": "Free",
+  "단일수구": "Single Apparatus",
+  "혼합수구": "Mixed Apparatus",
+  "종목 기입란 *": "Event Details *",
+  "예: 후프 / 볼 3, 리본 2": "e.g. Hoop / 3 Balls, 2 Ribbons",
+  "선택한 유형의 세부 종목을 입력해주세요.": "Enter the event details for the selected type.",
   "추가 옵션": "Additional Options",
   "촬영 신청 대상 종목": "Events for Media Requests",
+  "신청 종목": "Applied Events",
   "사진·영상 촬영은 참가비와 별도 비용입니다.": "Photo and video coverage is charged separately from the entry fee.",
   "원하는 종목을 사진과 영상으로 각각 선택하세요. 금액과 결제 방법은 운영진이 별도로 안내합니다.": "Select the events you want photographed and filmed. Staff will provide pricing and payment instructions separately.",
   "대회 사진 신청": "Competition Photo Request",
@@ -345,10 +364,12 @@ const phraseMap = {
   "서약서가 서버에 저장되지 않았습니다. Apps Script 배포를 확인해주세요.": "The pledge was not saved on the server. Check the Apps Script deployment.",
   "음악 파일 제출": "Music File Submission",
   "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.": "Music is optional. Upload an MP3, WAV, or M4A file.",
+  "음악은 선택 제출입니다(규정X). MP3 파일로 업로드하세요(ex. 홍길동2020_자유곤봉_경희대).": "Music submission is optional (not for regulation events). Upload an MP3 file (e.g. HongGildong2020_FreeClubs_KyungHee).",
   "MP3, WAV, M4A 파일을 업로드하세요. 실제 운영 시 파일은 Jotform 또는 서버 저장소로 전송됩니다.": "Upload an MP3, WAV, or M4A file. In live operation, files should be sent to Jotform or a server storage.",
   "파일을 드래그하거나 클릭하여 선택": "Drag a file here or click to choose",
   "선택된 파일 없음": "No file selected",
   "MP3, WAV, M4A 파일만 업로드할 수 있습니다.": "Only MP3, WAV, and M4A files can be uploaded.",
+  "MP3 파일만 업로드할 수 있습니다.": "Only MP3 files can be uploaded.",
   "동의 및 확인": "Consent and Review",
   "개인정보 수집 및 이용에 동의합니다.": "I agree to the collection and use of personal information.",
   "대회 사진 및 영상 촬영/활용 안내를 확인했습니다.": "I have reviewed the photo and video recording/use notice.",
@@ -359,6 +380,8 @@ const phraseMap = {
   "확인 내용": "Review",
   "종목을 하나 이상 선택하거나 입력해주세요.": "Select or enter at least one event.",
   "단체/그룹은 선수 정보를 최소 5명 입력해주세요.": "Group/team entries require at least 5 athletes.",
+  "선수 정보는 이름과 생년월일을 함께 입력해주세요.": "Enter both the athlete name and date of birth.",
+  "선수부 단체/그룹은 종목 기입란을 입력해주세요.": "Athlete Division group/team entries must include event details.",
   "먼저 종목을 선택해주세요.": "Select events first.",
   "대한체조협회 맨손 규정": "KGA freehand program",
   "대한체조협회 수구 규정": "KGA apparatus program",
@@ -398,7 +421,8 @@ const statusMap = {
   "신청완료": "Application Complete",
   "미제출": "Not Submitted",
   "운영진 확인 전": "Awaiting staff review",
-  "신청 확정": "Application confirmed"
+  "신청 확정": "Application confirmed",
+  "해당 없음": "Not Applicable"
 };
 
 const sampleApplications = [
@@ -624,6 +648,13 @@ function isAcceptedMusicFile(file) {
   return /\.(mp3|wav|m4a)$/.test(name) || ["audio/mpeg", "audio/wav", "audio/x-wav", "audio/x-m4a", "audio/mp4"].includes(type);
 }
 
+function isAcceptedMp3File(file) {
+  if (!file) return false;
+  const name = String(file.name || "").toLowerCase();
+  const type = String(file.type || "").toLowerCase();
+  return /\.mp3$/.test(name) || type === "audio/mpeg";
+}
+
 function isAcceptedPledgeFile(file) {
   if (!file) return false;
   const name = String(file.name || "").toLowerCase();
@@ -679,22 +710,34 @@ function getSelectedEventChoices(form) {
       };
     });
 
-  const groupCategory = getRadioValue(form, "groupCategory");
-  if (groupCategory) {
-    choices.push({
-      title: groupCategory,
-      section: "단체/그룹",
-      value: groupCategory
-    });
+  const groupCategoryInput = form.querySelector('input[name="groupCategory"]:checked:not(:disabled)');
+  const selectedGroupCategory = groupCategoryInput?.value || "";
+  const selectedGroupDetail = groupEventDetail(form);
+  if (selectedGroupCategory) {
+    if (isAthleteGroup(form) && selectedGroupDetail) {
+      choices.push({
+        title: selectedGroupDetail,
+        section: selectedGroupCategory,
+        value: `${selectedGroupCategory} · ${selectedGroupDetail}`
+      });
+    } else {
+      choices.push({
+        title: selectedGroupCategory,
+        section: groupCategoryInput?.dataset.eventSection || "단체/그룹",
+        value: selectedGroupCategory
+      });
+    }
   }
 
-  getCustomEventValues(form).forEach((eventName) => {
-    choices.push({
-      title: eventName,
-      section: entryType(form),
-      value: eventName
+  if (!isAthleteGroup(form)) {
+    getCustomEventValues(form).forEach((eventName) => {
+      choices.push({
+        title: eventName,
+        section: entryType(form),
+        value: eventName
+      });
     });
-  });
+  }
 
   return choices;
 }
@@ -758,8 +801,32 @@ function isGroupEntry(form) {
   return entryType(form) === "단체/그룹";
 }
 
+function isStandardDivision(form) {
+  return ["꿈나무부", "선수부"].includes(division(form));
+}
+
+function isDreamerIndividual(form) {
+  return division(form) === "꿈나무부" && entryType(form) === "개인";
+}
+
+function isAthleteIndividual(form) {
+  return division(form) === "선수부" && entryType(form) === "개인";
+}
+
+function isDreamerGroup(form) {
+  return division(form) === "꿈나무부" && isGroupEntry(form);
+}
+
+function isAthleteGroup(form) {
+  return division(form) === "선수부" && isGroupEntry(form);
+}
+
 function usesCustomEvents(form) {
   return ["성인부", "갈라쇼"].includes(entryType(form));
+}
+
+function groupEventDetail(form) {
+  return String(form.querySelector('input[name="groupEventDetail"]:not(:disabled)')?.value || "").trim();
 }
 
 function createAthleteCard(index) {
@@ -769,18 +836,43 @@ function createAthleteCard(index) {
   article.innerHTML = `
     <strong class="member-index">${index + 1}</strong>
     <div class="form-grid">
-      <label>선수 이름 *<input name="athleteName" type="text" placeholder="선수 이름" required /></label>
-      <label>생년월일 *<input name="birthDate" type="date" required /></label>
+      <label><span data-athlete-name-label>선수 이름 *</span><input name="athleteName" type="text" placeholder="선수 이름" /></label>
+      <label><span data-athlete-birth-label>생년월일 *</span><input name="birthDate" type="date" /></label>
     </div>
   `;
   return article;
+}
+
+function syncAthleteCardRequirements(form) {
+  Array.from(form.querySelectorAll("[data-athlete-card]")).forEach((card, index) => {
+    const required = !isAthleteGroup(form) || index < 5;
+    const nameInput = card.querySelector('input[name="athleteName"]');
+    const birthInput = card.querySelector('input[name="birthDate"]');
+    if (nameInput) nameInput.required = required;
+    if (birthInput) birthInput.required = required;
+    card.classList.toggle("optional-athlete", !required);
+    const nameLabel = card.querySelector("[data-athlete-name-label]");
+    const birthLabel = card.querySelector("[data-athlete-birth-label]");
+    if (nameLabel) nameLabel.textContent = required ? "선수 이름 *" : "선수 이름 (선택)";
+    if (birthLabel) birthLabel.textContent = required ? "생년월일 *" : "생년월일 (선택)";
+    card.querySelector(".member-index").textContent = String(index + 1);
+  });
 }
 
 function syncAthleteCards(form) {
   const list = form.querySelector("[data-athlete-list]");
   if (!list) return;
 
-  const targetCount = isGroupEntry(form) ? Math.max(5, list.children.length || 5) : 1;
+  const mode = isAthleteGroup(form) ? "athlete-group" : isDreamerGroup(form) ? "dreamer-group" : "single";
+  const previousMode = form.dataset.athleteMode || "";
+  const targetCount =
+    mode === "athlete-group"
+      ? 6
+      : mode === "dreamer-group"
+        ? previousMode === "dreamer-group"
+          ? Math.max(5, Math.min(list.children.length || 5, 6))
+          : 5
+        : 1;
   while (list.children.length < targetCount) {
     list.appendChild(createAthleteCard(list.children.length));
   }
@@ -788,15 +880,20 @@ function syncAthleteCards(form) {
     list.lastElementChild?.remove();
   }
 
-  Array.from(list.children).forEach((card, index) => {
-    card.querySelector(".member-index").textContent = String(index + 1);
-  });
+  form.dataset.athleteMode = mode;
+  syncAthleteCardRequirements(form);
 }
 
 function addAthleteCard(form) {
   const list = form.querySelector("[data-athlete-list]");
   if (!list || list.children.length >= 6) return;
   list.appendChild(createAthleteCard(list.children.length));
+  syncAthleteCardRequirements(form);
+  const addButton = form.querySelector("[data-add-athlete]");
+  if (addButton && list.children.length >= 6) {
+    addButton.hidden = true;
+    addButton.disabled = true;
+  }
   refreshTranslations();
 }
 
@@ -894,23 +991,56 @@ function syncMediaOptions(form) {
   });
 }
 
+function syncMusicUploadRules(form) {
+  const helper = form.querySelector("[data-music-helper]");
+  const input = form.querySelector('input[name="musicFile"]');
+  const fileLabel = form.querySelector("[data-music-file-name]");
+  const mp3Only = isStandardDivision(form);
+
+  if (helper) {
+    helper.textContent = mp3Only
+      ? "음악은 선택 제출입니다(규정X). MP3 파일로 업로드하세요(ex. 홍길동2020_자유곤봉_경희대)."
+      : "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.";
+  }
+  if (input) {
+    input.accept = mp3Only
+      ? ".mp3,audio/mpeg"
+      : ".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-m4a,audio/mp4";
+    const selectedFile = input.files?.[0];
+    if (selectedFile && mp3Only && !isAcceptedMp3File(selectedFile)) {
+      input.value = "";
+      if (fileLabel) fileLabel.textContent = "선택된 파일 없음";
+    }
+  }
+}
+
+function syncAthleteGroupDetail(form) {
+  const detailPanel = form.querySelector("[data-athlete-group-detail]");
+  const enabled = isAthleteGroup(form) && Boolean(getRadioValue(form, "groupCategory"));
+  setPanelEnabled(detailPanel, enabled);
+}
+
 function syncFormForEntryType(form) {
   const type = entryType(form);
   const judgeSelected = isJudgeEntry(form);
-  const standardDivision = ["꿈나무부", "선수부"].includes(division(form));
   const entryTypeChoice = form.querySelector("[data-entry-type-choice]");
   const competitorFields = form.querySelector("[data-competitor-fields]");
   const judgeFields = form.querySelector("[data-judge-fields]");
-  const individualEvents = form.querySelector("[data-individual-events]");
-  const groupEvents = form.querySelector("[data-group-events]");
+  const dreamerIndividualEvents = form.querySelector("[data-dreamer-individual-events]");
+  const athleteIndividualEvents = form.querySelector("[data-athlete-individual-events]");
+  const dreamerGroupEvents = form.querySelector("[data-dreamer-group-events]");
+  const athleteGroupEvents = form.querySelector("[data-athlete-group-events]");
   const customEvents = form.querySelector("[data-custom-events]");
   const judgeEventNote = form.querySelector("[data-judge-event-note]");
   const mediaOptions = form.querySelector("[data-media-options]");
   const musicUpload = form.querySelector("[data-music-upload]");
+  const pledgeUpload = form.querySelector("[data-pledge-upload]");
   const groupHelper = form.querySelector("[data-group-helper]");
   const addAthleteButton = form.querySelector("[data-add-athlete]");
   const memberTitle = form.querySelector("[data-member-title]");
   const customTitle = form.querySelector("[data-custom-event-title]");
+  const mediaSummaryTitle = form.querySelector("[data-media-summary-title]");
+  const individualContactFields = form.querySelectorAll("[data-individual-contact-field]");
 
   form.querySelectorAll('input[name="division"]').forEach((input) => {
     input.disabled = judgeSelected;
@@ -919,23 +1049,35 @@ function syncFormForEntryType(form) {
   syncAthleteCards(form);
   syncCustomEventRows(form);
 
-  setPanelEnabled(entryTypeChoice, !judgeSelected && standardDivision);
+  setPanelEnabled(entryTypeChoice, !judgeSelected && isStandardDivision(form));
   setPanelEnabled(competitorFields, !judgeSelected);
   setPanelEnabled(judgeFields, judgeSelected);
-  setPanelEnabled(individualEvents, type === "개인");
-  setPanelEnabled(groupEvents, type === "단체/그룹");
+  setPanelEnabled(dreamerIndividualEvents, isDreamerIndividual(form));
+  setPanelEnabled(athleteIndividualEvents, isAthleteIndividual(form));
+  setPanelEnabled(dreamerGroupEvents, isDreamerGroup(form));
+  setPanelEnabled(athleteGroupEvents, isAthleteGroup(form));
   setPanelEnabled(customEvents, usesCustomEvents(form));
   setPanelEnabled(judgeEventNote, judgeSelected);
   setPanelEnabled(mediaOptions, !judgeSelected);
   setPanelEnabled(musicUpload, !judgeSelected);
+  setPanelEnabled(pledgeUpload, !judgeSelected);
+  individualContactFields.forEach((field) => setPanelEnabled(field, !judgeSelected && !isGroupEntry(form)));
+
+  syncAthleteGroupDetail(form);
+  syncMusicUploadRules(form);
 
   if (memberTitle) memberTitle.textContent = isGroupEntry(form) ? "팀 선수 정보" : "선수 정보";
   if (groupHelper) groupHelper.hidden = !isGroupEntry(form);
   if (addAthleteButton) {
-    addAthleteButton.hidden = !isGroupEntry(form);
-    addAthleteButton.disabled = !isGroupEntry(form);
+    const canAddAthlete = isGroupEntry(form) && form.querySelectorAll("[data-athlete-card]").length < 6;
+    addAthleteButton.hidden = !canAddAthlete;
+    addAthleteButton.disabled = !canAddAthlete;
   }
   if (customTitle) customTitle.textContent = type === "갈라쇼" ? "갈라쇼 종목" : "성인부 종목";
+  if (mediaSummaryTitle) {
+    const shortTitle = isDreamerIndividual(form) || isAthleteIndividual(form) || isAthleteGroup(form);
+    mediaSummaryTitle.textContent = shortTitle ? "신청 종목" : "촬영 신청 대상 종목";
+  }
 
   syncMediaOptions(form);
   refreshTranslations();
@@ -956,6 +1098,8 @@ function createApplicationFromForm(form) {
   const groupCategory = getRadioValue(form, "groupCategory");
   const applicationEmail = judgeSelected ? judgeEmail : String(formData.get("email") || "");
   const customEvents = getCustomEventValues(form);
+  const selectedGroupDetail = groupEventDetail(form);
+  if (isAthleteGroup(form) && selectedGroupDetail) customEvents.push(selectedGroupDetail);
   const routineEvents = getCheckedValues(form, "routine");
 
   return {
@@ -1016,11 +1160,22 @@ function validateCurrentStep(form, stepIndex) {
   }
 
   if (stepIndex === 2 && isGroupEntry(form)) {
-    const completedAthletes = collectAthletes(form).filter((athlete) => athlete.name && athlete.birthDate);
+    const enteredAthletes = collectAthletes(form);
+    const completedAthletes = enteredAthletes.filter((athlete) => athlete.name && athlete.birthDate);
+    const partialAthlete = enteredAthletes.some((athlete) => !athlete.name || !athlete.birthDate);
     if (completedAthletes.length < 5) {
       form.querySelector("[data-form-message]").textContent = translateText("단체/그룹은 선수 정보를 최소 5명 입력해주세요.");
       return false;
     }
+    if (partialAthlete) {
+      form.querySelector("[data-form-message]").textContent = translateText("선수 정보는 이름과 생년월일을 함께 입력해주세요.");
+      return false;
+    }
+  }
+
+  if (stepIndex === 3 && isAthleteGroup(form) && !groupEventDetail(form)) {
+    form.querySelector("[data-form-message]").textContent = translateText("선수부 단체/그룹은 종목 기입란을 입력해주세요.");
+    return false;
   }
 
   if (stepIndex === 3 && !isJudgeEntry(form)) {
@@ -1130,13 +1285,19 @@ function setupWizard() {
   });
 
   form.addEventListener("change", (event) => {
-    if (event.target.matches('input[name="routine"], input[name="apparatus"], input[name="groupCategory"]')) {
+    if (event.target.matches('input[name="groupCategory"]')) {
+      syncAthleteGroupDetail(form);
+      syncMediaOptions(form);
+      refreshTranslations();
+      return;
+    }
+    if (event.target.matches('input[name="routine"], input[name="apparatus"]')) {
       syncMediaOptions(form);
     }
   });
 
   form.addEventListener("input", (event) => {
-    if (event.target.matches('input[name="customEvent"]')) {
+    if (event.target.matches('input[name="customEvent"], input[name="groupEventDetail"]')) {
       syncMediaOptions(form);
     }
   });
@@ -1159,7 +1320,7 @@ function setupWizard() {
       if (!validateFile(file)) {
         input.value = "";
         label.textContent = translateText("선택된 파일 없음");
-        if (message) message.textContent = translateText(invalidMessage);
+        if (message) message.textContent = translateText(typeof invalidMessage === "function" ? invalidMessage() : invalidMessage);
         return;
       }
 
@@ -1175,7 +1336,7 @@ function setupWizard() {
       if (file && !validateFile(file)) {
         event.target.value = "";
         label.textContent = translateText("선택된 파일 없음");
-        form.querySelector("[data-form-message]").textContent = translateText(invalidMessage);
+        form.querySelector("[data-form-message]").textContent = translateText(typeof invalidMessage === "function" ? invalidMessage() : invalidMessage);
         return;
       }
       label.textContent = file?.name || translateText("선택된 파일 없음");
@@ -1209,8 +1370,8 @@ function setupWizard() {
   setupFileDrop(
     'input[name="musicFile"]',
     "[data-music-file-name]",
-    isAcceptedMusicFile,
-    "MP3, WAV, M4A 파일만 업로드할 수 있습니다."
+    (file) => (isStandardDivision(form) ? isAcceptedMp3File(file) : isAcceptedMusicFile(file)),
+    () => (isStandardDivision(form) ? "MP3 파일만 업로드할 수 있습니다." : "MP3, WAV, M4A 파일만 업로드할 수 있습니다.")
   );
 
   form.addEventListener("submit", async (event) => {
@@ -1225,7 +1386,7 @@ function setupWizard() {
 
       if (hasRemoteApi()) {
         const result = await callRemote("submitApplication", payload);
-        if (!result.application?.pledgeFileUrl) {
+        if (!isJudgeEntry(form) && !result.application?.pledgeFileUrl) {
           throw new Error(translateText("서약서가 서버에 저장되지 않았습니다. Apps Script 배포를 확인해주세요."));
         }
         payload.application.id = result.application?.id || payload.application.id;
@@ -1254,7 +1415,7 @@ function setupWizard() {
   });
 
   document.addEventListener("languagechange", () => {
-    syncMediaOptions(form);
+    syncFormForEntryType(form);
     render();
   });
 
@@ -1283,20 +1444,27 @@ function formatStoredRoutineEvent(eventName, application) {
   return `${section} · ${normalized}`;
 }
 
-function formatStoredFreeEvent(eventName) {
+function formatStoredFreeEvent(eventName, application) {
   const normalized = String(eventName || "");
   if (!normalized || normalized.includes(" · ")) return normalized;
+  if (application.division === "선수부" && application.entryType === "개인") return normalized;
   return `자유 부문 · ${normalized}`;
 }
 
 function renderApplication(application) {
+  const storedCustomEvents = Array.isArray(application.customEvents) ? application.customEvents : [];
+  const athleteGroupEvents =
+    application.division === "선수부" && application.entryType === "단체/그룹" && application.groupCategory
+      ? storedCustomEvents.length
+        ? [`${application.groupCategory} · ${storedCustomEvents.join(" / ")}`]
+        : [application.groupCategory]
+      : [application.groupCategory, ...storedCustomEvents];
   const events = Array.from(
     new Set(
       [
         ...(application.routines || []).map((eventName) => formatStoredRoutineEvent(eventName, application)),
-        ...(application.apparatus || []).map((eventName) => formatStoredFreeEvent(eventName)),
-        application.groupCategory,
-        ...(application.customEvents || [])
+        ...(application.apparatus || []).map((eventName) => formatStoredFreeEvent(eventName, application)),
+        ...athleteGroupEvents
       ].filter(Boolean)
     )
   );
@@ -1330,7 +1498,7 @@ function renderApplication(application) {
         <div><dt>${translateDynamic("대회 사진 신청")}</dt><dd>${photosText}</dd></div>
         <div><dt>${translateDynamic("대회 영상 신청")}</dt><dd>${videosText}</dd></div>
         <div><dt>${translateDynamic("결제")}</dt><dd>${translateDynamic(application.paymentStatus || "-")}</dd></div>
-        <div><dt>${currentLanguage() === "en" ? "Pledge" : "서약서"}</dt><dd>${translateDynamic(application.pledgeStatus || (application.pledgeFileUrl ? "제출완료" : "-"))}</dd></div>
+        <div><dt>${currentLanguage() === "en" ? "Pledge" : "서약서"}</dt><dd>${translateDynamic(application.entryType === "심판 제출" ? "해당 없음" : application.pledgeStatus || (application.pledgeFileUrl ? "제출완료" : "-"))}</dd></div>
         <div><dt>${currentLanguage() === "en" ? "Music" : "음악"}</dt><dd>${translateDynamic(application.musicStatus || "-")}</dd></div>
         <div><dt>${translateDynamic("운영 메모")}</dt><dd>${translateDynamic(application.adminMemo || "-")}</dd></div>
       </dl>

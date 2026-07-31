@@ -931,6 +931,10 @@ button, input, select, textarea { font: inherit; }
   border-radius: 12px;
   background: #fff;
 }
+.athlete-card.optional-athlete {
+  border-style: dashed;
+  background: #fbfcff;
+}
 .member-index {
   color: var(--muted);
   font-size: 15px;
@@ -939,6 +943,16 @@ button, input, select, textarea { font: inherit; }
   display: grid;
   gap: 14px;
   margin-bottom: 14px;
+}
+.group-event-detail {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.group-event-detail .helper {
+  margin: 0;
 }
 .custom-event-row {
   display: grid;
@@ -1240,6 +1254,7 @@ input:focus, textarea:focus {
   cursor: pointer;
   font-weight: 900;
 }
+[hidden],
 .hidden { display: none !important; }
 .form-message {
   grid-area: message;

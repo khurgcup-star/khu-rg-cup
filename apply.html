@@ -13,7 +13,7 @@
     <meta property="og:image:height" content="2595" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://khurgcup-star.github.io/khu-rg-cup/assets/hero-rg-competition.png?v=2" />
-    <link rel="stylesheet" href="styles.css?v=20260725-event-sections" />
+    <link rel="stylesheet" href="styles.css?v=20260731-entry-form-update" />
   </head>
   <body class="soft-page">
     <header class="topbar light">
@@ -137,8 +137,8 @@
 
             <h2>연락 및 소속 정보</h2>
             <div class="form-grid">
-              <label>영문 이름 *<input name="englishName" type="text" placeholder="Hong Gildong" required /></label>
-              <label>연락처 *<input name="phone" type="tel" placeholder="010-0000-0000" required /></label>
+              <label data-individual-contact-field>영문 이름 *<input name="englishName" type="text" placeholder="Hong Gildong" required /></label>
+              <label data-individual-contact-field>연락처 *<input name="phone" type="tel" placeholder="010-0000-0000" required /></label>
               <label>이메일 *<input name="email" type="email" placeholder="example@email.com" required /></label>
               <label class="wide">소속 팀 *<input name="organization" type="text" placeholder="소속 팀" required /></label>
             </div>
@@ -164,7 +164,7 @@
         <section class="wizard-step" data-step="3">
           <h1>종목 선택</h1>
 
-          <div data-individual-events>
+          <div data-dreamer-individual-events hidden>
             <div class="event-block">
               <h2>규정 부문</h2>
               <h3 class="event-subtitle">맨손</h3>
@@ -187,7 +187,8 @@
             <div class="event-block">
               <h2>자유 부문</h2>
               <div class="apparatus-grid">
-                <label><input type="checkbox" name="apparatus" value="FH" data-event-section="자유 부문" /><strong>FH</strong><span>맨손자유</span></label>
+                <label><input type="checkbox" name="apparatus" value="FH_Short(1분10초 이하)" data-event-section="자유 부문" /><strong>FH_Short</strong><span>1분10초 이하</span></label>
+                <label><input type="checkbox" name="apparatus" value="FH_Long(1분30초 이하)" data-event-section="자유 부문" /><strong>FH_Long</strong><span>1분30초 이하</span></label>
                 <label><input type="checkbox" name="apparatus" value="Hoop" data-event-section="자유 부문" /><strong>Hoop</strong><span>후프</span></label>
                 <label><input type="checkbox" name="apparatus" value="Ball" data-event-section="자유 부문" /><strong>Ball</strong><span>볼</span></label>
                 <label><input type="checkbox" name="apparatus" value="Clubs" data-event-section="자유 부문" /><strong>Clubs</strong><span>곤봉</span></label>
@@ -196,12 +197,43 @@
             </div>
           </div>
 
-          <div class="event-block" data-group-events hidden>
+          <div class="event-block" data-athlete-individual-events hidden>
+            <h2>개인 종목 선택</h2>
+            <div class="apparatus-grid">
+              <label><input type="checkbox" name="apparatus" value="Hoop" /><strong>Hoop</strong><span>후프</span></label>
+              <label><input type="checkbox" name="apparatus" value="Ball" /><strong>Ball</strong><span>볼</span></label>
+              <label><input type="checkbox" name="apparatus" value="Clubs" /><strong>Clubs</strong><span>곤봉</span></label>
+              <label><input type="checkbox" name="apparatus" value="Ribbon" /><strong>Ribbon</strong><span>리본</span></label>
+              <label><input type="checkbox" name="apparatus" value="FH" /><strong>FH</strong><span>맨손자유</span></label>
+            </div>
+          </div>
+
+          <div class="event-block" data-dreamer-group-events hidden>
+            <h2>단체/그룹 종목 선택</h2>
+            <h3 class="event-subtitle">규정</h3>
+            <div class="apparatus-grid group-category-grid">
+              <label><input type="radio" name="groupCategory" value="단체 규정 맨손" data-event-section="단체 규정" /><strong>맨손</strong><span>단체 규정 맨손</span></label>
+              <label><input type="radio" name="groupCategory" value="단체 규정 후프" data-event-section="단체 규정" /><strong>후프</strong><span>단체 규정 후프</span></label>
+              <label><input type="radio" name="groupCategory" value="단체 규정 볼" data-event-section="단체 규정" /><strong>볼</strong><span>단체 규정 볼</span></label>
+            </div>
+            <h3 class="event-subtitle">자유</h3>
+            <div class="apparatus-grid group-category-grid">
+              <label><input type="radio" name="groupCategory" value="맨손" data-event-section="자유" /><strong>맨손</strong><span>자유</span></label>
+              <label><input type="radio" name="groupCategory" value="단일수구" data-event-section="자유" /><strong>단일수구</strong><span>자유</span></label>
+              <label><input type="radio" name="groupCategory" value="혼합수구" data-event-section="자유" /><strong>혼합수구</strong><span>자유</span></label>
+            </div>
+          </div>
+
+          <div class="event-block" data-athlete-group-events hidden>
             <h2>단체/그룹 종목 선택</h2>
             <div class="apparatus-grid group-category-grid">
-              <label><input type="radio" name="groupCategory" value="시니어" /><strong>Senior</strong><span>시니어</span></label>
-              <label><input type="radio" name="groupCategory" value="주니어(2011-2013)" /><strong>Junior</strong><span>2011-2013</span></label>
-              <label><input type="radio" name="groupCategory" value="프리주니어(2014-2017)" /><strong>Pre-Junior</strong><span>2014-2017</span></label>
+              <label><input type="radio" name="groupCategory" value="맨손" /><strong>맨손</strong><span>맨손</span></label>
+              <label><input type="radio" name="groupCategory" value="단일수구" /><strong>단일수구</strong><span>단일수구</span></label>
+              <label><input type="radio" name="groupCategory" value="혼합수구" /><strong>혼합수구</strong><span>혼합수구</span></label>
+            </div>
+            <div class="custom-event-list group-event-detail" data-athlete-group-detail hidden>
+              <label class="custom-event-row">종목 기입란 *<input name="groupEventDetail" type="text" placeholder="예: 후프 / 볼 3, 리본 2" required /></label>
+              <p class="helper">선택한 유형의 세부 종목을 입력해주세요.</p>
             </div>
           </div>
 
@@ -218,7 +250,7 @@
 
           <div class="event-block media-request-block" data-media-options>
             <div class="selected-events-summary">
-              <h2>촬영 신청 대상 종목</h2>
+              <h2 data-media-summary-title>촬영 신청 대상 종목</h2>
               <div class="selected-event-list" data-selected-event-summary></div>
             </div>
             <div class="media-cost-notice">
@@ -236,7 +268,7 @@
 
           <div class="event-block" data-music-upload>
             <h2>음악 파일 제출</h2>
-            <p class="helper">음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.</p>
+            <p class="helper" data-music-helper>음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.</p>
             <label class="file-drop">
               <input name="musicFile" type="file" accept=".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-m4a,audio/mp4" />
               <span>파일을 드래그하거나 클릭하여 선택</span>
@@ -281,6 +313,6 @@
     </main>
 
     <script src="config.js"></script>
-    <script src="script.js?v=20260725-event-sections"></script>
+    <script src="script.js?v=20260731-entry-form-update"></script>
   </body>
 </html>

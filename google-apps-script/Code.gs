@@ -4,7 +4,7 @@ const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-24-president-cup";
+const API_VERSION = "2026-07-31-entry-form-update";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -104,7 +104,7 @@ function queryPayload(e) {
 }
 
 function submitApplication(application, musicFile, pledgeFile) {
-  const validation = validateApplication(application, pledgeFile);
+  const validation = validateApplication(application, musicFile, pledgeFile);
   if (!validation.ok) {
     return { ok: false, error: validation.error };
   }
@@ -145,7 +145,7 @@ function submitApplication(application, musicFile, pledgeFile) {
     apparatus: stringifyList(application.apparatus),
     photoOptions: stringifyList(application.photoOptions),
     videoOptions: stringifyList(application.videoOptions),
-    pledgeStatus: pledge.url ? "제출완료" : "미제출",
+    pledgeStatus: application.entryType === "심판 제출" ? "해당 없음" : pledge.url ? "제출완료" : "미제출",
     pledgeFileName: pledge.name || application.pledgeFileName || "",
     pledgeFileUrl: pledge.url || "",
     musicFileName: music.name || application.musicFileName || "",
@@ -207,13 +207,19 @@ function sendConfirmationEmail(application) {
   }
 }
 
-function validateApplication(application, pledgeFile) {
+function validateApplication(application, musicFile, pledgeFile) {
   if (!application) {
     return { ok: false, error: "신청 데이터가 없습니다." };
   }
 
-  if (!pledgeFile || !pledgeFile.base64) {
+  const judgeEntry = application.entryType === "심판 제출";
+  if (!judgeEntry && (!pledgeFile || !pledgeFile.base64)) {
     return { ok: false, error: "서약서 파일을 업로드해야 합니다." };
+  }
+
+  const standardDivision = ["꿈나무부", "선수부"].includes(application.division);
+  if (standardDivision && musicFile && musicFile.base64 && !/\.mp3$/i.test(String(musicFile.name || ""))) {
+    return { ok: false, error: "음악 파일은 MP3 형식으로 업로드해야 합니다." };
   }
 
   const requiredFields = [
@@ -253,11 +259,13 @@ function validateApplication(application, pledgeFile) {
   const competitorFields = [
     ["athleteName", "선수 이름"],
     ["birthDate", "생년월일"],
-    ["phone", "연락처"],
     ["organization", "소속"],
     ["coachName", "지도자명"],
     ["coachPhone", "지도자 연락처"]
   ];
+  if (application.entryType !== "단체/그룹") {
+    competitorFields.push(["phone", "연락처"]);
+  }
 
   for (const [field, label] of competitorFields) {
     if (!String(application[field] || "").trim()) {
@@ -266,8 +274,20 @@ function validateApplication(application, pledgeFile) {
   }
 
   const athletes = Array.isArray(application.athletes) ? application.athletes : [];
-  if (application.entryType === "단체/그룹" && athletes.length < 5) {
-    return { ok: false, error: "단체/그룹은 선수 정보를 최소 5명 입력해야 합니다." };
+  if (application.entryType === "단체/그룹") {
+    const completedAthletes = athletes.filter((athlete) => String(athlete.name || "").trim() && String(athlete.birthDate || "").trim());
+    const partialAthlete = athletes.some((athlete) => !String(athlete.name || "").trim() || !String(athlete.birthDate || "").trim());
+    if (completedAthletes.length < 5) {
+      return { ok: false, error: "단체/그룹은 선수 정보를 최소 5명 입력해야 합니다." };
+    }
+    if (partialAthlete) {
+      return { ok: false, error: "선수 이름과 생년월일을 함께 입력해야 합니다." };
+    }
+  }
+
+  const customEvents = Array.isArray(application.customEvents) ? application.customEvents : [];
+  if (application.division === "선수부" && application.entryType === "단체/그룹" && !customEvents.length) {
+    return { ok: false, error: "선수부 단체/그룹은 종목 기입란을 입력해야 합니다." };
   }
 
   const selectedEvents = []
