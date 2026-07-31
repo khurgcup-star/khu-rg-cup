@@ -1036,6 +1036,15 @@ input:focus, textarea:focus {
   color: #4d5565;
   cursor: pointer;
 }
+.pill-group input {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  padding: 0;
+  margin: 0;
+  accent-color: var(--blue);
+}
 .pill-group label:has(input:checked) {
   color: #fff;
   background: var(--navy-2);
@@ -1167,14 +1176,39 @@ input:focus, textarea:focus {
 .apparatus-grid input {
   grid-area: box;
   width: 18px;
+  height: 18px;
   min-height: 18px;
+  padding: 0;
   margin-top: 4px;
+  accent-color: var(--blue);
 }
 .apparatus-grid strong { grid-area: title; color: var(--navy); }
 .apparatus-grid span { grid-area: desc; color: var(--muted); font-size: 13px; }
 .apparatus-grid label:has(input:checked) {
   border-color: var(--red);
   box-shadow: 0 0 0 3px rgba(157, 35, 49, 0.1);
+}
+.apparatus-grid.dreamer-free-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+.apparatus-grid.dreamer-free-grid label {
+  grid-template-columns: 18px minmax(0, 1fr);
+  min-height: 72px;
+  padding: 12px;
+  gap: 2px 9px;
+}
+.apparatus-grid.dreamer-free-grid input {
+  margin-top: 2px;
+}
+.apparatus-grid.dreamer-free-grid strong {
+  min-width: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.apparatus-grid.dreamer-free-grid span {
+  font-size: 12px;
+  white-space: nowrap;
 }
 .helper { color: var(--muted); }
 .pledge-download {
@@ -2079,3 +2113,16 @@ input:focus, textarea:focus {
   background: var(--red);
   color: #fff;
 }
+/* Dreamer individual free-event layout: keep all six cards balanced across screen sizes. */
+@media (max-width: 860px) {
+  .apparatus-grid.dreamer-free-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .apparatus-grid.dreamer-free-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+

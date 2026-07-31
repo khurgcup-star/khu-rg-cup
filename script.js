@@ -1,6 +1,11 @@
 ﻿const STORAGE_KEY = "khu-president-cup-applications";
 const LANGUAGE_KEY = "khu-president-cup-language";
 
+const EVENT_DISPLAY_META = Object.freeze({
+  "FH_Short(1분10초 이하)": Object.freeze({ title: "FH_Short", detail: "1분10초 이하" }),
+  "FH_Long(1분30초 이하)": Object.freeze({ title: "FH_Long", detail: "1분30초 이하" })
+});
+
 const phraseMap = {
   "대회 안내": "Guide",
   "신규 신청": "New Application",
@@ -696,19 +701,26 @@ function getCustomEventValues(form) {
     .filter(Boolean);
 }
 
+function createEventChoiceFromInput(input) {
+  const section = input.dataset.eventSection || "";
+  const metadata = EVENT_DISPLAY_META[input.value] || {};
+  const title = input.dataset.eventTitle || metadata.title || input.value;
+  const detail = input.dataset.eventDetail || metadata.detail || "";
+
+  return {
+    title,
+    detail,
+    section,
+    value: section ? `${section} · ${input.value}` : input.value
+  };
+}
+
 function getSelectedEventChoices(form) {
   const choices = Array.from(
     form.querySelectorAll('input[name="routine"]:checked, input[name="apparatus"]:checked')
   )
     .filter((input) => !input.disabled)
-    .map((input) => {
-      const section = input.dataset.eventSection || "";
-      return {
-        title: input.value,
-        section,
-        value: section ? `${section} · ${input.value}` : input.value
-      };
-    });
+    .map(createEventChoiceFromInput);
 
   const groupCategoryInput = form.querySelector('input[name="groupCategory"]:checked:not(:disabled)');
   const selectedGroupCategory = groupCategoryInput?.value || "";
@@ -717,12 +729,14 @@ function getSelectedEventChoices(form) {
     if (isAthleteGroup(form) && selectedGroupDetail) {
       choices.push({
         title: selectedGroupDetail,
+        detail: "",
         section: selectedGroupCategory,
         value: `${selectedGroupCategory} · ${selectedGroupDetail}`
       });
     } else {
       choices.push({
         title: selectedGroupCategory,
+        detail: "",
         section: groupCategoryInput?.dataset.eventSection || "단체/그룹",
         value: selectedGroupCategory
       });
@@ -733,6 +747,7 @@ function getSelectedEventChoices(form) {
     getCustomEventValues(form).forEach((eventName) => {
       choices.push({
         title: eventName,
+        detail: "",
         section: entryType(form),
         value: eventName
       });
@@ -946,7 +961,8 @@ function syncMediaOptions(form) {
         const description = document.createElement("span");
         card.className = "selected-event-card";
         title.textContent = translateEventText(eventChoice.title);
-        description.textContent = translateEventText(eventChoice.section || "선택 종목");
+        const summaryDescription = [eventChoice.section, eventChoice.detail].filter(Boolean).join(" · ");
+        description.textContent = translateEventText(summaryDescription || "선택 종목");
         card.append(title, description);
         summary.appendChild(card);
       });
@@ -980,7 +996,7 @@ function syncMediaOptions(form) {
       check.className = "media-option-check";
       copy.className = "media-option-copy";
       title.textContent = translateEventText(eventChoice.title);
-      description.textContent = [eventChoice.section, optionDescription]
+      description.textContent = [eventChoice.section, eventChoice.detail, optionDescription]
         .filter(Boolean)
         .map((part) => translateEventText(part))
         .join(" · ");
