@@ -128,6 +128,27 @@
 
   let currentIndex = 0;
   let lastFocusedElement = null;
+  let geometryFrame = 0;
+
+  const syncLightboxGeometry = () => {
+    window.cancelAnimationFrame(geometryFrame);
+    geometryFrame = window.requestAnimationFrame(() => {
+      if (modal.hidden || !modalImage.naturalWidth) return;
+      const rect = modalImage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      modal.style.setProperty("--gallery-image-width", `${Math.round(rect.width)}px`);
+      modal.style.setProperty("--gallery-image-left", `${Math.round(rect.left)}px`);
+      modal.style.setProperty("--gallery-image-right", `${Math.round(rect.right)}px`);
+      modal.style.setProperty("--gallery-image-top", `${Math.round(rect.top)}px`);
+      modal.style.setProperty("--gallery-image-center-y", `${Math.round(rect.top + rect.height / 2)}px`);
+    });
+  };
+
+  const handleImageReady = () => {
+    modalImage.classList.remove("is-loading");
+    syncLightboxGeometry();
+  };
 
   const normalizeIndex = (index) => (index + galleryItems.length) % galleryItems.length;
 
@@ -142,20 +163,25 @@
   const render = (index) => {
     currentIndex = normalizeIndex(index);
     const item = galleryItems[currentIndex];
-    modalImage.src = item.src;
+    modalImage.classList.add("is-loading");
     modalImage.alt = item.alt;
     modalTitle.textContent = item.title;
     modalCounter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
+    modalImage.src = item.src;
+    if (modalImage.complete) handleImageReady();
     preloadAdjacentImages();
   };
 
   const openGallery = (index, trigger) => {
     lastFocusedElement = trigger || document.activeElement;
-    render(index);
     modal.hidden = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("gallery-lightbox-open");
-    window.requestAnimationFrame(() => closeButton.focus());
+    render(index);
+    window.requestAnimationFrame(() => {
+      syncLightboxGeometry();
+      closeButton.focus();
+    });
   };
 
   const closeGallery = () => {
@@ -178,6 +204,9 @@
       }
     });
   });
+
+  modalImage.addEventListener("load", handleImageReady);
+  window.addEventListener("resize", syncLightboxGeometry, { passive: true });
 
   closeButton.addEventListener("click", closeGallery);
   previousButton.addEventListener("click", () => render(currentIndex - 1));
