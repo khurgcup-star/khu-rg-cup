@@ -1,0 +1,137 @@
+/* Homepage photo gallery only. Existing site styles and layouts are intentionally unchanged. */
+.competition-gallery-card {
+  cursor: zoom-in;
+}
+
+.competition-gallery-card:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.gallery-lightbox[hidden] {
+  display: none;
+}
+
+.gallery-lightbox {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(52px, 1fr) minmax(0, 1120px) minmax(52px, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 32px;
+  background: rgba(7, 10, 18, 0.94);
+  backdrop-filter: blur(12px);
+}
+
+.gallery-lightbox-open {
+  overflow: hidden;
+}
+
+.gallery-lightbox-figure {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+}
+
+.gallery-lightbox-image {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 150px);
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.44);
+}
+
+.gallery-lightbox-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  color: #fff;
+}
+
+.gallery-lightbox-caption strong {
+  font-size: 17px;
+}
+
+.gallery-lightbox-caption span {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 14px;
+}
+
+.gallery-lightbox-close,
+.gallery-lightbox-nav {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.gallery-lightbox-close:focus-visible,
+.gallery-lightbox-nav:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.gallery-lightbox-nav {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  justify-self: center;
+  border-radius: 50%;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.gallery-lightbox-prev {
+  grid-column: 1;
+}
+
+.gallery-lightbox-figure {
+  grid-column: 2;
+}
+
+.gallery-lightbox-next {
+  grid-column: 3;
+}
+
+@media (max-width: 760px) {
+  .gallery-lightbox {
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    gap: 8px;
+    padding: 72px 12px 22px;
+  }
+
+  .gallery-lightbox-image {
+    max-height: calc(100vh - 190px);
+  }
+
+  .gallery-lightbox-nav {
+    width: 42px;
+    height: 42px;
+    font-size: 34px;
+  }
+
+  .gallery-lightbox-caption {
+    display: grid;
+    gap: 5px;
+  }
+}
