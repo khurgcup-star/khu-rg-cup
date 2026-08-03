@@ -351,12 +351,13 @@ const phraseMap = {
   "추가 옵션": "Additional Options",
   "촬영 신청 대상 종목": "Events for Media Requests",
   "신청 종목": "Applied Events",
-  "사진·영상 촬영은 참가비와 별도 비용입니다.": "Photo and video coverage is charged separately from the entry fee.",
-  "원하는 종목을 사진과 영상으로 각각 선택하세요. 금액과 결제 방법은 운영진이 별도로 안내합니다.": "Select the events you want photographed and filmed. Staff will provide pricing and payment instructions separately.",
+  "사진·영상 촬영 비용은 3만원이며 참가비와 별도입니다.": "Photo and video coverage costs KRW 30,000 and is separate from the entry fee.",
+  "원하는 종목을 사진과 영상으로 각각 선택하세요. 결제 방법은 운영진이 별도로 안내합니다.": "Select the events you want photographed and filmed. Staff will provide payment instructions separately.",
   "대회 사진 신청": "Competition Photo Request",
   "사진 촬영을 신청할 종목을 선택하세요.": "Select the events for photo coverage.",
   "대회 영상 신청": "Competition Video Request",
   "영상 촬영을 신청할 종목을 선택하세요.": "Select the events for video coverage.",
+  "3만원": "KRW 30,000",
   "별도 비용": "Separate Fee",
   "사진 별도 신청": "Separate photo request",
   "영상 별도 신청": "Separate video request",
@@ -368,10 +369,11 @@ const phraseMap = {
   "서약서 파일을 업로드해주세요.": "Please upload the signed pledge file.",
   "서약서가 서버에 저장되지 않았습니다. Apps Script 배포를 확인해주세요.": "The pledge was not saved on the server. Check the Apps Script deployment.",
   "음악 파일 제출": "Music File Submission",
-  "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.": "Music is optional. Upload an MP3, WAV, or M4A file.",
-  "음악은 선택 제출입니다(규정X). MP3 파일로 업로드하세요(ex. 홍길동2020_자유곤봉_경희대).": "Music submission is optional (not for regulation events). Upload an MP3 file (e.g. HongGildong2020_FreeClubs_KyungHee).",
+  "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 여러 개 업로드할 수 있습니다.": "Music is optional. You can upload multiple MP3, WAV, or M4A files.",
+  "음악은 선택 제출입니다(규정X). MP3 파일을 여러 개 업로드할 수 있습니다(ex. 홍길동2020_자유곤봉_경희대).": "Music submission is optional (not for regulation events). You can upload multiple MP3 files (e.g. HongGildong2020_FreeClubs_KyungHee).",
   "MP3, WAV, M4A 파일을 업로드하세요. 실제 운영 시 파일은 Jotform 또는 서버 저장소로 전송됩니다.": "Upload an MP3, WAV, or M4A file. In live operation, files should be sent to Jotform or a server storage.",
   "파일을 드래그하거나 클릭하여 선택": "Drag a file here or click to choose",
+  "파일을 여러 개 드래그하거나 클릭하여 선택": "Drag files here or click to choose",
   "선택된 파일 없음": "No file selected",
   "MP3, WAV, M4A 파일만 업로드할 수 있습니다.": "Only MP3, WAV, and M4A files can be uploaded.",
   "MP3 파일만 업로드할 수 있습니다.": "Only MP3 files can be uploaded.",
@@ -1015,15 +1017,15 @@ function syncMusicUploadRules(form) {
 
   if (helper) {
     helper.textContent = mp3Only
-      ? "음악은 선택 제출입니다(규정X). MP3 파일로 업로드하세요(ex. 홍길동2020_자유곤봉_경희대)."
-      : "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 업로드하세요.";
+      ? "음악은 선택 제출입니다(규정X). MP3 파일을 여러 개 업로드할 수 있습니다(ex. 홍길동2020_자유곤봉_경희대)."
+      : "음악은 선택 제출입니다. MP3, WAV, M4A 파일을 여러 개 업로드할 수 있습니다.";
   }
   if (input) {
     input.accept = mp3Only
       ? ".mp3,audio/mpeg"
       : ".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-m4a,audio/mp4";
-    const selectedFile = input.files?.[0];
-    if (selectedFile && mp3Only && !isAcceptedMp3File(selectedFile)) {
+    const selectedFiles = Array.from(input.files || []);
+    if (mp3Only && selectedFiles.some((file) => !isAcceptedMp3File(file))) {
       input.value = "";
       if (fileLabel) fileLabel.textContent = "선택된 파일 없음";
     }
@@ -1106,7 +1108,7 @@ function createApplicationFromForm(form) {
   const formData = new FormData(form);
   const now = new Date();
   const id = `KHU-2026-${String(Date.now()).slice(-6)}`;
-  const musicFile = form.querySelector('input[name="musicFile"]')?.files?.[0];
+  const musicFiles = Array.from(form.querySelector('input[name="musicFile"]')?.files || []);
   const pledgeFile = form.querySelector('input[name="pledgeFile"]')?.files?.[0];
   const athletes = collectAthletes(form);
   const firstAthlete = athletes[0] || {};
@@ -1165,10 +1167,10 @@ function createApplicationFromForm(form) {
     videoOptions: getCheckedValues(form, "videoOptions"),
     pledgeFileName: pledgeFile?.name || "",
     pledgeFileSize: pledgeFile?.size || 0,
-    musicFileName: musicFile?.name || "",
-    musicFileSize: musicFile?.size || 0,
+    musicFileName: musicFiles.map((file) => file.name).join(", "),
+    musicFileSize: musicFiles.reduce((total, file) => total + file.size, 0),
     paymentStatus: "미확인",
-    musicStatus: musicFile ? "확인중" : "미제출",
+    musicStatus: musicFiles.length ? "확인중" : "미제출",
     schedule: [],
     adminMemo: "운영진 확인 전"
   };
@@ -1176,11 +1178,16 @@ function createApplicationFromForm(form) {
 
 async function buildSubmissionPayload(form) {
   const application = createApplicationFromForm(form);
-  const musicFile = form.querySelector('input[name="musicFile"]')?.files?.[0];
+  const musicFiles = Array.from(form.querySelector('input[name="musicFile"]')?.files || []);
   const pledgeFile = form.querySelector('input[name="pledgeFile"]')?.files?.[0];
-  const musicFilePayload = await readFileAsPayload(musicFile);
+  const musicFilePayloads = await Promise.all(musicFiles.map((file) => readFileAsPayload(file)));
   const pledgeFilePayload = await readFileAsPayload(pledgeFile);
-  return { application, musicFile: musicFilePayload, pledgeFile: pledgeFilePayload };
+  return {
+    application,
+    musicFiles: musicFilePayloads,
+    musicFile: musicFilePayloads[0] || null,
+    pledgeFile: pledgeFilePayload
+  };
 }
 
 function validateCurrentStep(form, stepIndex) {
@@ -1342,16 +1349,20 @@ function setupWizard() {
     syncMediaOptions(form);
   });
 
-  function setupFileDrop(inputSelector, labelSelector, validateFile, invalidMessage) {
+  function setupFileDrop(inputSelector, labelSelector, validateFile, invalidMessage, allowMultiple = false) {
     const input = form.querySelector(inputSelector);
     const drop = input?.closest(".file-drop");
     const label = form.querySelector(labelSelector);
     if (!input || !drop || !label) return;
 
-    function setFile(file) {
-      if (!file) return;
+    function selectedFileText(files) {
+      return files.length ? files.map((file) => file.name).join(", ") : translateText("선택된 파일 없음");
+    }
+
+    function setFiles(files) {
+      if (!files.length) return;
       const message = form.querySelector("[data-form-message]");
-      if (!validateFile(file)) {
+      if (files.some((file) => !validateFile(file))) {
         input.value = "";
         label.textContent = translateText("선택된 파일 없음");
         if (message) message.textContent = translateText(typeof invalidMessage === "function" ? invalidMessage() : invalidMessage);
@@ -1359,21 +1370,21 @@ function setupWizard() {
       }
 
       const transfer = new DataTransfer();
-      transfer.items.add(file);
+      files.forEach((file) => transfer.items.add(file));
       input.files = transfer.files;
-      label.textContent = file.name;
+      label.textContent = selectedFileText(files);
       if (message) message.textContent = "";
     }
 
     input.addEventListener("change", (event) => {
-      const file = event.target.files?.[0];
-      if (file && !validateFile(file)) {
+      const files = Array.from(event.target.files || []);
+      if (files.some((file) => !validateFile(file))) {
         event.target.value = "";
         label.textContent = translateText("선택된 파일 없음");
         form.querySelector("[data-form-message]").textContent = translateText(typeof invalidMessage === "function" ? invalidMessage() : invalidMessage);
         return;
       }
-      label.textContent = file?.name || translateText("선택된 파일 없음");
+      label.textContent = selectedFileText(files);
     });
 
     ["dragenter", "dragover"].forEach((type) => {
@@ -1391,7 +1402,8 @@ function setupWizard() {
 
     drop.addEventListener("drop", (event) => {
       event.preventDefault();
-      setFile(event.dataTransfer?.files?.[0]);
+      const droppedFiles = Array.from(event.dataTransfer?.files || []);
+      setFiles(allowMultiple ? droppedFiles : droppedFiles.slice(0, 1));
     });
   }
 
@@ -1405,7 +1417,8 @@ function setupWizard() {
     'input[name="musicFile"]',
     "[data-music-file-name]",
     (file) => (isStandardDivision(form) ? isAcceptedMp3File(file) : isAcceptedMusicFile(file)),
-    () => (isStandardDivision(form) ? "MP3 파일만 업로드할 수 있습니다." : "MP3, WAV, M4A 파일만 업로드할 수 있습니다.")
+    () => (isStandardDivision(form) ? "MP3 파일만 업로드할 수 있습니다." : "MP3, WAV, M4A 파일만 업로드할 수 있습니다."),
+    true
   );
 
   form.addEventListener("submit", async (event) => {

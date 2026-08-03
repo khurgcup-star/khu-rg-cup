@@ -4,7 +4,7 @@ const PLEDGE_FOLDER_NAME = "서약서";
 
 const APPLICATION_SHEET = "Applications";
 const SCHEDULE_SHEET = "Schedule";
-const API_VERSION = "2026-07-31-youth-coach-contact-v2";
+const API_VERSION = "2026-08-03-multiple-music-files";
 
 const APPLICATION_HEADERS = [
   "id",
@@ -77,7 +77,7 @@ function handleRequest(e, method) {
       });
     }
     if (payload.action === "submitApplication") {
-      return jsonResponse(submitApplication(payload.application, payload.musicFile, payload.pledgeFile));
+      return jsonResponse(submitApplication(payload.application, payload.musicFiles || payload.musicFile, payload.pledgeFile));
     }
     if (payload.action === "lookupApplication") {
       return jsonResponse(lookupApplication(payload.email));
@@ -103,14 +103,15 @@ function queryPayload(e) {
   };
 }
 
-function submitApplication(application, musicFile, pledgeFile) {
+function submitApplication(application, musicFiles, pledgeFile) {
   // 꿈나무부·선수부는 선수 개인 연락처를 저장하지 않고 지도자 연락처를 사용합니다.
   if (application && ["꿈나무부", "선수부"].includes(String(application.division || ""))) {
     application.englishName = "";
     application.phone = "";
   }
 
-  const validation = validateApplication(application, musicFile, pledgeFile);
+  const normalizedMusicFiles = Array.isArray(musicFiles) ? musicFiles : musicFiles ? [musicFiles] : [];
+  const validation = validateApplication(application, normalizedMusicFiles, pledgeFile);
   if (!validation.ok) {
     return { ok: false, error: validation.error };
   }
@@ -120,7 +121,7 @@ function submitApplication(application, musicFile, pledgeFile) {
   const now = new Date().toISOString();
   const id = application.id || `KHU-2026-${Date.now().toString().slice(-6)}`;
   const pledge = savePledgeFile(id, application, pledgeFile);
-  const music = saveMusicFile(id, application, musicFile);
+  const music = saveMusicFiles(id, application, normalizedMusicFiles);
 
   const rowObject = {
     id,
@@ -172,7 +173,8 @@ function submitApplication(application, musicFile, pledgeFile) {
       paymentStatus: rowObject.paymentStatus,
       musicStatus: rowObject.musicStatus,
       pledgeFileUrl: rowObject.pledgeFileUrl,
-      musicFileUrl: rowObject.musicFileUrl
+      musicFileUrl: rowObject.musicFileUrl,
+      musicFileCount: music.urls.length
     }
   };
 }
@@ -213,7 +215,7 @@ function sendConfirmationEmail(application) {
   }
 }
 
-function validateApplication(application, musicFile, pledgeFile) {
+function validateApplication(application, musicFiles, pledgeFile) {
   if (!application) {
     return { ok: false, error: "신청 데이터가 없습니다." };
   }
@@ -224,7 +226,7 @@ function validateApplication(application, musicFile, pledgeFile) {
   }
 
   const standardDivision = ["꿈나무부", "선수부"].includes(application.division);
-  if (standardDivision && musicFile && musicFile.base64 && !/\.mp3$/i.test(String(musicFile.name || ""))) {
+  if (standardDivision && musicFiles.some((musicFile) => musicFile && musicFile.base64 && !/\.mp3$/i.test(String(musicFile.name || "")))) {
     return { ok: false, error: "음악 파일은 MP3 형식으로 업로드해야 합니다." };
   }
 
@@ -389,17 +391,23 @@ function savePledgeFile(id, application, pledgeFile) {
   return { name: file.getName(), url: file.getUrl() };
 }
 
-function saveMusicFile(id, application, musicFile) {
-  if (!musicFile || !musicFile.base64) {
-    return { name: "", url: "" };
+function saveMusicFiles(id, application, musicFiles) {
+  if (!musicFiles.length) {
+    return { name: "", url: "", names: [], urls: [] };
   }
 
   const folder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const bytes = Utilities.base64Decode(musicFile.base64);
-  const safeFileName = buildSubmissionFileName(id, application, "음악", musicFile.name || "music");
-  const blob = Utilities.newBlob(bytes, musicFile.mimeType || "application/octet-stream", safeFileName);
-  const file = folder.createFile(blob);
-  return { name: file.getName(), url: file.getUrl() };
+  const savedFiles = musicFiles
+    .filter((musicFile) => musicFile && musicFile.base64)
+    .map((musicFile) => {
+      const bytes = Utilities.base64Decode(musicFile.base64);
+      const safeFileName = buildSubmissionFileName(id, application, "음악", musicFile.name || "music");
+      const blob = Utilities.newBlob(bytes, musicFile.mimeType || "application/octet-stream", safeFileName);
+      return folder.createFile(blob);
+    });
+  const names = savedFiles.map((file) => file.getName());
+  const urls = savedFiles.map((file) => file.getUrl());
+  return { name: names.join(", "), url: urls.join("\n"), names, urls };
 }
 
 function buildSubmissionFileName(id, application, fileKind, originalName) {
