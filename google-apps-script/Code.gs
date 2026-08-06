@@ -41,7 +41,19 @@ const APPLICATION_HEADERS = [
   "updatedAt",
   "pledgeStatus",
   "pledgeFileName",
-  "pledgeFileUrl"
+  "pledgeFileUrl",
+  "athlete1Name",
+  "athlete1BirthDate",
+  "athlete2Name",
+  "athlete2BirthDate",
+  "athlete3Name",
+  "athlete3BirthDate",
+  "athlete4Name",
+  "athlete4BirthDate",
+  "athlete5Name",
+  "athlete5BirthDate",
+  "athlete6Name",
+  "athlete6BirthDate"
 ];
 
 const SCHEDULE_HEADERS = [
@@ -122,6 +134,7 @@ function submitApplication(application, musicFiles, pledgeFile) {
   const id = application.id || `KHU-2026-${Date.now().toString().slice(-6)}`;
   const pledge = savePledgeFile(id, application, pledgeFile);
   const music = saveMusicFiles(id, application, normalizedMusicFiles);
+  const athletes = Array.isArray(application.athletes) ? application.athletes.slice(0, 6) : [];
 
   const rowObject = {
     id,
@@ -158,7 +171,19 @@ function submitApplication(application, musicFiles, pledgeFile) {
     musicFileName: music.name || application.musicFileName || "",
     musicFileUrl: music.url || "",
     adminMemo: application.adminMemo || "운영진 확인 전",
-    updatedAt: now
+    updatedAt: now,
+    athlete1Name: athletes[0] ? athletes[0].name || "" : "",
+    athlete1BirthDate: athletes[0] ? athletes[0].birthDate || "" : "",
+    athlete2Name: athletes[1] ? athletes[1].name || "" : "",
+    athlete2BirthDate: athletes[1] ? athletes[1].birthDate || "" : "",
+    athlete3Name: athletes[2] ? athletes[2].name || "" : "",
+    athlete3BirthDate: athletes[2] ? athletes[2].birthDate || "" : "",
+    athlete4Name: athletes[3] ? athletes[3].name || "" : "",
+    athlete4BirthDate: athletes[3] ? athletes[3].birthDate || "" : "",
+    athlete5Name: athletes[4] ? athletes[4].name || "" : "",
+    athlete5BirthDate: athletes[4] ? athletes[4].birthDate || "" : "",
+    athlete6Name: athletes[5] ? athletes[5].name || "" : "",
+    athlete6BirthDate: athletes[5] ? athletes[5].birthDate || "" : ""
   };
 
   sheet.appendRow(APPLICATION_HEADERS.map((header) => rowObject[header] || ""));
