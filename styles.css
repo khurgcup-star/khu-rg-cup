@@ -198,11 +198,33 @@ button, input, select, textarea { font: inherit; }
   max-width: 820px;
   font-size: clamp(44px, 7vw, 90px);
 }
+.hero .hero-title {
+  font-size: clamp(26px, 7vw, 90px);
+}
+.hero-title span {
+  display: block;
+  white-space: nowrap;
+}
 .hero-copy {
   max-width: 680px;
   margin: 22px auto 0;
   color: rgba(255, 255, 255, 0.82);
   font-size: 19px;
+}
+.hero-copy > strong {
+  display: block;
+  color: #fff;
+  font-size: 21px;
+}
+.hero-account-info {
+  display: grid;
+  gap: 5px;
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.hero-account-info span {
+  display: block;
 }
 .hero-actions {
   display: flex;
@@ -2069,7 +2091,10 @@ input:focus, textarea:focus {
     width: min(100% - 32px, 1180px);
   }
   .hero h1 { font-size: 42px; }
+  .hero .hero-title { font-size: clamp(26px, 7vw, 42px); }
   .hero-copy { font-size: 16px; }
+  .hero-copy > strong { font-size: 18px; }
+  .hero-account-info { font-size: 14px; }
   .check-card { padding: 28px 18px; }
   .public-schedule-row {
     grid-template-columns: 1fr;
