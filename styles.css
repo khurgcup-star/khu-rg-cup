@@ -211,21 +211,6 @@ button, input, select, textarea { font: inherit; }
   color: rgba(255, 255, 255, 0.82);
   font-size: 19px;
 }
-.hero-copy > strong {
-  display: block;
-  color: #fff;
-  font-size: 21px;
-}
-.hero-account-info {
-  display: grid;
-  gap: 5px;
-  margin-top: 14px;
-  font-size: 16px;
-  line-height: 1.45;
-}
-.hero-account-info span {
-  display: block;
-}
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -649,6 +634,42 @@ button, input, select, textarea { font: inherit; }
   text-align: center;
 }
 .footer strong { font-size: clamp(44px, 8vw, 84px); line-height: 1.1; }
+.contact-footer > p {
+  max-width: 680px;
+  margin: -8px 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 17px;
+}
+.contact-details {
+  display: grid;
+  gap: 10px;
+  width: min(720px, 100%);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+.contact-details p {
+  margin: 0;
+  line-height: 1.5;
+}
+.contact-details p:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+.contact-details span {
+  color: var(--gold);
+  font-weight: 900;
+}
+.contact-details a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 .soft-page {
   min-height: 100vh;
@@ -2093,8 +2114,7 @@ input:focus, textarea:focus {
   .hero h1 { font-size: 42px; }
   .hero .hero-title { font-size: clamp(26px, 7vw, 42px); }
   .hero-copy { font-size: 16px; }
-  .hero-copy > strong { font-size: 18px; }
-  .hero-account-info { font-size: 14px; }
+  .contact-details { padding: 20px 18px; font-size: 14px; }
   .check-card { padding: 28px 18px; }
   .public-schedule-row {
     grid-template-columns: 1fr;
