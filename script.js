@@ -617,6 +617,10 @@ function hasRemoteApi() {
 }
 
 async function callRemote(action, payload = {}) {
+  if (action === "submitApplication" && apiConfig().REGISTRATION_CLOSED === true) {
+    throw new Error("참가신청이 마감되었습니다.");
+  }
+
   const response = await fetch(apiConfig().GOOGLE_APPS_SCRIPT_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -1242,6 +1246,11 @@ function validateCurrentStep(form, stepIndex) {
 function setupWizard() {
   const form = document.querySelector("[data-application-wizard]");
   if (!form) return;
+
+  if (apiConfig().REGISTRATION_CLOSED === true) {
+    form.hidden = true;
+    return;
+  }
 
   const steps = Array.from(form.querySelectorAll("[data-step]"));
   const dots = Array.from(form.querySelectorAll("[data-step-dot]"));

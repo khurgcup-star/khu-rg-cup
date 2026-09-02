@@ -746,6 +746,41 @@ button, input, select, textarea { font: inherit; }
   letter-spacing: 0;
   content: "KHU President's Cup RG Registration";
 }
+.application-closed {
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "banner"
+    "closed";
+  min-height: 500px;
+}
+.application-closed::before {
+  content: "KHU President's Cup RG Registration Closed";
+}
+.application-closed-content {
+  grid-area: closed;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  padding: 64px 28px;
+  text-align: center;
+}
+.application-closed-content h1,
+.application-closed-content p {
+  margin: 0;
+}
+.application-closed-content h1 {
+  color: var(--navy);
+  font-size: clamp(30px, 5vw, 48px);
+}
+.application-closed-content p {
+  max-width: 680px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.application-closed-content .btn {
+  margin-top: 14px;
+}
 .stepper {
   grid-area: steps;
   display: grid;
