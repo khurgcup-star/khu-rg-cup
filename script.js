@@ -1846,24 +1846,24 @@ function setupParkingNotice() {
     content.innerHTML = `
       <p class="parking-modal-eyebrow">PARKING PASS</p>
       <h2 id="parking-modal-title">${en ? "Discount Parking Pass" : "주차권 사전 구매 안내"}</h2>
-      <p class="parking-modal-lead">${en ? "Purchase your discount pass before entering the parking gate." : "주차 할인권은 반드시 차단기 진입 전에 구매해주세요."}</p>
+      <p class="parking-modal-lead">${en ? "Purchase your discount pass before entering the parking gate." : "주차 할인권은 반드시 차단기 진입 전에 구매해주시기 바랍니다."}</p>
       <div class="parking-fees">
         <div><span>${en ? "4 hours" : "4시간"}</span><strong>${en ? "KRW 2,000" : "2,000원"}</strong></div>
         <div><span>${en ? "6 hours" : "6시간"}</span><strong>${en ? "KRW 3,000" : "3,000원"}</strong></div>
         <div><span>${en ? "24 hours" : "24시간"}</span><strong>${en ? "KRW 4,000" : "4,000원"}</strong></div>
       </div>
       <section class="parking-account">
-        <span>${en ? "Bank transfer only" : "계좌이체만 가능"}</span>
+        <span>${en ? "Purchases are available by bank transfer only." : "구매는 계좌이체만 가능합니다."}</span>
         <strong>${en ? "Toss Bank 1000-6242-6129" : "토스뱅크 1000-6242-6129"}</strong>
         <small>${en ? "Account holder: Jeong Seoyeon" : "예금주 정서연"}</small>
         <button type="button" data-copy-parking-account>${en ? "Copy account number" : "계좌번호 복사"}</button>
       </section>
       <ul class="parking-warnings">
-        <li><strong>${en ? "Without a pass" : "주차권 미구매 시"}</strong><span>${en ? "The standard rate of KRW 500 per 10 minutes applies (KRW 12,000 for 4 hours)." : "10분당 500원의 일반요금이 부과됩니다. (4시간 기준 12,000원)"}</span></li>
-        <li><strong>${en ? "No discount after entry" : "진입 후 할인 적용 불가"}</strong><span>${en ? "A discount pass cannot be applied after entering through the gate." : "차단기 진입 후에는 주차 할인 적용이 절대 불가합니다."}</span></li>
-        <li><strong>${en ? "On-site purchase" : "현장 구매"}</strong><span>${en ? "Seonseungwan venue, first-floor entrance" : "선승관 대회장 1층 출입구"}</span></li>
+        <li><strong>${en ? "Without a pass" : "주차권 미구매 시"}</strong><span>${en ? "The standard rate of KRW 500 per 10 minutes applies (KRW 12,000 for 4 hours)." : "10분당 500원으로 주차요금이 부과됩니다. (4시간 주차 기준 12,000원)"}</span></li>
+        <li><strong>${en ? "Purchase before entry" : "반드시 사전에 구매해주세요"}</strong><span>${en ? "A discount cannot be applied if you enter the gate without first purchasing a parking discount pass." : "주차 할인권을 구매하지 않고 차단기 진입 후에는 주차 할인 적용이 절대 불가합니다."}</span></li>
+        <li><strong>${en ? "On-site purchase" : "주차권 구매 · 현장구매"}</strong><span>${en ? "Seonseungwan venue, first-floor entrance" : "선승관 대회장 1층 출입구"}</span></li>
       </ul>
-      <p class="parking-modal-footnote">${en ? "For QR purchases, pre-payment is available only within 30 minutes before exit." : "QR코드 구매 시 출차 30분 전부터 사전 정산이 가능합니다."}</p>
+      <p class="parking-modal-footnote">${en ? "For QR-code purchases, advance payment is available only 30 minutes before exit." : "QR코드로 구매 시 출차 30분 전에만 사전 정산 가능합니다."}</p>
       <a class="parking-route-link" href="directions.html">${en ? "View parking routes" : "주차장 위치 및 이동 동선 보기"}</a>`;
 
     content.querySelector("[data-copy-parking-account]")?.addEventListener("click", async (event) => {
@@ -1900,13 +1900,7 @@ function setupParkingNotice() {
   });
   document.addEventListener("languagechange", renderContent);
 
-  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
-  const datePart = (type) => parts.find((part) => part.type === type)?.value || "";
-  const koreaDate = `${datePart("year")}-${datePart("month")}-${datePart("day")}`;
-  if (koreaDate >= "2026-09-17" && koreaDate <= "2026-09-20" && !sessionStorage.getItem("khu-parking-notice-2026")) {
-    sessionStorage.setItem("khu-parking-notice-2026", "shown");
-    window.setTimeout(openModal, 700);
-  }
+  window.setTimeout(openModal, 350);
 }
 
 setupLanguageToggle();
