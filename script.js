@@ -73,7 +73,7 @@ const phraseMap = {
   "유치부 경기": "Preschool Competition",
   "경기장 퇴장": "Exit Competition Hall",
   "주차권 구매 안내": "Parking Pass Information",
-  "주차 할인권은 차단기 진입 전에 구매해야 합니다. 미구매 시 10분당 500원의 일반요금이 부과됩니다.": "Purchase a discount parking pass before entering the gate. Without a pass, the standard rate is KRW 500 per 10 minutes.",
+  "주차 할인권은 출차 전에 구매해야 합니다. 미구매 시 10분당 500원의 일반요금이 부과됩니다.": "Purchase a discount parking pass before exiting. Without a pass, the standard rate is KRW 500 per 10 minutes.",
   "참가자 등록": "Participant Check-in",
   "안내 데스크 / 접수 확인 및 배번 수령": "Information desk / application check and bib pickup",
   "안내 데스크": "Information Desk",
@@ -1846,7 +1846,7 @@ function setupParkingNotice() {
     content.innerHTML = `
       <p class="parking-modal-eyebrow">PARKING PASS</p>
       <h2 id="parking-modal-title">${en ? "Discount Parking Pass" : "주차권 사전 구매 안내"}</h2>
-      <p class="parking-modal-lead">${en ? "Purchase your discount pass before entering the parking gate." : "주차 할인권은 반드시 차단기 진입 전에 구매해주시기 바랍니다."}</p>
+      <p class="parking-modal-lead">${en ? "Purchase your discount pass before exiting." : "주차 할인권은 반드시 출차 전에 구매해주시기 바랍니다."}</p>
       <div class="parking-fees">
         <div><span>${en ? "4 hours" : "4시간"}</span><strong>${en ? "KRW 2,000" : "2,000원"}</strong></div>
         <div><span>${en ? "6 hours" : "6시간"}</span><strong>${en ? "KRW 3,000" : "3,000원"}</strong></div>
@@ -1860,7 +1860,7 @@ function setupParkingNotice() {
       </section>
       <ul class="parking-warnings">
         <li><strong>${en ? "Without a pass" : "주차권 미구매 시"}</strong><span>${en ? "The standard rate of KRW 500 per 10 minutes applies (KRW 12,000 for 4 hours)." : "10분당 500원으로 주차요금이 부과됩니다. (4시간 주차 기준 12,000원)"}</span></li>
-        <li><strong>${en ? "Purchase before entry" : "반드시 사전에 구매해주세요"}</strong><span>${en ? "A discount cannot be applied if you enter the gate without first purchasing a parking discount pass." : "주차 할인권을 구매하지 않고 차단기 진입 후에는 주차 할인 적용이 절대 불가합니다."}</span></li>
+        <li><strong>${en ? "Purchase before exit" : "반드시 출차 전에 구매해주세요"}</strong><span>${en ? "The parking discount cannot be applied unless the discount pass is purchased before exiting." : "출차 전에 주차 할인권을 구매하지 않으면 주차 할인 적용이 불가합니다."}</span></li>
         <li><strong>${en ? "On-site purchase" : "주차권 구매 · 현장구매"}</strong><span>${en ? "Seonseungwan venue, first-floor entrance" : "선승관 대회장 1층 출입구"}</span></li>
       </ul>
       <p class="parking-modal-footnote">${en ? "For QR-code purchases, advance payment is available only 30 minutes before exit." : "QR코드로 구매 시 출차 30분 전에만 사전 정산 가능합니다."}</p>
@@ -1900,9 +1900,39 @@ function setupParkingNotice() {
     if (event.key === "Escape" && !modal.hidden) closeModal();
   });
   document.addEventListener("languagechange", renderContent);
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) closeModal();
+  });
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (!link) return;
+    try {
+      const destination = new URL(link.href, window.location.href);
+      if (destination.origin === window.location.origin) {
+        sessionStorage.setItem("khu-parking-internal-navigation", "1");
+      }
+    } catch (error) {
+      console.warn("Could not record internal navigation.", error);
+    }
+  });
 
   const isHomePage = document.body.hasAttribute("data-parking-auto-open");
-  if (isHomePage) {
+  let cameFromThisSite = false;
+  let cameFromInternalClick = false;
+  try {
+    cameFromThisSite = Boolean(document.referrer) && new URL(document.referrer).origin === window.location.origin;
+  } catch (error) {
+    cameFromThisSite = false;
+  }
+  try {
+    cameFromInternalClick = sessionStorage.getItem("khu-parking-internal-navigation") === "1";
+    sessionStorage.removeItem("khu-parking-internal-navigation");
+  } catch (error) {
+    cameFromInternalClick = false;
+  }
+
+  if (isHomePage && !cameFromThisSite && !cameFromInternalClick) {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: "Asia/Seoul",
       year: "numeric",
@@ -1918,7 +1948,7 @@ function setupParkingNotice() {
         window.setTimeout(() => openModal({ automatic: true }), 350);
       }
     } catch (error) {
-      window.setTimeout(() => openModal({ automatic: true }), 350);
+      console.warn("Parking notice storage is unavailable; automatic popup was skipped.", error);
     }
   }
 }
