@@ -51,6 +51,29 @@ const phraseMap = {
   "일정을 불러오는 중입니다.": "Loading schedule.",
   "Google Sheet 연동 후 자동 표시됩니다.": "This appears automatically after Google Sheets is connected.",
   "운영진이 연결된 Schedule 시트를 업데이트하면 이 페이지에 전체 일정이 자동 표시됩니다. 일정표를 HTML로 별도 제작하지 않고, 엑셀/시트 원본을 기준으로 보여줍니다.": "When staff update the connected Schedule sheet, the full schedule appears here automatically. The page displays the spreadsheet source instead of maintaining a separate HTML schedule.",
+  "9월 19일(토)과 20일(일)의 경기 및 시상 일정을 확인해주세요. 현장 운영 상황에 따라 세부 시간은 변경될 수 있습니다.": "Check the competition and awards schedule for September 19 and 20. Detailed times may change depending on on-site operations.",
+  "관람 전 확인해주세요": "Before You Visit",
+  "‘연습매트 open’ 시간에는 해당 부문의 연습매트를 이용할 수 있습니다.": "The practice mat is available to the relevant division during the marked open times.",
+  "2층 연습장 및 관중석 오픈": "Second-floor Practice Area and Seating Open",
+  "경기장 오픈": "Competition Hall Opens",
+  "경기매트 오픈": "Competition Mat Opens",
+  "경기 시작": "Competition Begins",
+  "중·고등부 경기": "Middle and High School Competition",
+  "초등부 경기": "Elementary Competition",
+  "체육관 퇴장": "Exit Gymnasium",
+  "5·6학년/중등부 경기": "Grades 5–6 / Middle School Competition",
+  "3·4학년 경기 매트 오픈": "Grades 3–4 Competition Mat Opens",
+  "3·4학년 경기": "Grades 3–4 Competition",
+  "갈라쇼": "Gala Show",
+  "개회식 및 시상식": "Opening and Awards Ceremony",
+  "1·2학년/단체 경기 매트 오픈": "Grades 1–2 / Group Competition Mat Opens",
+  "단체 경기": "Group Competition",
+  "1·2학년 경기": "Grades 1–2 Competition",
+  "유치부 경기 매트 오픈": "Preschool Competition Mat Opens",
+  "유치부 경기": "Preschool Competition",
+  "경기장 퇴장": "Exit Competition Hall",
+  "주차권 구매 안내": "Parking Pass Information",
+  "주차 할인권은 차단기 진입 전에 구매해야 합니다. 미구매 시 10분당 500원의 일반요금이 부과됩니다.": "Purchase a discount parking pass before entering the gate. Without a pass, the standard rate is KRW 500 per 10 minutes.",
   "참가자 등록": "Participant Check-in",
   "안내 데스크 / 접수 확인 및 배번 수령": "Information desk / application check and bib pickup",
   "안내 데스크": "Information Desk",
@@ -1642,42 +1665,247 @@ function setupLookup() {
   }
 }
 
-const fallbackPublicSchedule = [];
+const fallbackPublicSchedule = [
+  { date: "2026-09-19", time: "7:00", label: "2층 연습장 및 관중석 오픈", memo: "-" },
+  { date: "2026-09-19", time: "7:30", label: "경기장 오픈", memo: "open" },
+  { date: "2026-09-19", time: "9:00", label: "경기매트 오픈", memo: "open" },
+  { date: "2026-09-19", time: "10:30", label: "경기 시작", memo: "open" },
+  { date: "2026-09-19", time: "10:30-12:40", label: "중·고등부 경기", memo: "open", highlight: true },
+  { date: "2026-09-19", time: "12:40-13:10", label: "시상식", memo: "-" },
+  { date: "2026-09-19", time: "13:10-13:30", label: "경기매트 오픈", memo: "open" },
+  { date: "2026-09-19", time: "13:35-15:45", label: "초등부 경기", memo: "open", highlight: true },
+  { date: "2026-09-19", time: "15:50-16:20", label: "시상식", memo: "-" },
+  { date: "2026-09-19", time: "16:30", label: "체육관 퇴장", memo: "-" },
+  { date: "2026-09-20", time: "7:00", label: "2층 연습장 및 관중석 오픈", memo: "-" },
+  { date: "2026-09-20", time: "7:10", label: "경기장 오픈", memo: "open" },
+  { date: "2026-09-20", time: "8:10-8:25", label: "경기매트 오픈", memo: "open" },
+  { date: "2026-09-20", time: "8:30", label: "경기 시작", memo: "open" },
+  { date: "2026-09-20", time: "8:30-10:00", label: "5·6학년/중등부 경기", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "10:00-10:07", label: "3·4학년 경기 매트 오픈", memo: "open" },
+  { date: "2026-09-20", time: "10:10-12:52", label: "3·4학년 경기", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "12:52-12:55", label: "갈라쇼", memo: "open" },
+  { date: "2026-09-20", time: "13:00-14:30", label: "개회식 및 시상식", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "14:30-14:37", label: "1·2학년/단체 경기 매트 오픈", memo: "open" },
+  { date: "2026-09-20", time: "14:40-14:50", label: "단체 경기", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "14:50-16:50", label: "1·2학년 경기", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "16:50-16:57", label: "유치부 경기 매트 오픈", memo: "open" },
+  { date: "2026-09-20", time: "17:00-18:15", label: "유치부 경기", memo: "open", highlight: true },
+  { date: "2026-09-20", time: "18:15-18:45", label: "시상식", memo: "-" },
+  { date: "2026-09-20", time: "19:00", label: "경기장 퇴장", memo: "-" }
+];
+
+let activePublicSchedule = fallbackPublicSchedule;
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function scheduleDateKey(value) {
+  const normalized = String(value || "").replace(/[./]/g, "-");
+  if (normalized.includes("2026-09-19") || /^0?9-19\b/.test(normalized)) return "2026-09-19";
+  if (normalized.includes("2026-09-20") || /^0?9-20\b/.test(normalized)) return "2026-09-20";
+  return normalized || "일정";
+}
+
+function scheduleDayMeta(date) {
+  if (date === "2026-09-19") return { short: "9/19", weekday: currentLanguage() === "en" ? "SAT" : "토요일" };
+  if (date === "2026-09-20") return { short: "9/20", weekday: currentLanguage() === "en" ? "SUN" : "일요일" };
+  return { short: date, weekday: currentLanguage() === "en" ? "Schedule" : "일정" };
+}
 
 function renderPublicSchedule(schedule) {
   const target = document.querySelector("[data-public-schedule]");
   if (!target) return;
 
-  target.innerHTML = schedule.length
-    ? schedule
-        .map(
-          (item) => `
-            <article class="public-schedule-row">
-              <time>${item.date || "-"} · ${item.time || "-"}</time>
-              <strong>${translateDynamic(item.label || "-")}</strong>
-              <span>${translateDynamic(item.location || "-")}${item.memo ? ` / ${translateDynamic(item.memo)}` : ""}</span>
-            </article>
-          `
-        )
-        .join("")
-    : `<article class="schedule-row"><strong>${translateDynamic("등록된 일정이 없습니다.")}</strong><span>${translateDynamic("운영진이 Schedule 시트를 업데이트하면 표시됩니다.")}</span></article>`;
+  if (!schedule.length) {
+    target.innerHTML = `<article class="schedule-row"><strong>${translateDynamic("등록된 일정이 없습니다.")}</strong><span>${translateDynamic("운영진이 Schedule 시트를 업데이트하면 표시됩니다.")}</span></article>`;
+    return;
+  }
+
+  const groups = schedule.reduce((result, item) => {
+    const date = scheduleDateKey(item.date);
+    if (!result[date]) result[date] = [];
+    result[date].push(item);
+    return result;
+  }, {});
+  const dates = Object.keys(groups);
+
+  target.innerHTML = `
+    <div class="schedule-tabs" role="tablist" aria-label="${currentLanguage() === "en" ? "Choose a competition date" : "대회 날짜 선택"}">
+      ${dates
+        .map((date, index) => {
+          const meta = scheduleDayMeta(date);
+          return `<button class="schedule-tab${index === 0 ? " active" : ""}" type="button" role="tab" aria-selected="${index === 0}" aria-controls="schedule-panel-${index}" data-schedule-tab="${index}"><strong>${escapeHtml(meta.short)}</strong><span>${escapeHtml(meta.weekday)}</span></button>`;
+        })
+        .join("")}
+    </div>
+    ${dates
+      .map(
+        (date, index) => `
+          <section class="schedule-day-panel" id="schedule-panel-${index}" role="tabpanel" data-schedule-panel="${index}"${index === 0 ? "" : " hidden"}>
+            <div class="schedule-table-head" aria-hidden="true">
+              <span>${currentLanguage() === "en" ? "Time" : "시간"}</span>
+              <span>${currentLanguage() === "en" ? "Program" : "일정"}</span>
+              <span>${currentLanguage() === "en" ? "Practice mat" : "연습매트"}</span>
+            </div>
+            <div class="schedule-table-body">
+              ${groups[date]
+                .map((item) => {
+                  const note = item.memo || item.location || "-";
+                  const detail = item.location && item.memo ? item.location : "";
+                  return `<article class="public-schedule-row${item.highlight ? " is-highlight" : ""}">
+                    <time>${escapeHtml(item.time || "-")}</time>
+                    <div><strong>${escapeHtml(translateDynamic(item.label || "-"))}</strong>${detail ? `<small>${escapeHtml(translateDynamic(detail))}</small>` : ""}</div>
+                    <span class="schedule-note${String(note).toLowerCase() === "open" ? " is-open" : ""}">${escapeHtml(translateDynamic(note))}</span>
+                  </article>`;
+                })
+                .join("")}
+            </div>
+          </section>`
+      )
+      .join("")}`;
+
+  target.querySelectorAll("[data-schedule-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const selected = button.dataset.scheduleTab;
+      target.querySelectorAll("[data-schedule-tab]").forEach((tab) => {
+        const active = tab.dataset.scheduleTab === selected;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", String(active));
+      });
+      target.querySelectorAll("[data-schedule-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.schedulePanel !== selected;
+      });
+    });
+  });
+}
+
+function isCompleteCompetitionSchedule(schedule) {
+  if (!Array.isArray(schedule) || schedule.length < 10) return false;
+  const dates = new Set(schedule.map((item) => scheduleDateKey(item.date)));
+  return dates.has("2026-09-19") && dates.has("2026-09-20");
 }
 
 async function setupPublicSchedule() {
   const target = document.querySelector("[data-public-schedule]");
   if (!target) return;
 
-  if (!hasRemoteApi()) {
-    renderPublicSchedule(fallbackPublicSchedule);
-    return;
-  }
+  renderPublicSchedule(activePublicSchedule);
+  document.addEventListener("languagechange", () => renderPublicSchedule(activePublicSchedule));
+  if (!hasRemoteApi()) return;
 
   try {
     const result = await callRemote("getPublicSchedule");
-    renderPublicSchedule(result.schedule || []);
+    if (isCompleteCompetitionSchedule(result.schedule)) {
+      activePublicSchedule = result.schedule;
+      renderPublicSchedule(activePublicSchedule);
+    }
   } catch (error) {
     console.error(error);
-    renderPublicSchedule(fallbackPublicSchedule);
+  }
+}
+
+function setupParkingNotice() {
+  if (!document.body || document.querySelector("[data-parking-modal]")) return;
+
+  const isEnglish = () => currentLanguage() === "en";
+  const quickButton = document.createElement("button");
+  quickButton.className = "parking-quick-button";
+  quickButton.type = "button";
+  quickButton.dataset.openParkingModal = "";
+  quickButton.setAttribute("aria-haspopup", "dialog");
+  quickButton.innerHTML = `<span aria-hidden="true">P</span><strong>주차권 안내</strong>`;
+
+  const modal = document.createElement("div");
+  modal.className = "parking-modal";
+  modal.dataset.parkingModal = "";
+  modal.hidden = true;
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "parking-modal-title");
+  modal.innerHTML = `
+    <div class="parking-modal-card">
+      <button class="parking-modal-close" type="button" data-close-parking-modal aria-label="닫기">×</button>
+      <div data-parking-modal-content></div>
+    </div>`;
+
+  document.body.append(quickButton, modal);
+  const content = modal.querySelector("[data-parking-modal-content]");
+  const closeButton = modal.querySelector("[data-close-parking-modal]");
+  let previouslyFocused = null;
+
+  function renderContent() {
+    const en = isEnglish();
+    quickButton.querySelector("strong").textContent = en ? "Parking Pass" : "주차권 안내";
+    closeButton.setAttribute("aria-label", en ? "Close" : "닫기");
+    content.innerHTML = `
+      <p class="parking-modal-eyebrow">PARKING PASS</p>
+      <h2 id="parking-modal-title">${en ? "Discount Parking Pass" : "주차권 사전 구매 안내"}</h2>
+      <p class="parking-modal-lead">${en ? "Purchase your discount pass before entering the parking gate." : "주차 할인권은 반드시 차단기 진입 전에 구매해주세요."}</p>
+      <div class="parking-fees">
+        <div><span>${en ? "4 hours" : "4시간"}</span><strong>${en ? "KRW 2,000" : "2,000원"}</strong></div>
+        <div><span>${en ? "6 hours" : "6시간"}</span><strong>${en ? "KRW 3,000" : "3,000원"}</strong></div>
+        <div><span>${en ? "24 hours" : "24시간"}</span><strong>${en ? "KRW 4,000" : "4,000원"}</strong></div>
+      </div>
+      <section class="parking-account">
+        <span>${en ? "Bank transfer only" : "계좌이체만 가능"}</span>
+        <strong>${en ? "Toss Bank 1000-6242-6129" : "토스뱅크 1000-6242-6129"}</strong>
+        <small>${en ? "Account holder: Jeong Seoyeon" : "예금주 정서연"}</small>
+        <button type="button" data-copy-parking-account>${en ? "Copy account number" : "계좌번호 복사"}</button>
+      </section>
+      <ul class="parking-warnings">
+        <li><strong>${en ? "Without a pass" : "주차권 미구매 시"}</strong><span>${en ? "The standard rate of KRW 500 per 10 minutes applies (KRW 12,000 for 4 hours)." : "10분당 500원의 일반요금이 부과됩니다. (4시간 기준 12,000원)"}</span></li>
+        <li><strong>${en ? "No discount after entry" : "진입 후 할인 적용 불가"}</strong><span>${en ? "A discount pass cannot be applied after entering through the gate." : "차단기 진입 후에는 주차 할인 적용이 절대 불가합니다."}</span></li>
+        <li><strong>${en ? "On-site purchase" : "현장 구매"}</strong><span>${en ? "Seonseungwan venue, first-floor entrance" : "선승관 대회장 1층 출입구"}</span></li>
+      </ul>
+      <p class="parking-modal-footnote">${en ? "For QR purchases, pre-payment is available only within 30 minutes before exit." : "QR코드 구매 시 출차 30분 전부터 사전 정산이 가능합니다."}</p>
+      <a class="parking-route-link" href="directions.html">${en ? "View parking routes" : "주차장 위치 및 이동 동선 보기"}</a>`;
+
+    content.querySelector("[data-copy-parking-account]")?.addEventListener("click", async (event) => {
+      try {
+        await navigator.clipboard.writeText("1000-6242-6129");
+        event.currentTarget.textContent = en ? "Copied" : "복사 완료";
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  function openModal() {
+    previouslyFocused = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add("parking-modal-open");
+    closeButton.focus();
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    document.body.classList.remove("parking-modal-open");
+    previouslyFocused?.focus?.();
+  }
+
+  renderContent();
+  document.querySelectorAll("[data-open-parking-modal]").forEach((button) => button.addEventListener("click", openModal));
+  closeButton.addEventListener("click", closeModal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) closeModal();
+  });
+  document.addEventListener("languagechange", renderContent);
+
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+  const datePart = (type) => parts.find((part) => part.type === type)?.value || "";
+  const koreaDate = `${datePart("year")}-${datePart("month")}-${datePart("day")}`;
+  if (koreaDate >= "2026-09-17" && koreaDate <= "2026-09-20" && !sessionStorage.getItem("khu-parking-notice-2026")) {
+    sessionStorage.setItem("khu-parking-notice-2026", "shown");
+    window.setTimeout(openModal, 700);
   }
 }
 
@@ -1685,4 +1913,5 @@ setupLanguageToggle();
 setupWizard();
 setupLookup();
 setupPublicSchedule();
+setupParkingNotice();
 applyTranslations();
