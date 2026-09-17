@@ -1900,7 +1900,26 @@ function setupParkingNotice() {
   });
   document.addEventListener("languagechange", renderContent);
 
-  window.setTimeout(openModal, 350);
+  const isHomePage = Boolean(document.querySelector("main > .hero"));
+  if (isHomePage) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(new Date());
+    const datePart = (type) => parts.find((part) => part.type === type)?.value || "";
+    const todayKey = `khu-parking-notice-${datePart("year")}-${datePart("month")}-${datePart("day")}`;
+
+    try {
+      if (!localStorage.getItem(todayKey)) {
+        localStorage.setItem(todayKey, "shown");
+        window.setTimeout(openModal, 350);
+      }
+    } catch (error) {
+      window.setTimeout(openModal, 350);
+    }
+  }
 }
 
 setupLanguageToggle();
