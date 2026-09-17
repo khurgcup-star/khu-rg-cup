@@ -1876,7 +1876,8 @@ function setupParkingNotice() {
     });
   }
 
-  function openModal() {
+  function openModal(options = {}) {
+    if (options.automatic === true && !document.body.hasAttribute("data-parking-auto-open")) return;
     previouslyFocused = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("parking-modal-open");
@@ -1900,7 +1901,7 @@ function setupParkingNotice() {
   });
   document.addEventListener("languagechange", renderContent);
 
-  const isHomePage = Boolean(document.querySelector("main > .hero"));
+  const isHomePage = document.body.hasAttribute("data-parking-auto-open");
   if (isHomePage) {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: "Asia/Seoul",
@@ -1914,10 +1915,10 @@ function setupParkingNotice() {
     try {
       if (!localStorage.getItem(todayKey)) {
         localStorage.setItem(todayKey, "shown");
-        window.setTimeout(openModal, 350);
+        window.setTimeout(() => openModal({ automatic: true }), 350);
       }
     } catch (error) {
-      window.setTimeout(openModal, 350);
+      window.setTimeout(() => openModal({ automatic: true }), 350);
     }
   }
 }
